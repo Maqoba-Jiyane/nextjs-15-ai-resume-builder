@@ -8,16 +8,13 @@ import Link from "next/link";
 import ResumeItem from "./ResumeItem";
 import jwt from "jsonwebtoken";
 import { redirect } from "next/navigation";
+import { NextRequest } from "next/server";
 
 export const metadata: Metadata = {
   title: "Your resumes",
 };
 
-const page = async ({
-  queryParams,
-}: {
-  queryParams?: { [key: string]: string | undefined };
-}) => {
+const page = async (request: NextRequest) => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -42,8 +39,8 @@ const page = async ({
   ]);
 
   let paid = false;
-
-  const accesstoken = queryParams?.accesstoken;
+  const { searchParams } = new URL(request.url);
+  const accesstoken = searchParams.get("accesstoken")
 
   if (accesstoken) {
     const secrete = process.env.YOCO_SECRET_KEY || "";
