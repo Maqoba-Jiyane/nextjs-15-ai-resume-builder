@@ -9,67 +9,59 @@ import ResumeItem from "./ResumeItem";
 import jwt from "jsonwebtoken";
 import { redirect } from "next/navigation";
 
-// This is the type for our page props: searchParams is optional
-interface PageProps {
-  searchParams?: {
-    accesstoken?: string;
-  };
-}
-
 export const metadata: Metadata = {
   title: "Your resumes",
 };
 
-// Page component that can use `searchParams`
-export default async function Page({ searchParams }: PageProps) {
+const Page = async ({ searchParams }: { searchParams: { [key: string]: string } }) => {
   const { userId } = await auth();
+
   if (!userId) {
     return null;
   }
 
-  // Check the query param "accesstoken"
-  let paid = false;
-  const accesstoken = searchParams?.accesstoken;
-  
-  if (accesstoken) {
-    const secret = process.env.YOCO_SECRET_KEY || "";
-    const decoded = jwt.decode(accesstoken);
-    
-    if (decoded && typeof decoded === "object") {
-      // Compare exp with current time
-      const currentTimeInSeconds = Math.floor(Date.now() / 1000);
-      const exp = (decoded as { exp?: number }).exp;
-
-      if (exp && exp < currentTimeInSeconds) {
-        // Token is expired, redirect or handle as needed
-        redirect("/resumes");
-      }
-    }
-    
-    try {
-      // Will throw if invalid or expired
-      jwt.verify(accesstoken, secret);
-      paid = true;
-    } catch (error) {
-      console.error("Invalid token:", error);
-      // Handle invalid token—maybe redirect or do nothing
-      redirect("/resumes");
-    }
-  }
-
-  // Fetch resumes
   const [resumes, totalCount] = await Promise.all([
     prisma.resume.findMany({
-      where: { userId },
-      orderBy: { updatedAt: "desc" },
+      where: {
+        userId,
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
       include: resumeDataInclude,
     }),
     prisma.resume.count({
-      where: { userId },
+      where: {
+        userId,
+      },
     }),
   ]);
 
-  // Render the page
+  let paid = false;
+
+  const {accesstoken} = await searchParams
+
+  if(accesstoken){
+    const secrete = process.env.YOCO_SECRET_KEY || ''
+    const decoded = jwt.decode(accesstoken);
+    const currentTimeInSeconds = Math.floor(Date.now() / 1000);
+
+    if(JSON.parse(JSON.stringify(decoded)).exp < currentTimeInSeconds){
+      redirect('/resumes')
+    }
+
+    try {
+      jwt.verify(accesstoken, secrete)
+      paid = true
+    } catch (error) {
+      if(error instanceof Error)
+      throw new Error('Issue with token')
+    }
+
+  }
+
+  //TODO: Check qouta for non-premium users
+
   return (
     <main className="max-w-7xl mx-auto w-full px-3 py-6 space-y-6">
       <Button asChild className="mx-auto flex w-fit gap-2">
@@ -84,9 +76,11 @@ export default async function Page({ searchParams }: PageProps) {
       </div>
       <div className="flex flex-col sm:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full gap-3">
         {resumes.map((resume) => (
-          <ResumeItem key={resume.id} resume={resume} paid={paid} />
+          <ResumeItem key={resume.id} resume={resume} paid={paid}/>
         ))}
       </div>
     </main>
   );
-}
+};
+
+export default Page;
