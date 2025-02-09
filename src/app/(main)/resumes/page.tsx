@@ -13,13 +13,11 @@ export const metadata: Metadata = {
   title: "Your resumes",
 };
 
-interface PageProps {
-  searchParams?: {
-    [key: string]: string | undefined;
-  };
-}
-
-const page = async ({ searchParams }: PageProps) => {
+const page = async ({
+  queryParams,
+}: {
+  queryParams?: { [key: string]: string | undefined };
+}) => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -45,7 +43,7 @@ const page = async ({ searchParams }: PageProps) => {
 
   let paid = false;
 
-  const accesstoken = searchParams?.accesstoken;
+  const accesstoken = queryParams?.accesstoken;
 
   if (accesstoken) {
     const secrete = process.env.YOCO_SECRET_KEY || "";
