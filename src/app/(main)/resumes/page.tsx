@@ -8,59 +8,68 @@ import Link from "next/link";
 import ResumeItem from "./ResumeItem";
 import jwt from "jsonwebtoken";
 import { redirect } from "next/navigation";
-import { NextRequest } from "next/server";
+
+// This is the type for our page props: searchParams is optional
+interface PageProps {
+  searchParams?: {
+    accesstoken?: string;
+  };
+}
 
 export const metadata: Metadata = {
   title: "Your resumes",
 };
 
-const page = async (request: NextRequest) => {
+// Page component that can use `searchParams`
+export default async function Page({ searchParams }: PageProps) {
   const { userId } = await auth();
-
   if (!userId) {
     return null;
   }
 
-  const [resumes, totalCount] = await Promise.all([
-    prisma.resume.findMany({
-      where: {
-        userId,
-      },
-      orderBy: {
-        updatedAt: "desc",
-      },
-      include: resumeDataInclude,
-    }),
-    prisma.resume.count({
-      where: {
-        userId,
-      },
-    }),
-  ]);
-
+  // Check the query param "accesstoken"
   let paid = false;
-  const { searchParams } = new URL(request.url);
-  const accesstoken = searchParams.get("accesstoken")
-
+  const accesstoken = searchParams?.accesstoken;
+  
   if (accesstoken) {
-    const secrete = process.env.YOCO_SECRET_KEY || "";
+    const secret = process.env.YOCO_SECRET_KEY || "";
     const decoded = jwt.decode(accesstoken);
-    const currentTimeInSeconds = Math.floor(Date.now() / 1000);
+    
+    if (decoded && typeof decoded === "object") {
+      // Compare exp with current time
+      const currentTimeInSeconds = Math.floor(Date.now() / 1000);
+      const exp = (decoded as { exp?: number }).exp;
 
-    if (JSON.parse(JSON.stringify(decoded)).exp < currentTimeInSeconds) {
-      redirect("/resumes");
+      if (exp && exp < currentTimeInSeconds) {
+        // Token is expired, redirect or handle as needed
+        redirect("/resumes");
+      }
     }
-
+    
     try {
-      jwt.verify(accesstoken, secrete);
+      // Will throw if invalid or expired
+      jwt.verify(accesstoken, secret);
       paid = true;
     } catch (error) {
-      if (error instanceof Error) throw new Error("Issue with token");
+      console.error("Invalid token:", error);
+      // Handle invalid token—maybe redirect or do nothing
+      redirect("/resumes");
     }
   }
 
-  //TODO: Check qouta for non-premium users
+  // Fetch resumes
+  const [resumes, totalCount] = await Promise.all([
+    prisma.resume.findMany({
+      where: { userId },
+      orderBy: { updatedAt: "desc" },
+      include: resumeDataInclude,
+    }),
+    prisma.resume.count({
+      where: { userId },
+    }),
+  ]);
 
+  // Render the page
   return (
     <main className="max-w-7xl mx-auto w-full px-3 py-6 space-y-6">
       <Button asChild className="mx-auto flex w-fit gap-2">
@@ -80,6 +89,4 @@ const page = async (request: NextRequest) => {
       </div>
     </main>
   );
-};
-
-export default page;
+}
