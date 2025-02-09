@@ -13,7 +13,13 @@ export const metadata: Metadata = {
   title: "Your resumes",
 };
 
-const page = async ({ searchParams }: { searchParams: { [key: string]: string } }) => {
+interface PageProps {
+  searchParams?: {
+    [key: string]: string | undefined;
+  };
+}
+
+const page = async ({ searchParams }: PageProps) => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -39,25 +45,23 @@ const page = async ({ searchParams }: { searchParams: { [key: string]: string } 
 
   let paid = false;
 
-  const {accesstoken} = await searchParams
+  const accesstoken = searchParams?.accesstoken;
 
-  if(accesstoken){
-    const secrete = process.env.YOCO_SECRET_KEY || ''
+  if (accesstoken) {
+    const secrete = process.env.YOCO_SECRET_KEY || "";
     const decoded = jwt.decode(accesstoken);
     const currentTimeInSeconds = Math.floor(Date.now() / 1000);
 
-    if(JSON.parse(JSON.stringify(decoded)).exp < currentTimeInSeconds){
-      redirect('/resumes')
+    if (JSON.parse(JSON.stringify(decoded)).exp < currentTimeInSeconds) {
+      redirect("/resumes");
     }
 
     try {
-      jwt.verify(accesstoken, secrete)
-      paid = true
+      jwt.verify(accesstoken, secrete);
+      paid = true;
     } catch (error) {
-      if(error instanceof Error)
-      throw new Error('Issue with token')
+      if (error instanceof Error) throw new Error("Issue with token");
     }
-
   }
 
   //TODO: Check qouta for non-premium users
@@ -76,7 +80,7 @@ const page = async ({ searchParams }: { searchParams: { [key: string]: string } 
       </div>
       <div className="flex flex-col sm:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full gap-3">
         {resumes.map((resume) => (
-          <ResumeItem key={resume.id} resume={resume} paid={paid}/>
+          <ResumeItem key={resume.id} resume={resume} paid={paid} />
         ))}
       </div>
     </main>
