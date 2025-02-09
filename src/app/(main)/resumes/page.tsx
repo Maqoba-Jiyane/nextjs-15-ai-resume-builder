@@ -13,55 +13,53 @@ export const metadata: Metadata = {
   title: "Your resumes",
 };
 
-const Page = async ({ searchParams }: { searchParams: { [key: string]: string } }) => {
-  const { userId } = await auth();
+interface PageProps {
+  searchParams?: {
+    accesstoken?: string; 
+    [key: string]: string | string[] | undefined; 
+  };
+}
 
+export default async function Page({ searchParams }: PageProps) {
+  const { userId } = await auth();
   if (!userId) {
     return null;
   }
 
-  const [resumes, totalCount] = await Promise.all([
-    prisma.resume.findMany({
-      where: {
-        userId,
-      },
-      orderBy: {
-        updatedAt: "desc",
-      },
-      include: resumeDataInclude,
-    }),
-    prisma.resume.count({
-      where: {
-        userId,
-      },
-    }),
-  ]);
-
+  // 1. Check the access token in searchParams
   let paid = false;
+  const accesstoken = searchParams?.accesstoken
 
-  const {accesstoken} = await searchParams
-
-  if(accesstoken){
-    const secrete = process.env.YOCO_SECRET_KEY || ''
+  if (accesstoken) {
+    const secret = process.env.YOCO_SECRET_KEY || "";
     const decoded = jwt.decode(accesstoken);
     const currentTimeInSeconds = Math.floor(Date.now() / 1000);
 
-    if(JSON.parse(JSON.stringify(decoded)).exp < currentTimeInSeconds){
-      redirect('/resumes')
+    if (decoded && typeof decoded === "object" && "exp" in decoded) {
+      if ((decoded as { exp: number }).exp < currentTimeInSeconds) {
+        redirect("/resumes");
+      }
     }
 
     try {
-      jwt.verify(accesstoken, secrete)
-      paid = true
+      jwt.verify(accesstoken, secret);
+      paid = true;
     } catch (error) {
-      if(error instanceof Error)
-      throw new Error('Issue with token')
+      throw new Error("Issue with token: " + (error as Error).message);
     }
-
   }
 
-  //TODO: Check qouta for non-premium users
+  // 2. Fetch data from prisma
+  const [resumes, totalCount] = await Promise.all([
+    prisma.resume.findMany({
+      where: { userId },
+      orderBy: { updatedAt: "desc" },
+      include: resumeDataInclude,
+    }),
+    prisma.resume.count({ where: { userId } }),
+  ]);
 
+  // 3. Render
   return (
     <main className="max-w-7xl mx-auto w-full px-3 py-6 space-y-6">
       <Button asChild className="mx-auto flex w-fit gap-2">
@@ -76,11 +74,9 @@ const Page = async ({ searchParams }: { searchParams: { [key: string]: string } 
       </div>
       <div className="flex flex-col sm:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full gap-3">
         {resumes.map((resume) => (
-          <ResumeItem key={resume.id} resume={resume} paid={paid}/>
+          <ResumeItem key={resume.id} resume={resume} paid={paid} />
         ))}
       </div>
     </main>
   );
-};
-
-export default Page;
+}
