@@ -6,12 +6,14 @@ import { PlusSquare } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import ResumeItem from "./ResumeItem";
+import jwt from "jsonwebtoken";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Your resumes",
 };
 
-const page = async () => {
+const page = async ({ searchParams }: { searchParams: { [key: string]: string } }) => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -35,6 +37,29 @@ const page = async () => {
     }),
   ]);
 
+  let paid = false;
+
+  const {accesstoken} = await searchParams
+
+  if(accesstoken){
+    const secrete = process.env.YOCO_SECRET_KEY || ''
+    const decoded = jwt.decode(accesstoken);
+    const currentTimeInSeconds = Math.floor(Date.now() / 1000);
+
+    if(JSON.parse(JSON.stringify(decoded)).exp < currentTimeInSeconds){
+      redirect('/resumes')
+    }
+
+    try {
+      jwt.verify(accesstoken, secrete)
+      paid = true
+    } catch (error) {
+      if(error instanceof Error)
+      throw new Error('Issue with token')
+    }
+
+  }
+
   //TODO: Check qouta for non-premium users
 
   return (
@@ -51,7 +76,7 @@ const page = async () => {
       </div>
       <div className="flex flex-col sm:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full gap-3">
         {resumes.map((resume) => (
-          <ResumeItem key={resume.id} resume={resume}/>
+          <ResumeItem key={resume.id} resume={resume} paid={paid}/>
         ))}
       </div>
     </main>

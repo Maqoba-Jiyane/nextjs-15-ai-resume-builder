@@ -29,14 +29,19 @@ import { useReactToPrint } from "react-to-print";
 
 interface ResumeItemProps {
   resume: ResumeServerData;
+  paid: boolean
 }
 
-const ResumeItem = ({ resume }: ResumeItemProps) => {
+const ResumeItem = ({ resume, paid }: ResumeItemProps) => {
+  
   const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({
     contentRef,
     documentTitle: resume.title || "Resume",
   });
+
+  console.log(paid)
+  
   const wasUpdated = resume.updatedAt !== resume.createdAt;
 
   return (
@@ -70,7 +75,7 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
           <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent" />
         </Link>
       </div>
-      <MoreMenu resumeId={resume.id} onPrintClick={reactToPrintFn} />
+      <MoreMenu resumeId={resume.id} onPrintClick={paid ? reactToPrintFn : ()=>(MyClientComponent())} />
     </div>
   );
 };
@@ -177,5 +182,42 @@ function DeleteConfirmationDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+}
+
+export function MyClientComponent() {
+  callApi()
+  async function callApi() {
+    try {
+
+      const response = await fetch("/api/yoco-checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: "500",
+          currency: "ZAR",
+          totalDiscount: "5500",
+        }),
+      });
+
+      console.log(response)
+
+      if (!response.ok) {
+        throw new Error("Failed to create Yoco checkout");
+      }
+
+      const createPayment = await response.json();
+
+      // Directly redirect in the browser
+      window.location.href = createPayment.redirectUrl;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  return (
+    <button onClick={callApi}>Pay and Redirect</button>
   );
 }
