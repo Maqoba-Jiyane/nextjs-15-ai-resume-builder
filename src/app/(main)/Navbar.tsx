@@ -21,7 +21,7 @@ function Navbar() {
             alt="logo"
             width={35}
             height={35}
-            className="rounded-full"
+            className="rounded-full filter hue-rotate-90"
           />
           <span className="text-lg font-bold tracking-tight">
             AI Resume Builder
