@@ -33,11 +33,11 @@ interface ResumeItemProps {
 
 const ResumeItem = ({ resume}: ResumeItemProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
+  console.log(contentRef)
   const reactToPrintFn = useReactToPrint({
-    content: () => contentRef.current, // ✅ Ensures only the resume prints
+    contentRef,
     documentTitle: resume.title || "Resume",
   });
-  
 
   const wasUpdated = resume.updatedAt !== resume.createdAt;
 
