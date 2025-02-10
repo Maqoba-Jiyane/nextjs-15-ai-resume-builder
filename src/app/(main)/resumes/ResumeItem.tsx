@@ -33,7 +33,7 @@ interface ResumeItemProps {
 
 const ResumeItem = ({ resume}: ResumeItemProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
-  console.log(contentRef)
+
   const reactToPrintFn = useReactToPrint({
     contentRef,
     documentTitle: resume.title || "Resume",
@@ -222,14 +222,11 @@ export function MyClientComponent(resumeId: string) {
         }),
       });
 
-      console.log(response);
-
       if (!response.ok) {
         throw new Error("Failed to create Yoco checkout");
       }
 
       const createPayment = await response.json();
-      console.log("createPayment: ", resumeId);
 
       updateResumeForPayment(resumeId, createPayment.id);
 

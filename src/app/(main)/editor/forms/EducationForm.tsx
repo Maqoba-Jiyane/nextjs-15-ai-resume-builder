@@ -35,7 +35,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/utils";
 
 const EducationForm = ({ resumeData, setResumeData }: EditorFormProps) => {
-  console.log('education ', resumeData.educations)
+
   const form = useForm<EducationValues>({
     resolver: zodResolver(educationSchema),
     defaultValues: {

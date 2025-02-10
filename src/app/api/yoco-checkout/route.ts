@@ -4,7 +4,7 @@ export async function POST(req: NextRequest) {
   try {
 
     const origin = req.nextUrl.origin
-    console.log(req.nextUrl.origin)
+
     const YocoSecret = process.env.YOCO_SECRET_KEY;
     if (!YocoSecret) {
       return NextResponse.json(
@@ -30,7 +30,6 @@ export async function POST(req: NextRequest) {
     });
 
     if (!response.ok) {
-      // console.log(response.status);
       return NextResponse.json(
         { error: "Failed Yoco request" },
         { status: response.status },
