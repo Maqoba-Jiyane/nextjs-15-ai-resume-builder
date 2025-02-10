@@ -83,13 +83,13 @@ body {
     padding: 0;
     visibility: visible;
   }
-}
 
-#resumePreviewContent {
-  font-family: Inter;
-}
-
-@page {
-  size: A4;
-  margin: 0.6cm
+  #resumePreviewContent {
+    font-family: Inter;
+  }
+  
+  @page {
+    size: A4;
+    margin: 0.6cm
+  }
 }
