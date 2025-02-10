@@ -75,9 +75,9 @@ body {
 }
 
 @media print {
-  body * {
+  /* body * {
     visibility: hidden;
-  }
+  } */
   #resumePreviewContent {
     visibility: visible;
     position: absolute;
