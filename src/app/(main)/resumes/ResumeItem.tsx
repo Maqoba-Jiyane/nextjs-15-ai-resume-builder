@@ -45,8 +45,11 @@ const ResumeItem = ({ resume}: ResumeItemProps) => {
 
   const reactToPrintFn = useReactToPrint({
     contentRef,
-    documentTitle: resume.title || "Resume",onBeforePrint: () => {
+    documentTitle: resume.title || "Resume",
+    //@typescript-eslint/no-unused-vars
+    onBeforePrint: () => {
       return new Promise((resolve) => {
+        //@typescript-eslint/no-unused-vars
         promiseResolveRef.current = resolve;
         setIsPrinting(true);
       });
