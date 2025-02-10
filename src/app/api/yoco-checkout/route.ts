@@ -1,7 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
+
+    const origin = req.nextUrl.origin
+    console.log(req.nextUrl.origin)
     const YocoSecret = process.env.YOCO_SECRET_KEY;
     if (!YocoSecret) {
       return NextResponse.json(
@@ -22,7 +25,7 @@ export async function POST(req: Request) {
         amount,
         currency,
         totalDiscount,
-        successUrl: `https://t43fx9gz-3000.inc1.devtunnels.ms/resumes`,
+        successUrl: `${origin}/resumes`,
       }),
     });
 
