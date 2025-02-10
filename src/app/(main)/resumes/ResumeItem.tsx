@@ -12,10 +12,10 @@ import { useToast } from "@/hooks/use-toast";
 import { ResumeServerData } from "@/lib/types";
 import { mapToResumeValues } from "@/lib/utils";
 import { formatDate } from "date-fns";
-import { MoreVertical, Printer, Trash2 } from "lucide-react";
+import { CreditCard, MoreVertical, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState, useTransition } from "react";
-import deleteResume from "./actions";
+import deleteResume, { updateResumeForPayment } from "./actions";
 import {
   Dialog,
   DialogContent,
@@ -29,19 +29,15 @@ import { useReactToPrint } from "react-to-print";
 
 interface ResumeItemProps {
   resume: ResumeServerData;
-  paid: boolean
 }
 
-const ResumeItem = ({ resume, paid }: ResumeItemProps) => {
-  
+const ResumeItem = ({ resume}: ResumeItemProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const reactToPrintFn = useReactToPrint({
     contentRef,
     documentTitle: resume.title || "Resume",
   });
 
-  console.log(paid)
-  
   const wasUpdated = resume.updatedAt !== resume.createdAt;
 
   return (
@@ -74,8 +70,22 @@ const ResumeItem = ({ resume, paid }: ResumeItemProps) => {
           />
           <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent" />
         </Link>
+        <Button
+          size="lg"
+          variant="premium"
+          disabled={!resume.paid}
+          onClick={resume.paid ? () => reactToPrintFn() : undefined}
+          className="flex w-full"
+        >
+          Download
+        </Button>
       </div>
-      <MoreMenu resumeId={resume.id} onPrintClick={paid ? reactToPrintFn : ()=>(MyClientComponent())} />
+      <MoreMenu
+        resumeId={resume.id}
+        onPrintClick={
+          resume.paid ? reactToPrintFn : () => MyClientComponent(resume.id)
+        }
+      />
     </div>
   );
 };
@@ -84,7 +94,7 @@ export default ResumeItem;
 
 interface MoreMenuProps {
   resumeId: string;
-  onPrintClick: () => void
+  onPrintClick: () => void;
 }
 
 function MoreMenu({ resumeId, onPrintClick }: MoreMenuProps) {
@@ -103,13 +113,12 @@ function MoreMenu({ resumeId, onPrintClick }: MoreMenuProps) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-            
           <DropdownMenuItem
             className="flex items-center gap-2"
             onClick={onPrintClick}
           >
-            <Printer className="size-4" />
-            Print
+            <CreditCard className="size-4" />
+            Pay
           </DropdownMenuItem>
           <DropdownMenuItem
             className="flex items-center gap-2"
@@ -185,11 +194,10 @@ function DeleteConfirmationDialog({
   );
 }
 
-export function MyClientComponent() {
-  callApi()
+export function MyClientComponent(resumeId: string) {
+  callApi();
   async function callApi() {
     try {
-
       const response = await fetch("/api/yoco-checkout", {
         method: "POST",
         headers: {
@@ -199,16 +207,30 @@ export function MyClientComponent() {
           amount: "500",
           currency: "ZAR",
           totalDiscount: "5500",
+          subtotalAmount: "6000",
+          lineItems: [
+            {
+              displayName: "Chips",
+              quantity: 1,
+              pricingDetails: {
+                price: 6000,
+              },
+            },
+          ],
+          resumeId: "testing",
         }),
       });
 
-      console.log(response)
+      console.log(response);
 
       if (!response.ok) {
         throw new Error("Failed to create Yoco checkout");
       }
 
       const createPayment = await response.json();
+      console.log("createPayment: ", resumeId);
+
+      updateResumeForPayment(resumeId, createPayment.id);
 
       // Directly redirect in the browser
       window.location.href = createPayment.redirectUrl;
@@ -216,8 +238,4 @@ export function MyClientComponent() {
       console.error(error);
     }
   }
-
-  return (
-    <button onClick={callApi}>Pay and Redirect</button>
-  );
 }

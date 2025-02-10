@@ -6,47 +6,17 @@ import { PlusSquare } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import ResumeItem from "./ResumeItem";
-import jwt from "jsonwebtoken";
-import { redirect } from "next/navigation";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Your resumes",
 };
 
-interface PageProps {
-  searchParams?: {
-    accesstoken?: string; 
-    [key: string]: string | string[] | undefined; 
-  };
-}
-
-export default async function Page({ searchParams }: PageProps) {
+export default async function Page() {
   const { userId } = await auth();
   if (!userId) {
     return null;
-  }
-
-  // 1. Check the access token in searchParams
-  let paid = false;
-  const accesstoken = searchParams?.accesstoken
-
-  if (accesstoken) {
-    const secret = process.env.YOCO_SECRET_KEY || "";
-    const decoded = jwt.decode(accesstoken);
-    const currentTimeInSeconds = Math.floor(Date.now() / 1000);
-
-    if (decoded && typeof decoded === "object" && "exp" in decoded) {
-      if ((decoded as { exp: number }).exp < currentTimeInSeconds) {
-        redirect("/resumes");
-      }
-    }
-
-    try {
-      jwt.verify(accesstoken, secret);
-      paid = true;
-    } catch (error) {
-      throw new Error("Issue with token: " + (error as Error).message);
-    }
   }
 
   // 2. Fetch data from prisma
@@ -74,7 +44,7 @@ export default async function Page({ searchParams }: PageProps) {
       </div>
       <div className="flex flex-col sm:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full gap-3">
         {resumes.map((resume) => (
-          <ResumeItem key={resume.id} resume={resume} paid={paid} />
+          <ResumeItem key={resume.id} resume={resume} />
         ))}
       </div>
     </main>

@@ -51,7 +51,7 @@ export async function saveResume(values: ResumeValues) {
       where: { id },
       data: {
         ...resumeValues,
-        photoUrl: newPhotoUrl,
+        photoUrl: newPhotoUrl,checkoutId: null, paid: false,
         workExperiences: {
           deleteMany: {},
           create: workExperiences?.map((exp) => ({
@@ -75,7 +75,7 @@ export async function saveResume(values: ResumeValues) {
       data: {
         ...resumeValues,
         userId,
-        photoUrl: newPhotoUrl,
+        photoUrl: newPhotoUrl, checkoutId: null, paid: false,
         workExperiences: {
           create: workExperiences?.map((exp) => ({
             ...exp,

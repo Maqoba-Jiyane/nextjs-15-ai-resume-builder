@@ -32,6 +32,8 @@ model Resume {
   country String?
   phone String?
   email String?
+  checkoutId String?
+  paid Boolean @default(false)
 
   skills String[]
 
