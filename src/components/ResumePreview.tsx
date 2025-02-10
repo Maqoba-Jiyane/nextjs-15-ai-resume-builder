@@ -23,7 +23,6 @@ console.log('contentRef: ', contentRef)
         "bg-white text-black h-fit w-full aspect-[210/297]",
         className,
       )}
-      ref={containerRef}
     >
       <div
         className={cn("space-y-6 p-6", !width && "invisible")}

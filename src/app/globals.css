@@ -75,9 +75,6 @@ body {
 }
 
 @media print {
-  body{
-    visibility: hidden;
-  }
   #resumePreviewContent {
     zoom: 1 !important;
     padding: 0;
