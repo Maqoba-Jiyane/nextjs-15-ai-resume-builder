@@ -44,22 +44,20 @@ const ResumeItem = ({ resume}: ResumeItemProps) => {
   }, [isPrinting]);
 
   const reactToPrintFn = useReactToPrint({
-    contentRef,
+    content: () => contentRef.current, // ✅ Use `content` instead of `contentRef`
     documentTitle: resume.title || "Resume",
-    //@typescript-eslint/no-unused-vars
     onBeforePrint: () => {
-      return new Promise((resolve) => {
-        //@typescript-eslint/no-unused-vars
-        promiseResolveRef.current = resolve;
-        setIsPrinting(true);
-      });
+      if (promiseResolveRef.current) {
+        promiseResolveRef.current(); // ✅ Ensures the promise resolves correctly
+      }
+      setIsPrinting(true);
     },
     onAfterPrint: () => {
-      // Reset the Promise resolve so we can print again
-      promiseResolveRef.current = null;
+      promiseResolveRef.current = null; // ✅ Reset after printing
       setIsPrinting(false);
-    }
+    },
   });
+  
 
   const wasUpdated = resume.updatedAt !== resume.createdAt;
 
