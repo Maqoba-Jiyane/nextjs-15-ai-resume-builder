@@ -14,7 +14,7 @@ import { mapToResumeValues } from "@/lib/utils";
 import { formatDate } from "date-fns";
 import { CreditCard, MoreVertical, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import deleteResume, { updateResumeForPayment } from "./actions";
 import {
   Dialog,
@@ -25,40 +25,19 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import LoadingButton from "@/components/LoadingButton";
-import { useReactToPrint, onBeforePrint } from "react-to-print";
+import { useReactToPrint } from "react-to-print";
 
 interface ResumeItemProps {
   resume: ResumeServerData;
 }
 
 const ResumeItem = ({ resume}: ResumeItemProps) => {
-  const [isPrinting, setIsPrinting] = useState(false);
-  const promiseResolveRef = useRef(null);
   const contentRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (isPrinting && promiseResolveRef.current) {
-      // Resolves the Promise, letting `react-to-print` know that the DOM updates are completed
-      promiseResolveRef.current();
-    }
-  }, [isPrinting]);
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const reactToPrintFn = useReactToPrint({
-  content: () => contentRef.current,
-  documentTitle: resume.title || "Resume",
-  onBeforePrint: () => {
-    if (promiseResolveRef.current) {
-      promiseResolveRef.current();
-    }
-    setIsPrinting(true);
-  },
-  onAfterPrint: () => {
-    promiseResolveRef.current = null;
-    setIsPrinting(false);
-  },
-});
-
+  console.log(contentRef)
+  const reactToPrintFn = useReactToPrint({
+    contentRef,
+    documentTitle: resume.title || "Resume",
+  });
 
   const wasUpdated = resume.updatedAt !== resume.createdAt;
 

@@ -16,7 +16,7 @@ interface ResumePreviewProps {
 const ResumePreview = ({ resumeData, contentRef, className }: ResumePreviewProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { width } = useDimensions(containerRef);
-
+console.log('contentRef: ', contentRef)
   return (
     <div
       className={cn(
