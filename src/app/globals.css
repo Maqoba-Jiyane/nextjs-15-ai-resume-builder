@@ -75,20 +75,6 @@ body {
 }
 
 @media print {
-  /* body * {
-    visibility: hidden;
-  } */
-  #resumePreviewContent {
-    visibility: visible;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-  }
-}
-
-
-/* @media print {
   #resumePreviewContent {
     zoom: 1 !important;
     padding: 0;
@@ -97,7 +83,7 @@ body {
 
 #resumePreviewContent {
   font-family: Inter;
-} */
+}
 
 @page {
   size: A4;
