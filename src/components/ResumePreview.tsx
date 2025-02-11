@@ -1,8 +1,8 @@
-// import useDimensions from "@/hooks/useDimensions";
+import useDimensions from "@/hooks/useDimensions";
 import { cn } from "@/lib/utils";
 import { ResumeValues } from "@/lib/validation";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { formatDate } from "date-fns";
 import { Badge } from "./ui/badge";
 import { BorderStyles } from "@/app/(main)/editor/BorderStyleButton";
@@ -13,24 +13,23 @@ interface ResumePreviewProps {
   className?: string;
 }
 
-const ResumePreview = ({ resumeData, contentRef }: ResumePreviewProps) => {
-  // const containerRef = useRef<HTMLDivElement>(null);
-  // const { width } = useDimensions(containerRef);
+const ResumePreview = ({ resumeData, contentRef, className }: ResumePreviewProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { width } = useDimensions(containerRef);
 
   return (
-    // <div
-    //   className={cn(
-    //     "bg-white text-black h-fit w-full aspect-[210/297]",
-    //     className,
-    //   )}
-    //   ref={containerRef}
-    // >
+    <div
+      className={cn(
+        "bg-white text-black h-fit w-full aspect-[210/297]",
+        className,
+      )}
+      ref={containerRef}
+    >
       <div
-        className={cn("space-y-6 p-6"//, !width && "invisible"
-          )}
-        // style={{
-        //   zoom: (1 / 794) * width,
-        // }}
+        className={cn("space-y-6 p-6", !width && "invisible")}
+        style={{
+          zoom: (1 / 794) * width,
+        }}
         ref={contentRef}
         id="resumePreviewContent"
       >
@@ -40,7 +39,7 @@ const ResumePreview = ({ resumeData, contentRef }: ResumePreviewProps) => {
         <EducationSection resumeData={resumeData} />
         <SkillsSection resumeData={resumeData} />
       </div>
-    // </div>
+    </div>
   );
 };
 
