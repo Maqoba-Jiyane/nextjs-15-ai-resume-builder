@@ -35,60 +35,9 @@ const ResumeItem = ({ resume}: ResumeItemProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
 
   const reactToPrintFn = useReactToPrint({
-    contentRef, // ✅ Ensures correct reference
+    contentRef,
     documentTitle: resume.title || "Resume",
-  
-    // ✅ Ensure everything is loaded before printing
-    onBeforePrint: async () => {
-      console.log("Preparing for print...");
-  
-      // ✅ Wait for images and fonts to fully load before printing
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          console.log("Content should be fully loaded now.");
-          resolve(null);
-        }, 500); // Adjust timeout if needed
-      });
-  
-      // ✅ Hide unnecessary elements
-      document.querySelectorAll(".hide-on-print").forEach((el) => {
-        (el as HTMLElement).style.display = "none";
-      });
-  
-      // ✅ Apply temporary print styles
-      const style = document.createElement("style");
-      style.innerHTML = `
-        @media print {
-          body {
-            background: white !important;
-          }
-          #resumePreviewContent {
-            width: 210mm;
-            height: 297mm;
-            margin: auto;
-            page-break-after: always;
-          }
-        }
-      `;
-      document.head.appendChild(style);
-    },
-  
-    // ✅ Restore styles after printing
-    onAfterPrint: () => {
-      console.log("Cleaning up after print...");
-      document.querySelectorAll(".hide-on-print").forEach((el) => {
-        (el as HTMLElement).style.display = "";
-      });
-  
-      // ✅ Remove temporary styles
-      document.head.querySelectorAll("style").forEach((style) => {
-        if (style.innerHTML.includes("@media print")) {
-          style.remove();
-        }
-      });
-    },
   });
-  
 
   const wasUpdated = resume.updatedAt !== resume.createdAt;
 
