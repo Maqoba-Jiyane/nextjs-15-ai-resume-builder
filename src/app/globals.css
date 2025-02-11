@@ -89,7 +89,7 @@ body {
   }
   
   @page {
-    size: A4;
+    size: Monarch;
     margin: 0.6cm
   }
 }
