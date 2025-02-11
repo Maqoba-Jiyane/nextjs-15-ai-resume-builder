@@ -99,6 +99,6 @@ body {
   /* ✅ Ensure A4 page size & prevent cropping */
   @page {
     size: A4;
-    margin: 1cm; /* ✅ Adjust margins to prevent cut-off */
+    margin: 10cm; /* ✅ Adjust margins to prevent cut-off */
   }
 }
