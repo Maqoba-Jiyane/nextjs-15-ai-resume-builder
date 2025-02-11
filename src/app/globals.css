@@ -76,9 +76,7 @@ body {
 
 @media print {
   body{
-    /* visibility: hidden; */
-    width: 100%;
-    height: 100%;
+    visibility: hidden;
   }
   #resumePreviewContent {
     zoom: 1 !important;
@@ -91,9 +89,7 @@ body {
   }
   
   @page {
-    size: 210/297;
-    margin: 0.6cm;
-    width: 100%;
-    height: 100%;
+    size: A4;
+    margin: 0.6cm
   }
 }
