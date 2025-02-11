@@ -47,7 +47,7 @@ const ResumeItem = ({ resume}: ResumeItemProps) => {
       const content = document.getElementById("resumePreviewContent");
       if (content) {
         content.style.width = "100%";
-        content.style.maxWidth = "210mm";
+        content.style.maxWidth = "210cm";
         content.style.margin = "0 auto";
       }
     
