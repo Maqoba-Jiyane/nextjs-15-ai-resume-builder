@@ -53,12 +53,6 @@ const ResumeItem = ({ resume}: ResumeItemProps) => {
     
       console.log("Mobile print optimization applied.");
     },
-    pageStyle: `{
-        content.style.width = "100%";
-        content.style.maxWidth = "210cm";
-        content.style.margin = "0 auto";
-      }`
-    
   });
 
   const wasUpdated = resume.updatedAt !== resume.createdAt;
