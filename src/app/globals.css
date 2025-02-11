@@ -90,6 +90,8 @@ body {
   
   @page {
     size: 210/297;
-    margin: 0.6cm
+    margin: 0.6cm;
+    width: auto;
+    height: auto;
   }
 }
