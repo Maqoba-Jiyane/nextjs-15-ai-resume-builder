@@ -75,21 +75,28 @@ body {
 }
 
 @media print {
-  body{
-    visibility: hidden;
-  }
-  #resumePreviewContent {
-    zoom: 1 !important;
-    padding: 0;
-    visibility: visible;
+  /* ✅ Hide everything except #resumePreviewContent */
+  body * {
+    visibility: hidden !important;
   }
 
-  #resumePreviewContent {
-    font-family: Inter;
+  #resumePreviewContent, #resumePreviewContent * {
+    visibility: visible !important;
   }
-  
+
+  /* ✅ Ensure proper A4 dimensions and centering */
+  #resumePreviewContent {
+    font-family: "Inter", sans-serif;
+    width: 210mm; /* ✅ Exact A4 width */
+    height: auto;
+    margin: 0 auto !important; /* ✅ Centering */
+    padding: 1cm; /* ✅ Adds padding for structure */
+    box-sizing: border-box; /* ✅ Ensures padding doesn't overflow */
+  }
+
+  /* ✅ Fix @page to correctly set A4 size */
   @page {
-    size: A4;
-    margin: 0.6cm
+    size: A4; /* ✅ Standard A4 size */
+    margin: 0.6cm; /* ✅ Prevents content cutoff */
   }
 }
