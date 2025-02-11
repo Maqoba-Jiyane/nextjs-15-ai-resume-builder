@@ -86,6 +86,7 @@ body {
     zoom: 1 !important;
     padding: 0;
     visibility: visible;
+    width: 100%;
   }
 
   #resumePreviewContent {
