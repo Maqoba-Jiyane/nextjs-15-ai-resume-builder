@@ -75,7 +75,7 @@ body {
 }
 
 @media print {
-  /* ✅ Hide everything except #resumePreviewContent */
+  /* ✅ Hide everything except resume content */
   body * {
     visibility: hidden !important;
   }
@@ -84,19 +84,28 @@ body {
     visibility: visible !important;
   }
 
-  /* ✅ Ensure proper A4 dimensions and centering */
+  /* ✅ Ensure proper mobile print layout */
   #resumePreviewContent {
     font-family: "Inter", sans-serif;
-    width: 210mm; /* ✅ Exact A4 width */
+    width: 100%; /* ✅ Full screen width on mobile */
+    max-width: 210mm; /* ✅ Ensures it doesn't exceed A4 width */
     height: auto;
-    margin: 0 auto !important; /* ✅ Centering */
-    padding: 1cm; /* ✅ Adds padding for structure */
-    box-sizing: border-box; /* ✅ Ensures padding doesn't overflow */
+    margin: auto !important; /* ✅ Centers content */
+    padding: 1cm; /* ✅ Prevents text cutoff */
+    box-sizing: border-box;
+    transform: scale(1); /* ✅ Ensures content doesn't shrink */
+    transform-origin: top left;
   }
 
-  /* ✅ Fix @page to correctly set A4 size */
+  /* ✅ Force A4 layout with correct scaling */
   @page {
-    size: A4; /* ✅ Standard A4 size */
-    margin: 0.6cm; /* ✅ Prevents content cutoff */
+    size: A4;
+    margin: 1cm; /* ✅ Standard print margins */
+  }
+
+  /* ✅ Ensure clean page breaks */
+  .page-break {
+    page-break-before: always;
   }
 }
+
