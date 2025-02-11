@@ -35,7 +35,7 @@ const ResumeItem = ({ resume}: ResumeItemProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
 
   const reactToPrintFn = useReactToPrint({
-    contentRef,
+    contentRef: contentRef,
     documentTitle: resume.title || "Resume",
     onBeforePrint: () => Promise.resolve(),
   });
