@@ -37,6 +37,23 @@ const ResumeItem = ({ resume}: ResumeItemProps) => {
   const reactToPrintFn = useReactToPrint({
     contentRef,
     documentTitle: resume.title || "Resume",
+    onBeforePrint: async () => {
+      console.log("Preparing document for print on mobile...");
+    
+      // ✅ Wait to ensure images & fonts load before printing
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Adjust delay if needed
+    
+      // ✅ Force full width before printing
+      const content = document.getElementById("resumePreviewContent");
+      if (content) {
+        content.style.width = "100%";
+        content.style.maxWidth = "210mm";
+        content.style.margin = "0 auto";
+      }
+    
+      console.log("Mobile print optimization applied.");
+    }
+    
   });
 
   const wasUpdated = resume.updatedAt !== resume.createdAt;
