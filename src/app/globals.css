@@ -92,5 +92,8 @@ body {
     size: A4;
     margin: 0.6cm;
     zoom: 1;
+    display: flex;
+    width: fit-content;
+    height: fit-content;
   }
 }
