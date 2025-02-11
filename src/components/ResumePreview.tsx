@@ -1,8 +1,8 @@
-import useDimensions from "@/hooks/useDimensions";
+// import useDimensions from "@/hooks/useDimensions";
 import { cn } from "@/lib/utils";
 import { ResumeValues } from "@/lib/validation";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { formatDate } from "date-fns";
 import { Badge } from "./ui/badge";
 import { BorderStyles } from "@/app/(main)/editor/BorderStyleButton";
@@ -13,7 +13,7 @@ interface ResumePreviewProps {
   className?: string;
 }
 
-const ResumePreview = ({ resumeData, contentRef, className }: ResumePreviewProps) => {
+const ResumePreview = ({ resumeData, contentRef }: ResumePreviewProps) => {
   // const containerRef = useRef<HTMLDivElement>(null);
   // const { width } = useDimensions(containerRef);
 
