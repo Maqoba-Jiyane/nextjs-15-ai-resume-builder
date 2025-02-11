@@ -52,7 +52,8 @@ const ResumeItem = ({ resume}: ResumeItemProps) => {
       }
     
       console.log("Mobile print optimization applied.");
-    }
+    },
+    
     
   });
 
