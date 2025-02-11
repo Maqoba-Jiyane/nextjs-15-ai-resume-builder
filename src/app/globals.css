@@ -89,7 +89,7 @@ body {
   }
   
   @page {
-    size: A4;
+    size: 210/297;
     margin: 0.6cm
   }
 }
