@@ -77,6 +77,10 @@ body {
 @media print {
   body{
     visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
   }
   #resumePreviewContent {
     zoom: 1 !important;
