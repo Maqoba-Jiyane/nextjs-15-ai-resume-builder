@@ -75,7 +75,7 @@ body {
 }
 
 @media print {
-  /* ✅ Hide everything except resume content */
+  /* Hide all content except the resume */
   body * {
     visibility: hidden !important;
   }
@@ -84,23 +84,21 @@ body {
     visibility: visible !important;
   }
 
-  /* ✅ Ensure proper mobile print layout */
+  /* ✅ Ensure proper A4 layout */
   #resumePreviewContent {
     font-family: "Inter", sans-serif;
-    width: 100%; /* ✅ Full screen width on mobile */
-    max-width: 210mm; /* ✅ Ensures it doesn't exceed A4 width */
+    width: 210mm; /* ✅ Standard A4 width */
     height: auto;
-    margin: auto !important; /* ✅ Centers content */
-    padding: 1cm; /* ✅ Prevents text cutoff */
-    box-sizing: border-box;
-    transform: scale(1); /* ✅ Ensures content doesn't shrink */
-    transform-origin: top left;
+    margin: auto !important; /* ✅ Centering */
+    padding: 2cm; /* ✅ Adds padding for readability */
+    box-sizing: border-box; /* ✅ Prevents overflow issues */
+    overflow: hidden; /* ✅ Ensures clean page breaks */
   }
 
-  /* ✅ Force A4 layout with correct scaling */
+  /* ✅ Force A4 page size */
   @page {
     size: A4;
-    margin: 1cm; /* ✅ Standard print margins */
+    margin: 1cm; /* ✅ Prevents content cutoff */
   }
 
   /* ✅ Ensure clean page breaks */
@@ -108,4 +106,3 @@ body {
     page-break-before: always;
   }
 }
-
