@@ -38,10 +38,10 @@ const ResumeItem = ({ resume}: ResumeItemProps) => {
     contentRef,
     documentTitle: resume.title || "Resume",
     onBeforePrint: async () => {
-      await new Promise((resolve) => setTimeout(resolve, 500)); // Waits 500ms before printing
+      await new Promise((resolve) => setTimeout(resolve, 5000)); // Waits 500ms before printing
     },
     onAfterPrint: async () => {
-      await new Promise((resolve) => setTimeout(resolve, 500)); // Waits 500ms after printing
+      await new Promise((resolve) => setTimeout(resolve, 5000)); // Waits 500ms after printing
     }
   });
 
