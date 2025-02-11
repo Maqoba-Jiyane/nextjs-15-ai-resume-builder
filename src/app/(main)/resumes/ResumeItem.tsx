@@ -37,6 +37,7 @@ const ResumeItem = ({ resume}: ResumeItemProps) => {
   const reactToPrintFn = useReactToPrint({
     contentRef,
     documentTitle: resume.title || "Resume",
+    onBeforePrint: () => Promise.resolve(),
   });
 
   const wasUpdated = resume.updatedAt !== resume.createdAt;

@@ -14,22 +14,23 @@ interface ResumePreviewProps {
 }
 
 const ResumePreview = ({ resumeData, contentRef, className }: ResumePreviewProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { width } = useDimensions(containerRef);
+  // const containerRef = useRef<HTMLDivElement>(null);
+  // const { width } = useDimensions(containerRef);
 
   return (
-    <div
-      className={cn(
-        "bg-white text-black h-fit w-full aspect-[210/297]",
-        className,
-      )}
-      ref={containerRef}
-    >
+    // <div
+    //   className={cn(
+    //     "bg-white text-black h-fit w-full aspect-[210/297]",
+    //     className,
+    //   )}
+    //   ref={containerRef}
+    // >
       <div
-        className={cn("space-y-6 p-6", !width && "invisible")}
-        style={{
-          zoom: (1 / 794) * width,
-        }}
+        className={cn("space-y-6 p-6"//, !width && "invisible"
+          )}
+        // style={{
+        //   zoom: (1 / 794) * width,
+        // }}
         ref={contentRef}
         id="resumePreviewContent"
       >
@@ -39,7 +40,7 @@ const ResumePreview = ({ resumeData, contentRef, className }: ResumePreviewProps
         <EducationSection resumeData={resumeData} />
         <SkillsSection resumeData={resumeData} />
       </div>
-    </div>
+    // </div>
   );
 };
 
