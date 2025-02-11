@@ -35,10 +35,55 @@ const ResumeItem = ({ resume}: ResumeItemProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
 
   const reactToPrintFn = useReactToPrint({
-    contentRef,
+    contentRef, // ✅ Use contentRef
     documentTitle: resume.title || "Resume",
-    onBeforePrint: () => Promise.resolve(),
+  
+    // ✅ Ensure `onBeforePrint` returns a Promise
+    onBeforePrint: async () => {
+      console.log("Preparing for print...");
+      
+      await new Promise(resolve => setTimeout(resolve, 100)); // Simulating async operation
+  
+      // Hide unnecessary elements before printing
+      document.querySelectorAll(".hide-on-print").forEach(el => {
+        (el as HTMLElement).style.display = "none";
+      });
+  
+      // Apply temporary print styles
+      const style = document.createElement("style");
+      style.innerHTML = `
+        @media print {
+          body {
+            background: white !important;
+          }
+          #resumePreviewContent {
+            width: 210mm;
+            height: 297mm;
+            margin: auto;
+            page-break-after: always;
+          }
+        }
+      `;
+      document.head.appendChild(style);
+    },
+  
+    // ✅ Ensure `onAfterPrint` restores the page
+    onAfterPrint: () => {
+      console.log("Cleaning up after print...");
+      
+      document.querySelectorAll(".hide-on-print").forEach(el => {
+        (el as HTMLElement).style.display = "";
+      });
+  
+      // Remove temporary styles
+      document.head.querySelectorAll("style").forEach(style => {
+        if (style.innerHTML.includes("@media print")) {
+          style.remove();
+        }
+      });
+    },
   });
+  
 
   const wasUpdated = resume.updatedAt !== resume.createdAt;
 
