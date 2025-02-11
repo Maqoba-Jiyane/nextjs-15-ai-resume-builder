@@ -98,5 +98,6 @@ body {
   @page {
     size: A4; /* ✅ Standard A4 size */
     margin: 0.6cm; /* ✅ Prevents content cutoff */
+    height: auto;
   }
 }
