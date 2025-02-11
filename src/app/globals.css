@@ -88,7 +88,7 @@ body {
   #resumePreviewContent {
     font-family: "Inter", sans-serif;
     width: 210mm; /* ✅ Exact A4 width */
-    height: 100%;
+    height: auto;
     margin: 0 auto !important; /* ✅ Centering */
     padding: 1cm; /* ✅ Adds padding for structure */
     box-sizing: border-box; /* ✅ Ensures padding doesn't overflow */
