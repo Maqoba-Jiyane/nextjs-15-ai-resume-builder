@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { amount, currency, totalDiscount } = await req.json();
+    const { amount, currency, totalDiscount, lineItems, totalTaxAmount } = await req.json();
 
     const response = await fetch("https://payments.yoco.com/api/checkouts", {
       method: "POST",
@@ -26,6 +26,8 @@ export async function POST(req: NextRequest) {
         amount,
         currency,
         totalDiscount,
+        lineItems,
+        totalTaxAmount,
         successUrl: `${origin}/resumes`,
       }),
     });

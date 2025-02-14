@@ -256,20 +256,20 @@ export function MyClientComponent(resumeId: string) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount: "500",
+          amount: (500*1.15),
           currency: "ZAR",
-          totalDiscount: "5500",
-          subtotalAmount: "6000",
+          totalDiscount: (5500*1.15),
+          totalTaxAmount: (500*0.15),
+          subtotalAmount: (6000*1.15),
           lineItems: [
             {
-              displayName: "Chips",
+              displayName: "Ai Resume",
               quantity: 1,
               pricingDetails: {
-                price: 6000,
+                price: (6000*1.15),
               },
             },
           ],
-          resumeId: "testing",
         }),
       });
 
