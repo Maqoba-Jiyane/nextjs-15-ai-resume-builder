@@ -263,7 +263,7 @@ export function MyClientComponent(resumeId: string) {
           subtotalAmount: (6000*1.15),
           lineItems: [
             {
-              displayName: "Ai Resume",
+              displayName: "AI Resume",
               quantity: 1,
               pricingDetails: {
                 price: (6000*1.15),
