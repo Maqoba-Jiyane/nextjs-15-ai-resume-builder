@@ -33,6 +33,7 @@ interface ResumeItemProps {
 
 const ResumeItem = ({ resume}: ResumeItemProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   const reactToPrintFn = useReactToPrint({
     contentRef,
@@ -75,11 +76,16 @@ const ResumeItem = ({ resume}: ResumeItemProps) => {
           size="lg"
           variant="premium"
           disabled={!resume.paid}
-          onClick={resume.paid ? () => reactToPrintFn() : undefined}
+          onClick={resume.paid ? () => setShowDeleteConfirmation(true) : undefined}
           className="flex w-full"
         >
           Download
         </Button>
+        <DownloadConfirmationDialog
+          open={showDeleteConfirmation}
+          onOpenChange={setShowDeleteConfirmation}
+          downloadDoc={reactToPrintFn}
+        />
       </div>
       <MoreMenu
         resumeId={resume.id}
@@ -185,6 +191,51 @@ function DeleteConfirmationDialog({
             loading={isPending}
           >
             Delete
+          </LoadingButton>
+          <Button variant="secondary" onClick={() => onOpenChange(false)}>
+            Cancel
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+interface DownloadConfirmationDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  downloadDoc: ()=> void
+}
+
+function DownloadConfirmationDialog({
+  open,
+  onOpenChange,
+  downloadDoc
+}: DownloadConfirmationDialogProps) {
+  const [isPending, startTransition] = useTransition();
+
+  async function handleDownload() {
+    startTransition(async () => {
+      downloadDoc()
+    });
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Download resume</DialogTitle>
+          <DialogDescription>
+            Be sure to set monarch on your download settings on mobile.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter className="gap-3">
+          <LoadingButton
+            variant="default"
+            onClick={handleDownload}
+            loading={isPending}
+          >
+            Download
           </LoadingButton>
           <Button variant="secondary" onClick={() => onOpenChange(false)}>
             Cancel

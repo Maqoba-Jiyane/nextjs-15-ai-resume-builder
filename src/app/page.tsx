@@ -22,7 +22,7 @@ export default function Home() {
           </span>{' '} in Minutes
         </h1>
         <p className="text-lg text-gray-500">Our <span className="font-bold">AI resume builder</span> helps you design the best resume for your next role.</p>
-        <Button asChild size='lg' variant='premium'><Link href={'/resumes'}>Get started</Link></Button>
+        <Button asChild size='lg' variant='premium'><Link href={'/to-get-started'}>Get started</Link></Button>
       </div>
       <div>
         <Image src={resumePreview} alt="Resume preview" width={600} className="shadow-md lg:rotate-[1.5deg] "/>
