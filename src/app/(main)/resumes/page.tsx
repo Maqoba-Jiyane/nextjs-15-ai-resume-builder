@@ -7,8 +7,6 @@ import { Metadata } from "next";
 import Link from "next/link";
 import ResumeItem from "./ResumeItem";
 
-export const dynamic = "force-dynamic";
-
 export const metadata: Metadata = {
   title: "Your resumes",
 };

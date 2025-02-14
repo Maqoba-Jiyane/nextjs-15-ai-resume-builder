@@ -180,7 +180,11 @@ function WorkExperienceItem({
         />
       </div>
       <div className="flex justify-center">
-<GenerateWorkExperinceButton onWorkExperienceGenerated={exp => form.setValue(`workExperiences.${index}`, exp)}/>
+        <GenerateWorkExperinceButton
+          onWorkExperienceGenerated={(exp) =>
+            form.setValue(`workExperiences.${index}`, exp)
+          }
+        />
       </div>
       <FormField
         control={form.control}
