@@ -13,6 +13,7 @@ import { skillsSchema, SkillsValues } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import GenerateSkillsButton from "./GenerateSkillsButton";
 
 const SkillsForm = ({ resumeData, setResumeData }: EditorFormProps) => {
   const form = useForm<SkillsValues>({
@@ -66,6 +67,10 @@ const SkillsForm = ({ resumeData, setResumeData }: EditorFormProps) => {
                 </FormControl>
                 <FormDescription>Separate each skill with a comma.</FormDescription>
                 <FormMessage/>
+                <GenerateSkillsButton
+                resumeData={resumeData}
+                onSkillsGenerated={skills => form.setValue('skills', skills.split(', '))}
+                />
               </FormItem>
             )}
           />

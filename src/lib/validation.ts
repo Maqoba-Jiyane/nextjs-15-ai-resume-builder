@@ -112,4 +112,12 @@ export const generateSummarySchema = z.object({
   ...skillsSchema.shape,
 });
 
-export type GenerateSummaryInput = z.infer<typeof generateSummarySchema>;
+export type   GenerateSummaryInput = z.infer<typeof generateSkillsSchema>;
+
+export const generateSkillsSchema = z.object({
+  jobTitle: optionalString,
+  ...workExperienceSchema.shape,
+  ...educationSchema.shape,
+});
+
+export type   GenerateSkillsInput = z.infer<typeof generateSkillsSchema>;
