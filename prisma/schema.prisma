@@ -10,12 +10,12 @@ generator client {
 
 // prisma/schema.prisma
 datasource db {
-  provider  = "postgresql"
+  provider  = "mongodb"
   url  	    = env("DATABASE_URL")
 }
 
 model Resume {
-  id String @id @default(cuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
   userId String
 
   title String?
@@ -24,6 +24,7 @@ model Resume {
   photoUrl String?
   colorHex String @default("#000000")
   borderStyle String @default("squircle")
+  template String @default("CLASSIC")
   summary String?
   firstName String?
   lastName String?
@@ -47,7 +48,7 @@ model Resume {
 }
 
 model WorkExperience {
-  id String @id @default(cuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
   position String?
   company String?
   startDate DateTime?
@@ -64,7 +65,7 @@ model WorkExperience {
 }
 
 model Education{
-  id String @id @default(cuid())
+  id String @id @default(auto()) @map("_id") @db.ObjectId
   degree String?
   school String?
   startDate DateTime?

@@ -40,6 +40,12 @@ const ResumeItem = ({ resume}: ResumeItemProps) => {
     documentTitle: resume.title || "Resume",
   });
 
+  const handlePrint = () => {
+    setTimeout(() => {
+      reactToPrintFn();
+    }, 500); // Small delay fixes mobile print issues
+  };
+
   const wasUpdated = resume.updatedAt !== resume.createdAt;
 
   return (
@@ -84,13 +90,13 @@ const ResumeItem = ({ resume}: ResumeItemProps) => {
         <DownloadConfirmationDialog
           open={showDeleteConfirmation}
           onOpenChange={setShowDeleteConfirmation}
-          downloadDoc={reactToPrintFn}
+          downloadDoc={handlePrint}
         />
       </div>
       <MoreMenu
         resumeId={resume.id}
         onPrintClick={
-          resume.paid ? reactToPrintFn : () => MyClientComponent(resume.id)
+          resume.paid ? handlePrint : () => MyClientComponent(resume.id)
         }
       />
     </div>
