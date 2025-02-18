@@ -15,17 +15,6 @@ const ModernResume = ({
   contentRef,
 }: ModernResumeProps) => {
 
-  const totalCheckboxes = 5;
-  const [checkedCount, setCheckedCount] = useState(2);
-
-  const handleCheckboxChange = (index) => {
-    if (index === checkedCount) {
-      setCheckedCount((prev) => prev + 1);
-    } else if (index === checkedCount - 1) {
-      setCheckedCount((prev) => prev - 1);
-    }
-  };
-
   const containerRef = useRef<HTMLDivElement>(null);
   const { width } = useDimensions(containerRef);
   const {
@@ -38,9 +27,6 @@ const ModernResume = ({
     skills,
     educations,
     workExperiences,
-    projects,
-    interests,
-    photo,
     colorHex,
   } = resumeData;
 
@@ -93,7 +79,7 @@ const ModernResume = ({
         )}
 
         {/* Work Experience */}
-        {workExperiences?.length > 0 && (
+        {workExperiences && workExperiences?.length > 0 && (
           <div className="mt-6">
             <h2
               className="text-xl font-semibold pb-1"
@@ -123,7 +109,7 @@ const ModernResume = ({
         )}
 
         {/* Education */}
-        {educations?.length > 0 && (
+        {educations && educations?.length > 0 && (
           <div className="mt-6">
             <h2
               className="text-xl font-semibold pb-1"
@@ -147,33 +133,8 @@ const ModernResume = ({
           </div>
         )}
 
-        {/* Projects */}
-        {projects?.length > 0 && (
-          <div className="mt-6">
-            <h2
-              className="text-xl font-semibold pb-1"
-              style={{ color: colorHex }}
-            >
-              Projects
-            </h2>
-            {projects.map((project, index) => (
-              <div key={index} className="mt-4">
-                <p className="font-semibold">{project.name}</p>
-                <p className="text-sm">
-                  {project.description}{" "}
-                  {project.link && (
-                    <a href={project.link} className="text-blue-500 underline">
-                      View Project
-                    </a>
-                  )}
-                </p>
-              </div>
-            ))}
-          </div>
-        )}
-
         {/* Skills */}
-        {skills?.length > 0 && (
+        {skills && skills?.length > 0 && (
           <div className="mt-6">
             <h2
               className="text-xl font-semibold pb-1"
@@ -184,19 +145,6 @@ const ModernResume = ({
             <SkillsList skills={skills} color={colorHex}/>
           </div>
         )}
-
-        {/* Interests */}
-        {interests?.length > 0 && (
-          <div className="mt-6">
-            <h2
-              className="text-xl font-semibold pb-1"
-              style={{ color: colorHex }}
-            >
-              Interests
-            </h2>
-            <p className="text-sm mt-2">{interests.join(", ")}</p>
-          </div>
-        )}
       </div>
     </div>
   );
@@ -204,7 +152,12 @@ const ModernResume = ({
 
 export default ModernResume;
 
-export function SkillsList({ skills, color }) {
+interface SkillsListProps {
+  skills: string[];
+  color: string | undefined
+}
+
+export function SkillsList({ skills, color }: SkillsListProps) {
   return (
     <div className="flex flex-col mt-2 gap-2">
       {skills.map((skill, skillIndex) => (
@@ -214,11 +167,16 @@ export function SkillsList({ skills, color }) {
   );
 }
 
-function SkillItem({ skill, colorHex }) {
+interface SkillListProps {
+  skill: string
+  colorHex: string | undefined
+}
+
+function SkillItem({ skill, colorHex }: SkillListProps) {
   const totalCheckboxes = 5;
   const [checkedCount, setCheckedCount] = useState(2);
 
-  const handleCheckboxChange = (index) => {
+  const handleCheckboxChange = (index: number) => {
     if (index === checkedCount) {
       setCheckedCount((prev) => prev + 1);
     } else if (index === checkedCount - 1) {
@@ -242,7 +200,9 @@ function SkillItem({ skill, colorHex }) {
             <label
               htmlFor={`${skill}-${index}`}
               className={`w-5 h-5 bg-blue-300 rounded-full peer-checked:bg-blue-500 cursor-pointer`}  
-              style={{ background: colorHex }}
+              style={{ background: colorHex
+                
+               }}
             ></label>
           </div>
         ))}
