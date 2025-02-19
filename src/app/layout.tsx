@@ -9,11 +9,11 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    template: `%s - AI Resume Builder`,
+    template: `%s - EonResume`,
     absolute: "AI Resume Builder",
   },
   description:
-    "AI Resume Builder is the easiest way to create a professional CV to help you lend your dream job.",
+    "EonResume is the easiest way to create a professional resume to help you lend your dream job.",
 };
 
 export default function RootLayout({
