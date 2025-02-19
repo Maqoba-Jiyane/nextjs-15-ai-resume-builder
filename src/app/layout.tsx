@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: {
     template: `%s - EonResume`,
-    absolute: "AI Resume Builder",
+    absolute: "EonResume",
   },
   description:
     "EonResume is the easiest way to create a professional resume to help you lend your dream job.",
