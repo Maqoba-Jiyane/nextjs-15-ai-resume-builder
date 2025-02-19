@@ -8,7 +8,7 @@ const Page = () => {
       <div className="rounded-lg shadow-lg w-full p-6">
         <h2 className="text-2xl font-bold mb-4">Best Resume Tips</h2>
         <p className="mb-2">
-          Welcome to <strong>AI Resume Builder</strong>! Before you start, here
+          Welcome to <strong>EonResume</strong>, your <strong>AI Resume Builder</strong>! Before you start, here
           are some expert resume tips:
         </p>
         <ul className="list-disc mb-4">
@@ -25,7 +25,7 @@ const Page = () => {
         </ul>
 
         <p className="text-yellow-600 font-semibold mb-4">
-          AI Resume Builder is still improving! Some features (especially
+          EonResume is still improving! Some features (especially
           downloading) may require adjustments.
         </p>
         <p className="mb-4">

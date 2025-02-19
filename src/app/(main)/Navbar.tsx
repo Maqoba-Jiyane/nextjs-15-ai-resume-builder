@@ -23,7 +23,7 @@ function Navbar() {
             className="rounded-full filter hue-rotate-90"
           />
           <span className="text-lg font-bold tracking-tight">
-            AI Resume Builder
+            EonResume
           </span>
         </Link>
         <div className="flex items-center gap-3">
