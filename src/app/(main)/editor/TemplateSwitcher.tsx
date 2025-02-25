@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { LayoutGrid, FileText, Layers } from "lucide-react";
+import { FileText, Layers } from "lucide-react";
 
 export const ResumeTemplates = {
   CLASSIC: "CLASSIC",
   MODERN: "MODERN",
-  CREATIVE: "CREATIVE",
+  // CREATIVE: "CREATIVE",
 }
 
 const templateStyles = Object.values(ResumeTemplates);
@@ -23,7 +23,7 @@ const TemplateSwitcher = ({ template, onChange }: TemplateSwitcherProps) => {
 
   const Icon =
     template === "CLASSIC" ? FileText :
-    template === "MODERN" ? LayoutGrid :
+    // template === "MODERN" ? LayoutGrid :
     Layers; // Default icon for CREATIVE
 
   return (

@@ -16,11 +16,13 @@ const ResumePreview = ({ resumeData, contentRef, className }: ResumePreviewProps
     <div className="w-full">
       {resumeData.template === "CLASSIC" ? (
         <ClassicResume resumeData={resumeData} className={className} contentRef={contentRef} />
-      ) : resumeData.template === "MODERN" ? (
+      ) :  (
         <ModernResume resumeData={resumeData} className={className} contentRef={contentRef} />
-      ) : (
-        <p className="text-white text-center">Coming soon...</p>
-      )}
+      )
+      //  : (
+      //   <p className="text-white text-center">Coming soon...</p>
+      // )
+      }
     </div>
   );
 };
