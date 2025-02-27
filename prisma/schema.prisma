@@ -35,6 +35,8 @@ model Resume {
   email String?
   checkoutId String?
   paid Boolean @default(false)
+  downloaded Boolean @default(false)
+  downloadRequest Boolean @default(false)
 
   skills String[]
 

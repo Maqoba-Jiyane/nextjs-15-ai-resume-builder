@@ -47,3 +47,16 @@ export async function updateResumeForPayment(resumeId:string, checkoutId: string
     }
   })
 }
+
+export async function requestDownloadFromAdmin(resumeId:string) {
+
+  const response = await prisma.resume.update({
+    where: { id : resumeId},
+    data: {
+      downloadRequest: true,
+      downloaded: false
+    }
+  })
+
+  return response;
+}

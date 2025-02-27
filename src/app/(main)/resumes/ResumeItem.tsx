@@ -15,7 +15,10 @@ import { formatDate } from "date-fns";
 import { CreditCard, MoreVertical, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState, useTransition } from "react";
-import deleteResume, { updateResumeForPayment } from "./actions";
+import deleteResume, {
+  requestDownloadFromAdmin,
+  updateResumeForPayment,
+} from "./actions";
 import {
   Dialog,
   DialogContent,
@@ -26,14 +29,16 @@ import {
 } from "@/components/ui/dialog";
 import LoadingButton from "@/components/LoadingButton";
 import { useReactToPrint } from "react-to-print";
+import { useRouter } from "next/navigation";
 
 interface ResumeItemProps {
   resume: ResumeServerData;
 }
 
-const ResumeItem = ({ resume}: ResumeItemProps) => {
+const ResumeItem = ({ resume }: ResumeItemProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const router = useRouter();
 
   const reactToPrintFn = useReactToPrint({
     contentRef,
@@ -47,6 +52,22 @@ const ResumeItem = ({ resume}: ResumeItemProps) => {
   };
 
   const wasUpdated = resume.updatedAt !== resume.createdAt;
+
+  const handleRequestDownload = async () => {
+    try {
+      const response = await requestDownloadFromAdmin(resume.id);
+
+      if (response) {
+        alert("Download request submitted successfully!");
+        router.refresh();
+      } else {
+        alert("Failed to submit download request.");
+      }
+    } catch (error) {
+      console.error("Failed to request download:", error);
+      alert("An error occurred while requesting the download.");
+    }
+  };
 
   return (
     <div className="group relative border rounded-lg border-transparent hover:border-border transition-colors bg-secondary p3">
@@ -82,11 +103,23 @@ const ResumeItem = ({ resume}: ResumeItemProps) => {
           size="lg"
           variant="premium"
           disabled={!resume.paid}
-          onClick={resume.paid ? () => setShowDeleteConfirmation(true) : undefined}
+          onClick={
+            resume.paid ? () => setShowDeleteConfirmation(true) : undefined
+          }
           className="flex w-full"
         >
           Download
         </Button>
+        {resume.paid && (
+          <Button
+            size="lg"
+            variant="destructive"
+            onClick={handleRequestDownload}
+            className="flex w-full"
+          >
+            {resume.downloadRequest ? "Requested" : "Request Admin Download"}
+          </Button>
+        )}
         <DownloadConfirmationDialog
           open={showDeleteConfirmation}
           onOpenChange={setShowDeleteConfirmation}
@@ -210,19 +243,19 @@ function DeleteConfirmationDialog({
 interface DownloadConfirmationDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  downloadDoc: ()=> void
+  downloadDoc: () => void;
 }
 
 function DownloadConfirmationDialog({
   open,
   onOpenChange,
-  downloadDoc
+  downloadDoc,
 }: DownloadConfirmationDialogProps) {
   const [isPending, startTransition] = useTransition();
 
   async function handleDownload() {
     startTransition(async () => {
-      downloadDoc()
+      downloadDoc();
     });
   }
 
@@ -262,17 +295,17 @@ export function MyClientComponent(resumeId: string) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount: (500*1.15),
+          amount: 500 * 1.15,
           currency: "ZAR",
-          totalDiscount: (5500*1.15),
-          totalTaxAmount: (500*0.15),
-          subtotalAmount: (6000*1.15),
+          totalDiscount: 5500 * 1.15,
+          totalTaxAmount: 500 * 0.15,
+          subtotalAmount: 6000 * 1.15,
           lineItems: [
             {
               displayName: "AI Resume",
               quantity: 1,
               pricingDetails: {
-                price: (6000*1.15),
+                price: 6000 * 1.15,
               },
             },
           ],
