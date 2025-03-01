@@ -40,7 +40,7 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const router = useRouter();
-  const discountPercentage = Number(useRetrieveRef()) | 0
+  const discountPercentage = Number(useRetrieveRef())
 
   const reactToPrintFn = useReactToPrint({
     contentRef,
@@ -130,7 +130,7 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
       <MoreMenu
         resumeId={resume.id}
         onPrintClick={
-          resume.paid ? handlePrint : () => MyClientComponent(resume.id, discountPercentage)
+          resume.paid ? handlePrint : () => myClientComponent(resume.id, discountPercentage)
         }
       />
     </div>
@@ -286,9 +286,10 @@ function DownloadConfirmationDialog({
   );
 }
 
-export function MyClientComponent(resumeId: string, discountPercentage: number) {
-  callApi(discountPercentage);
-  async function callApi(discountPercentage: number) {
+function myClientComponent(resumeId: string, discountPercentage: number) {
+  
+  callApi();
+  async function callApi() {
     const basePrice = 500;
     const taxRate = 0.15
     const discountedPrice = basePrice * (1 - discountPercentage / 100);
