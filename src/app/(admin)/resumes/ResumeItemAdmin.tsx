@@ -8,6 +8,7 @@ import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { markResumeAsDownloaded } from "./actions";
 import { useRouter } from "next/navigation";
+import { formatDate } from "date-fns";
 
 interface ResumeItemAdminProps {
   resume: ResumeServerData;
@@ -40,15 +41,29 @@ const ResumeItemAdmin = ({ resume }: ResumeItemAdminProps) => {
     });
   };
 
+  const wasUpdated = resume.updatedAt !== resume.createdAt;
+
   return (
     <div className="group relative border rounded-lg border-transparent hover:border-border transition-colors bg-secondary p3">
       <div className="space-y-3">
-        <div
-          className="inline-block w-full text-center cursor-pointer"
-          onClick={() => handleCopyToClipboard(resume.email || "No title")}
-        >
-          <p className="font-semibold line-clamp-1">
+        <div className="inline-block w-full text-center cursor-pointer">
+          <p
+            className="font-semibold line-clamp-1"
+            onClick={() => handleCopyToClipboard(resume.email || "No email")}
+          >
             {resume.email || "No title"}
+          </p>
+          <p
+            className="font-semibold line-clamp-1"
+            onClick={() =>
+              handleCopyToClipboard(resume.firstName || "No first name")
+            }
+          >
+            {resume.firstName}
+          </p>
+          <p className="text-xs text-muted-foreground">
+            {wasUpdated ? "Updated" : "Created"} on{" "}
+            {formatDate(resume.updatedAt, "MMM d, yyyy h:mm a")}
           </p>
         </div>
 
