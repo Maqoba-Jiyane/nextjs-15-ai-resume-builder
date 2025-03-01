@@ -13,8 +13,23 @@ export const metadata: Metadata = {
     template: `%s - EonResume`,
     absolute: "EonResume",
   },
-  description:
-    "EonResume is the easiest way to create a professional resume to help you lend your dream job.",
+  description: "Create professional resumes effortlessly with AI-powered templates and expert guidance.",
+  keywords: "resume builder, AI resume, job applications, online CV, professional resume",
+  openGraph: {
+    title: "EonResume | AI Resume Builder",
+    description: "Build professional resumes in minutes using AI-driven resume templates.",
+    url: "https://eonresume.co.za",
+    siteName: "EonResume",
+    images: [
+      {
+        url: "https://eonresume.co.za/opengraph-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "EonResume Homepage",
+      },
+    ],
+    type: "website",
+  },
 };
 
 export default function RootLayout({

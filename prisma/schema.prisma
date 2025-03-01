@@ -78,3 +78,16 @@ model Education{
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Coupon {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  code        String   @unique
+  discount    Float
+  usageLimit  Int?
+  usageCount  Int      @default(0) // Tracks the number of times the coupon has been used
+  isActive    Boolean  @default(true) // Determines if the coupon is active
+  expiresAt   DateTime?
+  createdAt   DateTime @default(now())
+
+  @@map("coupons")
+}

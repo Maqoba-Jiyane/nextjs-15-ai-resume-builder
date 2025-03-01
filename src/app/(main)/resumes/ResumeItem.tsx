@@ -30,6 +30,7 @@ import {
 import LoadingButton from "@/components/LoadingButton";
 import { useReactToPrint } from "react-to-print";
 import { useRouter } from "next/navigation";
+import { useRetrieveRef } from "@/hooks/useRetrieveRef";
 
 interface ResumeItemProps {
   resume: ResumeServerData;
@@ -39,6 +40,7 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const router = useRouter();
+  const discountPercentage = Number(useRetrieveRef()) | 0
 
   const reactToPrintFn = useReactToPrint({
     contentRef,
@@ -110,16 +112,15 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
         >
           Download
         </Button>
-        {resume.paid && (
-          <Button
-            size="lg"
-            variant="destructive"
-            onClick={handleRequestDownload}
-            className="flex w-full"
-          >
-            {resume.downloadRequest ? "Requested" : "Request Admin Download"}
-          </Button>
-        )}
+        <Button
+          size="lg"
+          variant="destructive"
+          disabled={!resume.paid}
+          onClick={handleRequestDownload}
+          className="flex w-full"
+        >
+          {resume.downloadRequest ? "Requested" : "Request Admin Download"}
+        </Button>
         <DownloadConfirmationDialog
           open={showDeleteConfirmation}
           onOpenChange={setShowDeleteConfirmation}
@@ -129,7 +130,7 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
       <MoreMenu
         resumeId={resume.id}
         onPrintClick={
-          resume.paid ? handlePrint : () => MyClientComponent(resume.id)
+          resume.paid ? handlePrint : () => MyClientComponent(resume.id, discountPercentage)
         }
       />
     </div>
@@ -285,31 +286,35 @@ function DownloadConfirmationDialog({
   );
 }
 
-export function MyClientComponent(resumeId: string) {
-  callApi();
-  async function callApi() {
+export function MyClientComponent(resumeId: string, discountPercentage: number) {
+  callApi(discountPercentage);
+  async function callApi(discountPercentage: number) {
+    const basePrice = 500;
+    const taxRate = 0.15
+    const discountedPrice = basePrice * (1 - discountPercentage / 100);
+    const taxAmount = discountedPrice * taxRate;
+    const totalAmount = discountedPrice + taxAmount;
     try {
       const response = await fetch("/api/yoco-checkout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          amount: 500 * 1.15,
+        body: JSON.stringify( {amount: totalAmount,
           currency: "ZAR",
-          totalDiscount: 5500 * 1.15,
-          totalTaxAmount: 500 * 0.15,
-          subtotalAmount: 6000 * 1.15,
+          totalDiscount: basePrice * (discountPercentage / 100),
+          totalTaxAmount: taxAmount,
+          subtotalAmount: discountedPrice,
           lineItems: [
-            {
-              displayName: "AI Resume",
-              quantity: 1,
-              pricingDetails: {
-                price: 6000 * 1.15,
+              {
+                  displayName: "AI Resume",
+                  quantity: 1,
+                  pricingDetails: {
+                      price: discountedPrice,
+                  },
               },
-            },
           ],
-        }),
+      }),
       });
 
       if (!response.ok) {
