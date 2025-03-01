@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 export function useRetrieveRef() {
-    const [ref, setRef] = useState(null);
+    const [ref, setRef] = useState<string | null>(null);
 
     useEffect(() => {
         const refCookie = document.cookie

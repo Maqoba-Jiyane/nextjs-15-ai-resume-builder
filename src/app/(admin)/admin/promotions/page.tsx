@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { Coupon } from "@prisma/client";
 
 const menuItems = [
     { name: "Dashboard", key: "dashboard" },
@@ -50,10 +51,19 @@ function Dashboard() {
     return <h2 className="text-2xl font-bold">Welcome to the Admin Dashboard</h2>;
 }
 
-export function Coupons() {
-    const [coupons, setCoupons] = useState([]);
+function Coupons() {
+    const [coupons, setCoupons] = useState<Coupon[]>([]);
     const [loading, setLoading] = useState(false);
-    const [newCoupon, setNewCoupon] = useState({ code: "".toUpperCase(), usageLimit: "", discount: "", expiresAt: "" });
+    const [newCoupon, setNewCoupon] = useState<Coupon>({
+        id: "", // Temporary placeholder, will be replaced when saving to DB
+        code: "".toUpperCase(),
+        usageLimit: 0,
+        discount: 0,
+        expiresAt: new Date(),
+        createdAt: new Date(),
+        isActive: false,
+        usageCount: 0,
+      });
     const { toast } = useToast();
 
     useEffect(() => {
@@ -87,7 +97,17 @@ export function Coupons() {
         const data = await response.json();
         if (data.success) {
             setCoupons([...coupons, data.coupon]);
-            setNewCoupon({ code: "", discount: "", expiresAt: "" });
+            setNewCoupon({
+                id: "", // Placeholder until an actual ID is generated
+                code: "",
+                discount: 0,
+                expiresAt: new Date(),
+                usageLimit: null,
+                usageCount: 0,
+                isActive: true, // Default active status
+                createdAt: new Date(), // Assign a creation date
+              });
+              
             toast({description: "Coupon added successfully!"});
         } else {
             toast({
@@ -129,25 +149,21 @@ export function Coupons() {
                 <Input
                     type="text"
                     placeholder="Coupon Code"
-                    value={newCoupon.code}
                     onChange={(e) => setNewCoupon({ ...newCoupon, code: e.target.value.toUpperCase() })}
                 />
                 <Input
                     type="number"
                     placeholder="Discount (%)"
-                    value={newCoupon.discount}
-                    onChange={(e) => setNewCoupon({ ...newCoupon, discount: e.target.value })}
+                    onChange={(e) => setNewCoupon({ ...newCoupon, discount: Number(e.target.value) })}
                 />
                 <Input
                     type="number"
                     placeholder="Usage Limit"
-                    value={newCoupon.usageLimit}
-                    onChange={(e) => setNewCoupon({ ...newCoupon, usageLimit: e.target.value })}
+                    onChange={(e) => setNewCoupon({ ...newCoupon, usageLimit: Number(e.target.value) })}
                 />
                 <Input
                     type="date"
-                    value={newCoupon.expiresAt}
-                    onChange={(e) => setNewCoupon({ ...newCoupon, expiresAt: e.target.value })}
+                    onChange={(e) => setNewCoupon({ ...newCoupon, expiresAt: new Date(e.target.value) || '' })}
                 />
                 <Button onClick={handleCreateCoupon} disabled={loading} className="mt-2">
                     {loading ? "Adding..." : "Add Coupon"}
@@ -159,13 +175,13 @@ export function Coupons() {
             <div className="border p-4 rounded-md">
                 {loading && <p>Loading coupons...</p>}
                 {coupons.length === 0 && !loading && <p>No coupons available.</p>}
-                {coupons.map((coupon) => (
+                {coupons.map((coupon: Coupon) => (
                     <div key={coupon.code} className="border-b py-2 flex justify-between items-center">
                         <div>
                             <p><strong>Code:</strong> {coupon.code}</p>
                             <p><strong>Discount:</strong> {coupon.discount}%</p>
                             <p><strong>Usage Limit:</strong> {coupon.usageLimit || 'None'}</p>
-                            <p><strong>Expires:</strong> {coupon.expiresAt || "No expiration"}</p>
+                            <p><strong>Expires:</strong> {coupon.expiresAt ? new Date(coupon.expiresAt).toISOString().split("T")[0] : "No expiration"}</p>
                         </div>
                         <Button variant="destructive" onClick={() => handleDeleteCoupon(coupon.code)}>
                             Delete
