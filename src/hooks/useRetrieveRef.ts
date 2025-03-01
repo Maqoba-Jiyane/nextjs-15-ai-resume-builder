@@ -6,7 +6,7 @@ export function useRetrieveRef() {
     useEffect(() => {
         const refCookie = document.cookie
             .split("; ")
-            .find(row => row.startsWith("ref="));
+            .find(row => row.startsWith("coupon="));
 
         if (refCookie) {
             const refValue = refCookie.split("=")[1];
