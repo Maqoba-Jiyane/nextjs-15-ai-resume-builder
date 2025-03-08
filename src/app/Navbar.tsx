@@ -15,7 +15,7 @@ import { usePathname } from "next/navigation"; // Use this for pathname instead 
 function Navbar() {
   const { theme } = useTheme();
   const width = useScreenWidth();
-  
+
   // State to check if the component has mounted
   const [isMounted, setIsMounted] = useState(false);
 
@@ -42,8 +42,8 @@ function Navbar() {
             height={35}
             className="rounded-full filter hue-rotate-90"
           />
-          <span className="text-lg font-bold tracking-tight hidden md:flex">
-            EonResume
+          <span className="text-lg font-bold tracking-tight text-black">
+            Eon<span className="text-blue-500">Resume</span>
           </span>
         </Link>
         {width > 1074 ? (
@@ -73,7 +73,7 @@ function Navbar() {
           </>
         ) : (
           <div className="flex">
-            <Button asChild size="lg" variant="premium">
+            <Button asChild size="default" variant="premium">
               <Link href="/resumes">Start Now</Link>
             </Button>
           </div>
