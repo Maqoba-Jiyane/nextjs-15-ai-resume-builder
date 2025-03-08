@@ -2,22 +2,37 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import logo from "@/assets/logo.png";
 import { UserButton } from "@clerk/nextjs";
 import ThemeToggle from "@/components/ThemeToggle";
 import { dark } from "@clerk/themes";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
-import DropDownMenu from "@/components/PublicDropDownMenu";
 import { useScreenWidth } from "@/hooks/useScreenWidth";
+import { usePathname } from "next/navigation"; // Use this for pathname instead of useRouter()
 
 function Navbar() {
   const { theme } = useTheme();
   const width = useScreenWidth();
+  
+  // State to check if the component has mounted
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Use usePathname from next/navigation to get the current path
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setIsMounted(true); // This will run once the component is mounted on the client
+  }, []);
+
+  // Only use pathname after the component has mounted on the client side
+  if (!isMounted || pathname !== "/") {
+    return null; // Hide the navbar on all pages except the home page
+  }
 
   return (
-    <header className="shadow-sm">
+    <header className="shadow-sm bg-gray-100 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto p-3 flex items-center justify-between gap-3">
         <Link href="/resumes" className="flex items-center gap-2">
           <Image
@@ -58,8 +73,9 @@ function Navbar() {
           </>
         ) : (
           <div className="flex">
-            <ThemeToggle />
-            <DropDownMenu />
+            <Button asChild size="lg" variant="premium">
+              <Link href="/resumes">Start Now</Link>
+            </Button>
           </div>
         )}
       </div>

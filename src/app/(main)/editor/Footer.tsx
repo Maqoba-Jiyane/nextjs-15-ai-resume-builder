@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { steps } from "./steps";
-import { FileUserIcon, PenLineIcon } from "lucide-react";
+import {  FileUserIcon, PenLineIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface FooterProps {
@@ -9,7 +9,7 @@ interface FooterProps {
   setCurrentStep: (step: string) => void;
   showSmResumePreview: boolean;
   setShowSmResumePreview: (show: boolean) => void;
-  isSaving: boolean
+  isSaving: boolean;
 }
 
 const Footer = ({
@@ -17,7 +17,7 @@ const Footer = ({
   setCurrentStep,
   showSmResumePreview,
   setShowSmResumePreview,
-  isSaving
+  isSaving,
 }: FooterProps) => {
   const previousStep = steps.find(
     (_, index) => steps[index + 1]?.key === currentStep,
@@ -54,7 +54,7 @@ const Footer = ({
           onClick={() => setShowSmResumePreview(!showSmResumePreview)}
           className="md:hidden"
           title={
-            showSmResumePreview? "Show input form":'Show resume preview'
+            showSmResumePreview ? "Show input form" : "Show resume preview"
           }
         >
           {showSmResumePreview ? <PenLineIcon /> : <FileUserIcon />}
@@ -63,7 +63,14 @@ const Footer = ({
           <Button variant="secondary" asChild>
             <Link href="/resumes">Close</Link>
           </Button>
-          <p className={cn("text-muted-foreground opacity-0", isSaving && 'opacity-100')}>Saving...</p>
+          <p
+            className={cn(
+              "text-muted-foreground opacity-0",
+              isSaving && "opacity-100",
+            )}
+          >
+            Saving...
+          </p>
         </div>
       </div>
     </footer>

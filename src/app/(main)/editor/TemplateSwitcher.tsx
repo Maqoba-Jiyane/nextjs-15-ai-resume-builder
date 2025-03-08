@@ -5,7 +5,7 @@ export const ResumeTemplates = {
   CLASSIC: "CLASSIC",
   MODERN: "MODERN",
   // CREATIVE: "CREATIVE",
-}
+};
 
 const templateStyles = Object.values(ResumeTemplates);
 
@@ -22,9 +22,10 @@ const TemplateSwitcher = ({ template, onChange }: TemplateSwitcherProps) => {
   }
 
   const Icon =
-    template === "CLASSIC" ? FileText :
-    // template === "MODERN" ? LayoutGrid :
-    Layers; // Default icon for CREATIVE
+    template === "CLASSIC"
+      ? FileText
+      : // template === "MODERN" ? LayoutGrid :
+        Layers; // Default icon for CREATIVE
 
   return (
     <Button

@@ -26,6 +26,7 @@ model Resume {
   borderStyle String @default("squircle")
   template String @default("CLASSIC")
   summary String?
+  jobDescription String?
   firstName String?
   lastName String?
   jobTitle String?
@@ -90,4 +91,14 @@ model Coupon {
   createdAt   DateTime @default(now())
 
   @@map("coupons")
+}
+
+// Prisma schema example
+model Template {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId // Unique ID for each template
+  name      String // Name of the template (e.g., Modern Resume, Creative Resume)
+  image     String // Image URL or path for the template
+
+  createdAt DateTime @default(now()) // Timestamp when the template was created
+  updatedAt DateTime @updatedAt     // Timestamp when the template was last updated
 }

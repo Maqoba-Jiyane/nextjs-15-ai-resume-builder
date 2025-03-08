@@ -1,7 +1,7 @@
 "use server";
 
 import openai from "@/lib/openai";
-import { GenerateSummaryInput, generateSummarySchema, GenerateWorkExperienceInput, generateWorkExperienceSchema, WorkExperience } from "@/lib/validation";
+import { AnalyzeResumeInput, analyzeResumeSchema, GenerateSummaryInput, generateSummarySchema, GenerateWorkExperienceInput, generateWorkExperienceSchema, WorkExperience } from "@/lib/validation";
 
 export async function generateSummary(input: GenerateSummaryInput) {
   // TODO: Block non-prremium users
@@ -149,4 +149,114 @@ export async function generateSkills(input: GenerateSummaryInput) {
   }
 
   return aiResponse;
+}
+
+export async function analyzeResume(input: AnalyzeResumeInput) {
+  try {
+    // Validate and parse the input based on the schema
+    const { jobTitle, workExperiences, educations, skills, jobDescription, summary } = analyzeResumeSchema.parse(input);
+
+// System Message: Instructions for the AI to process and analyze the job data.
+const systemMessage = `
+I want you to act as an Applicant Tracking System (ATS). Your task is to analyze the following candidate's resume data and compare it against a provided job description. Here's how you should evaluate the data:
+
+1. **Keyword Matching**: Compare the provided data against the job description for relevant keywords, including technical skills, soft skills, and qualifications mentioned in the job posting.
+2. **Experience Relevance**: Compare the candidate’s work experience to the job description. Focus on key areas like job responsibilities, achievements, and transferable skills.
+3. **Skills Match**: Evaluate how well the candidate’s skills align with the job description. Look for matching technical or soft skills.
+4. **Education and Certifications**: Compare the candidate’s education and certifications against the job requirements. Highlight any mismatches or missing qualifications.
+5. **ATS Compatibility**: Evaluate how well the data aligns with ATS systems, ensuring it is well-structured and aligned with job description criteria.
+6. **Overall Score**: Average of how well the resume fits the job requirements.
+
+### Conditions:
+- **If the provided data has not changed since the last analysis**, simply return the same response that was previously given, without re-analyzing or recalculating the data.
+- **If any data has changed**, perform the analysis again and provide the updated result.
+
+Once you perform the analysis, provide:
+- A score out of 100 based on how well the data matches the job description.
+- A breakdown of the match percentage for each section (e.g., Skills match, Experience match, etc.).
+- A list of recommendations to improve the data for better ATS compatibility.
+
+Use your knowledge of best practices in ATS algorithms and resume optimization to give a thorough analysis. Keep it concise and professional.
+
+`;
+
+// User Message: Request to compare the job description to the resume data (passed in the form of specific data attributes).
+const userMessage = `
+  Compare the following job description to the provided candidate data to check how well it matches. Please return only a JSON object with the following structure. Each section should contain a "score", "analysis", and "improvements" (if applicable). If there are no improvements, return an empty array "[]".
+
+**Job Description:** ${jobDescription?.trim() || "N/A"}
+
+**Candidate Data:**
+- jobTitle: ${jobTitle || "N/A"}
+- workExperiences: ${workExperiences || "N/A"}
+- educations: ${educations || "N/A"}
+- skills: ${skills || "N/A"}
+- summary: ${summary || "N/A"}
+
+  The JSON structure should look like this:
+
+  {
+    "overall_score": <overall_score>,
+    "keywords_match": {
+      "score": <score>,
+      "analysis": "<analysis>",
+      "improvements": ["<improvement1>", "<improvement2>", ...]
+    },
+    "experience_match": {
+      "score": <score>,
+      "analysis": "<analysis>",
+      "improvements": ["<improvement1>", "<improvement2>", ...]
+    },
+    "education_match": {
+      "score": <score>,
+      "analysis": "<analysis>",
+      "improvements": ["<improvement1>", "<improvement2>", ...]
+    },
+    "skills_match": {
+      "score": <score>,
+      "analysis": "<analysis>",
+      "improvements": ["<improvement1>", "<improvement2>", ...]
+    },
+    "ats_compatibility": {
+      "score": <score>,
+      "analysis": "<analysis>",
+      "improvements": ["<improvement1>", "<improvement2>", ...]
+    }
+  }
+
+  Make sure to include all sections, even if there are no improvements. If no improvements are necessary, return an empty array "[]".
+
+  If no job description has been provided, do not do the comparison, simply let the user know.
+
+  Only return the JSON object and no extra text.
+`;
+    // Request AI completion from OpenAI's GPT model
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content: systemMessage,
+        },
+        {
+          role: "user",
+          content: userMessage,
+        },
+      ],
+    });
+
+    // Extract AI response
+    const aiResponse = completion.choices[0].message.content;
+
+    // Check for valid response
+    if (!aiResponse) {
+      throw new Error("Failed to generate AI response.");
+    }
+    
+    return JSON.parse(aiResponse);
+
+  } catch (error) {
+    console.error("Error analyzing resume: ", error);
+    throw new Error("An error occurred while analyzing the resume.");
+  }
 }

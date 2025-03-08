@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/toaster";
 import Script from "next/script";
+import Navbar from "./Navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -45,7 +46,7 @@ export default function RootLayout({
             async
             src="https://www.googletagmanager.com/gtag/js?id=G-9FFS7J8YWB"
           ></Script>
-          <Script id="google-analytics">
+          <Script id="google-analytics"  strategy="afterInteractive">
             {`
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -55,6 +56,7 @@ export default function RootLayout({
           </Script>
         </head>
         <body className={inter.className}>
+        <Navbar />
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

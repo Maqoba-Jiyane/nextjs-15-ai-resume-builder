@@ -5,12 +5,14 @@ import WorkExperienceForm from "./forms/WorkExperienceForm";
 import EducationForm from "./forms/EducationForm";
 import SkillsForm from "./forms/SkillsForm";
 import SummaryForm from "./forms/SummaryForm";
+import JobDescriptionForm from "./forms/JobDescriptionForm";
 
 export const steps: {
   title: string;
   component: React.ComponentType<EditorFormProps>;
   key: string;
 }[] = [
+  { title: "Job description", component: JobDescriptionForm, key: "job-description" },
   { title: "General info", component: GeneralInfoForm, key: "general-info" },
   {
     title: "Personal info",

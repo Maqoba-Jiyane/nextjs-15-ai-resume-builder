@@ -1,11 +1,10 @@
-import { ArrowDown, ArrowUp, Download, LogOut, TrendingUp } from "lucide-react";
+import { ArrowDown, ArrowUp, Contact, FileUser, HandHelping, House, LogOut } from "lucide-react";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
@@ -14,7 +13,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { SignOutButton,  } from "@clerk/nextjs";
 
-const AdminDropDownMenu = () => {
+const PublicDropDownMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <DropdownMenu onOpenChange={(open) => setIsOpen(open)}>
@@ -33,27 +32,33 @@ const AdminDropDownMenu = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-        <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link href={"/admin/download-requests"}>
-              <Download />
-              <span>Download Requests</span>
+            <Link href={"/"}>
+            <House />
+              <span>Home</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem asChild>
+            <Link href={"/resumes"}>
+            <FileUser />
+              <span>Resumes</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href={"/admin/promotions"}>
-              <TrendingUp />
-              <span>Promotions</span>
+            <Link href={"/contact-us"}>
+            <Contact />
+              <span>Contact Us</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href={"/admin/unpaid-resumes"}>
-              <Download />
-              <span>Unpaid Resumes</span>
+            <Link href={"/help-center"}>
+            <HandHelping />
+              <span>Help Center</span>
             </Link>
           </DropdownMenuItem>
+          <DropdownMenuSeparator />
           <DropdownMenuItem>
             <SignOutButton>
               <div className="flex items-center gap-2 text-red-500 cursor-pointer">
@@ -68,4 +73,4 @@ const AdminDropDownMenu = () => {
   );
 };
 
-export default AdminDropDownMenu;
+export default PublicDropDownMenu;
