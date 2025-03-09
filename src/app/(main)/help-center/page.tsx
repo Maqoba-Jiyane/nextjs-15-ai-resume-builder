@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { ArrowDown, ArrowUp } from "lucide-react";
 
 const HelpCenter = () => {
   // State to manage which section is open
@@ -74,19 +75,30 @@ const HelpCenter = () => {
               "If you have any additional questions or need further assistance, please don't hesitate to contact our support team. We're here to help!",
           },
         ].map((section, index) => (
-          <div key={index}>
-            <div
-              onClick={() => toggleSection(index)}
-              className="cursor-pointer text-2xl font-semibold mb-2"
-            >
-              {section.title}
-            </div>
-            {openSection === index && (
-              <div className="text-lg">
-                <p>{section.content}</p>
+          <div key={index} className="mb-4">
+              <div
+                onClick={() => toggleSection(index)}
+                className="cursor-pointer text-2xl font-semibold mb-2 p-3 flex justify-center md:gap-4 items-center"
+              >
+                <span>{section.title}</span>
+                <span>
+                  {openSection === index ? (
+                    <span className="transform rotate-180">
+                      <ArrowUp />
+                    </span>
+                  ) : (
+                    <span>
+                      <ArrowDown />
+                    </span>
+                  )}
+                </span>
               </div>
-            )}
-          </div>
+              {openSection === index && (
+                <div className="text-lg pl-4">
+                  <p>{section.content}</p>
+                </div>
+              )}
+            </div>
         ))}
 
         {/* Contact Button */}

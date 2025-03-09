@@ -75,7 +75,7 @@ const ContactForm = () => {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
@@ -90,7 +90,7 @@ const ContactForm = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
@@ -104,13 +104,14 @@ const ContactForm = () => {
                 value={formData.issueType}
                 onChange={handleChange}
                 required
-                className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="General Inquiry">General Inquiry</option>
                 <option value="Technical Issue">Technical Issue</option>
                 <option value="Account Issues">Account Issues</option>
                 <option value="Payments">Payments</option>
                 <option value="Download Issues">Download Issues</option>
+                <option value="Other">Other</option>
               </select>
             </div>
 
@@ -125,12 +126,12 @@ const ContactForm = () => {
                 onChange={handleChange}
                 rows={6}
                 required
-                className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
             <div className="text-center">
-              <Button type="submit" variant={"premium"} disabled={isSubmitting}>
+              <Button type="submit" size={'lg'} variant={"premium"} disabled={isSubmitting}>
                 {isSubmitting ? "Submitting..." : "Submit"}
               </Button>
             </div>
