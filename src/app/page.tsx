@@ -157,7 +157,7 @@ export default function Home() {
               <h3 className="text-xl font-semibold text-gray-800 mb-4">
                 One-Time Payment for a Complete Resume
               </h3>
-              <p className="text-3xl font-bold text-blue-600 mb-4">R24</p>
+              <p className="text-3xl font-bold text-blue-600 mb-4">R27.60</p>
               <p className="text-gray-600 mb-6">
                 Pay once for a fully optimized resume with ATS compatibility,
                 including these amazing AI-powered features:

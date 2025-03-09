@@ -289,7 +289,7 @@ function myClientComponent(resumeId: string, discountPercentage: number) {
   
   callApi();
   async function callApi() {
-    const basePrice = 500;
+    const basePrice = 2400;
     const taxRate = 0.15
     const discountedPrice = basePrice * (1 - discountPercentage / 100);
     const taxAmount = discountedPrice * taxRate;
@@ -311,6 +311,13 @@ function myClientComponent(resumeId: string, discountPercentage: number) {
                   quantity: 1,
                   pricingDetails: {
                       price: discountedPrice,
+                  },
+              },
+              {
+                  displayName: "ATS",
+                  quantity: 1,
+                  pricingDetails: {
+                      price: 0,
                   },
               },
           ],
