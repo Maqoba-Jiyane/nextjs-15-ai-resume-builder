@@ -104,9 +104,8 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
         <Button
           size="lg"
           variant="premium"
-          disabled={!resume.paid}
           onClick={
-            resume.paid ? () => setShowDeleteConfirmation(true) : undefined
+            resume.paid ? () => setShowDeleteConfirmation(true) : () => myClientComponent(resume.id, discountPercentage)
           }
           className="flex w-full"
         >
