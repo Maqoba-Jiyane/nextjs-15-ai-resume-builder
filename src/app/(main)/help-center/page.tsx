@@ -67,7 +67,7 @@ const HelpCenter = () => {
           {
             title: "Can I Edit My Resume After Downloading?",
             content:
-              "Yes! You can always return to EonResume, update your resume, and download the latest version whenever needed.",
+              "We suggest that you ensure everything is up to date before making payment, as any update currently will erase the payment.",
           },
           {
             title: "Contact Support",
