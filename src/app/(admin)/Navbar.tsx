@@ -43,6 +43,9 @@ function Navbar() {
               <Link href="/admin/unpaid-resumes">
                 <Button variant="outline">Unpaid Resumes</Button>
               </Link>
+              <Link href="/admin/half-way-payment">
+                <Button variant="outline">Half Way Payment</Button>
+              </Link>
             </div>{" "}
             <div className="flex items-center gap-3">
               <ThemeToggle />
