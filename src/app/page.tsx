@@ -1,10 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import resumePreview from "@/assets/resume-preview.jpg";
 import { Star } from "lucide-react";
 import HelpCenter from "./(main)/help-center/page";
 
@@ -72,8 +70,9 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-gray-100 px-5 py-12 text-gray-900 text-center md:text-start lg:gap-12">
       {/* Main Content */}
       <div className="flex items-center max-md:flex-col gap-12">
-        <div className="max-w-prose space-y-3">
-          <Image
+        <div className="max-w-prose space-y-3 flex flex-col justify-center items-center">
+          <Image alt="logo" src={"/assets/logo.png"} width={500} height={500} />
+          {/* <Image
             src={logo}
             alt="logo"
             width={150}
@@ -90,21 +89,23 @@ export default function Home() {
           <p className="text-lg text-gray-500">
             Our <span className="font-bold">AI resume builder</span> helps you
             design the best resume for your next role.
-          </p>
-          <Button asChild size="lg" variant="premium">
-            <Link href="/to-get-started">Get started</Link>
-          </Button>
+          </p> */}
+          <div>
+            <Button asChild size="lg" variant="premium">
+              <Link href="/to-get-started">Get started</Link>
+            </Button>
+          </div>
         </div>
 
         {/* Resume Preview Image */}
-        <div>
+        {/* <div>
           <Image
             src={resumePreview}
             alt="Resume preview"
             width={600}
             className="shadow-md lg:rotate-[1.5deg]"
           />
-        </div>
+        </div> */}
       </div>
 
       {/* Testimonials Section */}
@@ -180,7 +181,8 @@ export default function Home() {
                   Standardized Formatting (fonts, headings)
                 </li>
                 <li className="flex items-center mb-2">
-                  <span className="text-green-500 mr-2">✔️</span> Clear Listing to enhance readability for ATS
+                  <span className="text-green-500 mr-2">✔️</span> Clear Listing
+                  to enhance readability for ATS
                 </li>
                 <li className="flex items-center mb-2">
                   <span className="text-green-500 mr-2">✔️</span> Compatible

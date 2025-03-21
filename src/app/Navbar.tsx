@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
-import logo from "@/assets/logo.png";
 import { UserButton } from "@clerk/nextjs";
 import ThemeToggle from "@/components/ThemeToggle";
 import { dark } from "@clerk/themes";
@@ -36,15 +35,21 @@ function Navbar() {
       <div className="max-w-7xl mx-auto p-3 flex items-center justify-between gap-3">
         <Link href="/resumes" className="flex items-center gap-2">
           <Image
-            src={logo}
+            src={'/assets/logo2.png'}
             alt="logo"
-            width={35}
-            height={35}
-            className="rounded-full filter hue-rotate-90"
+            width={50}
+            height={50}
+            className="rounded-full"
           />
-          <span className="text-lg font-bold tracking-tight text-black">
-            Eon<span className="text-blue-500">Resume</span>
-          </span>
+          <div className={`max-md:hidden`}>
+          <Image
+            src={'/assets/logo3.png'}
+            alt="logo"
+            width={213}
+            height={69}
+            className="rounded-full"
+          />
+          </div>
         </Link>
         {width > 1074 ? (
           <>
