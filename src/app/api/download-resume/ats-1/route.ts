@@ -144,7 +144,7 @@ export async function POST(request: Request) {
 
     // Section: Summary
     if (resume.summary) {
-      const summaryTitle = "Summary";
+      const summaryTitle = "Professional Summary";
       const summaryTitleHeight = 30; // Height of the summary title
       checkForNewPage(summaryTitleHeight); // Check if the summary title fits on the current page
       page.drawText(summaryTitle, {

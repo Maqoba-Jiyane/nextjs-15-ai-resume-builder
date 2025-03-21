@@ -80,10 +80,17 @@ export async function POST(request: Request) {
     const fontSize = 10;
     const headingFontSize = 12;
     const namesFontSize = 14;
+  
 
     // Minimum margin from the bottom of the page
     const bottomMargin = 50;
     const leftMargin = 25;
+
+    // Section spaces
+    const spaceBetween = 25
+
+    // Headin to content space
+    const headingToContentSpace = 20
 
     // Add the first page
     let page = pdfDoc.addPage();
@@ -159,7 +166,7 @@ export async function POST(request: Request) {
         color: rgb(0.3, 0.3, 0.3),
       });
 
-      yOffset -= contactInfoHeight + 10; // Move down after the first line of contact info
+      yOffset -= spaceBetween; // Move down after the first line of contact info
     }
 
     // Section: Summary
@@ -167,14 +174,14 @@ export async function POST(request: Request) {
       // Draw line
       page.drawLine({
         start: { x: leftMargin, y: yOffset },
-        end: { x: width - 50, y: yOffset },
+        end: { x: width - leftMargin, y: yOffset },
         thickness: 2,
         color: rgb(0, 0, 0),
       });
 
-      yOffset -= contactInfoHeight + 20; // Move down after the first line of contact info
+      yOffset -= spaceBetween; // Move down after the first line of contact info
 
-      const summaryTitle = "Professional profile";
+      const summaryTitle = "Professional Summary";
       const summaryTitleHeight = 30; // Height of the summary title
       checkForNewPage(summaryTitleHeight); // Check if the summary title fits on the current page
       page.drawText(summaryTitle, {
@@ -184,7 +191,7 @@ export async function POST(request: Request) {
         size: headingFontSize,
         color: rgb(0, 0, 0),
       });
-      yOffset -= summaryTitleHeight; // Move down after the section title
+      yOffset -= headingToContentSpace; // Move down after the section title
 
       const summaryLines = wrapText(
         resume.summary,
@@ -192,6 +199,7 @@ export async function POST(request: Request) {
         fontSize,
         width - 100,
       );
+
       const summaryHeight = summaryLines.length * 15; // Height of the summary text
       checkForNewPage(summaryHeight); // Check if the summary text fits on the current page
       summaryLines.forEach((line) => {
@@ -204,7 +212,7 @@ export async function POST(request: Request) {
         });
         yOffset -= 15; // Move down after each line
       });
-      yOffset -= 20; // Add extra space after the summary section
+      yOffset -= spaceBetween - 15; // Add extra space after the summary section
     }
 
     // Section: Work Experience
@@ -212,11 +220,11 @@ export async function POST(request: Request) {
       // Draw line
       page.drawLine({
         start: { x: leftMargin, y: yOffset },
-        end: { x: width - 50, y: yOffset },
+        end: { x: width - leftMargin, y: yOffset },
         thickness: 2,
         color: rgb(0, 0, 0),
       });
-      yOffset -= contactInfoHeight + 20; // Move down after the first line of contact info
+      yOffset -= spaceBetween; // Move down after the first line of contact info
 
       const experienceTitle = "Work experience";
       const experienceTitleHeight = 30; // Height of the experience title
@@ -228,7 +236,7 @@ export async function POST(request: Request) {
         size: headingFontSize,
         color: rgb(0, 0, 0),
       });
-      yOffset -= experienceTitleHeight; // Move down after the section title
+      yOffset -= headingToContentSpace; // Move down after the section title
 
       resume.workExperiences.forEach((experience: WorkExperience) => {
         const companyText = `${experience.company}`;
@@ -297,7 +305,7 @@ export async function POST(request: Request) {
             }
           });
         }
-        yOffset -= 20; // Add extra space after each work experience
+        yOffset -= spaceBetween - 15; // Add extra space after each work experience
       });
     }
 
@@ -310,7 +318,7 @@ export async function POST(request: Request) {
         thickness: 2,
         color: rgb(0, 0, 0),
       });
-      yOffset -= contactInfoHeight + 20; // Move down after the first line of contact info
+      yOffset -= spaceBetween; // Move down after the first line of contact info
 
       const educationTitle = "Education";
       const educationTitleHeight = 30; // Height of the education title
@@ -322,7 +330,7 @@ export async function POST(request: Request) {
         size: headingFontSize,
         color: rgb(0, 0, 0),
       });
-      yOffset -= educationTitleHeight; // Move down after the section title
+      yOffset -= headingToContentSpace; // Move down after the section title
 
       resume.educations.forEach((education: Education) => {
         const educationDegree = `${education.degree}`;
@@ -360,7 +368,7 @@ export async function POST(request: Request) {
         });
         yOffset -= educationHeight; // Move down after each line
       });
-      yOffset -= 20; // Add extra space after the education section
+      yOffset -= spaceBetween - 15; // Add extra space after the education section
     }
 
     // Section: Skills
@@ -372,7 +380,7 @@ export async function POST(request: Request) {
         thickness: 2,
         color: rgb(0, 0, 0),
       });
-      yOffset -= contactInfoHeight + 20; // Move down after the first line of contact info
+      yOffset -= spaceBetween; // Move down after the first line of contact info
 
       const skillsTitle = "Skills";
       const skillsTitleHeight = 30; // Height of the skills title
@@ -384,8 +392,7 @@ export async function POST(request: Request) {
         size: headingFontSize,
         color: rgb(0, 0, 0),
       });
-      yOffset -= 20; // Move down after the first line of contact info
-      yOffset -= skillsTitleHeight; // Move down after the section title
+      yOffset -= headingToContentSpace; // Move down after the first line of contact info
       let xOffset = leftMargin;
 
       const skillsHeight = resume.skills.length * 15; // Height of the summary text
