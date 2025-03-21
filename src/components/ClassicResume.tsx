@@ -60,7 +60,6 @@ interface ResumeSectionProps {
       country,
       phone,
       email,
-      colorHex,
       borderStyle,
     } = resumeData;
     const [photoSrc, setPhotoSrc] = useState(photo instanceof File ? "" : photo);
@@ -93,10 +92,10 @@ interface ResumeSectionProps {
         )}
         <div className="space-y-2.5">
           <div className="space-y-1">
-            <p className="text-3xl font-bold" style={{ color: colorHex }}>
+            <p className="text-3xl font-bold">
               {firstName} {lastName}
             </p>
-            <p className="font-medium" style={{ color: colorHex }}>
+            <p className="font-medium">
               {jobTitle}
             </p>
           </div>
@@ -111,15 +110,15 @@ interface ResumeSectionProps {
   }
   
   function SummarySection({ resumeData }: ResumeSectionProps) {
-    const { summary, colorHex } = resumeData;
+    const { summary } = resumeData;
   
     if (!summary) return null;
   
     return (
       <>
-        <hr className="border-2" style={{ borderColor: colorHex }} />
+        <hr className="border-2" />
         <div className="space-y-3 break-inside-avoid">
-          <p className="text-lg font-semibold" style={{ color: colorHex }}>
+          <p className="text-lg font-semibold">
             Professional profile
           </p>
           <div className="whitespace-pre-line text-sm">{summary}</div>
@@ -129,7 +128,7 @@ interface ResumeSectionProps {
   }
   
   function WorkExperienceSection({ resumeData }: ResumeSectionProps) {
-    const { workExperiences, colorHex } = resumeData;
+    const { workExperiences } = resumeData;
   
     const workExperiencesNotEmpty = workExperiences?.filter(
       (exp) => Object.values(exp).filter(Boolean).length > 0,
@@ -139,16 +138,16 @@ interface ResumeSectionProps {
   
     return (
       <>
-        <hr className="border-2" style={{ borderColor: colorHex }} />
+        <hr className="border-2" />
         <div className="space-y-3">
-          <p className="text-lg font-semibold" style={{ color: colorHex }}>
+          <p className="text-lg font-semibold">
             Work experience
           </p>
           {workExperiencesNotEmpty.map((exp, index) => (
             <div className="break-inside-avoid space-y-1" key={index}>
               <div
                 className="flex items-center justify-between text-sm font-semibold"
-                style={{ color: colorHex }}
+               
               >
                 <span>{exp.position}</span>
                 {exp.startDate && (
@@ -168,7 +167,7 @@ interface ResumeSectionProps {
   }
   
   function EducationSection({ resumeData }: ResumeSectionProps) {
-    const { educations, colorHex } = resumeData;
+    const { educations } = resumeData;
   
     const educationsNotEmpty = educations?.filter(
       (edu) => Object.values(edu).filter(Boolean).length > 0,
@@ -178,16 +177,16 @@ interface ResumeSectionProps {
   
     return (
       <>
-        <hr className="border-2" style={{ borderColor: colorHex }} />
+        <hr className="border-2" />
         <div className="space-y-3">
-          <p className="text-lg font-semibold" style={{ color: colorHex }}>
+          <p className="text-lg font-semibold">
             Education
           </p>
           {educationsNotEmpty.map((edu, index) => (
             <div className="break-inside-avoid space-y-1" key={index}>
               <div
                 className="flex items-center justify-between text-sm font-semibold"
-                style={{ color: colorHex }}
+               
               >
                 <span>{edu.degree}</span>
                 {edu.startDate && (
@@ -206,15 +205,15 @@ interface ResumeSectionProps {
   }
   
   function SkillsSection({ resumeData }: ResumeSectionProps) {
-    const { skills, colorHex, borderStyle } = resumeData;
+    const { skills } = resumeData;
   
     if (!skills?.length) return null;
   
     return (
       <>
-        <hr className="border-2" style={{ borderColor: colorHex }} />
+        <hr className="border-2" />
         <div className="break-inside-avoid space-y-3">
-          <p className="text-lg font-semibold" style={{ color: colorHex }}>
+          <p className="text-lg font-semibold">
             Skills
           </p>
           <div className="flex break-inside-avoid flex-wrap gap-2">
@@ -223,13 +222,7 @@ interface ResumeSectionProps {
                 key={index}
                 className="bg-black text-white rounded-md hover:bg-black"
                 style={{
-                  background: colorHex,
-                  borderRadius:
-                    borderStyle === BorderStyles.SQUARE
-                      ? "0px"
-                      : borderStyle === BorderStyles.CIRCLE
-                        ? "9999px"
-                        : "8px",
+                  borderRadius:  "0px"
                 }}
               >
                 {skill}

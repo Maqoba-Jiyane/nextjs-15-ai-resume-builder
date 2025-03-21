@@ -16,7 +16,6 @@ import { CreditCard, MoreVertical, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState, useTransition } from "react";
 import deleteResume, {
-  requestDownloadFromAdmin,
   updateResumeForPayment,
 } from "./actions";
 import {
@@ -28,8 +27,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import LoadingButton from "@/components/LoadingButton";
-import { useReactToPrint } from "react-to-print";
-import { useRouter } from "next/navigation";
 import { useRetrieveRef } from "@/hooks/useRetrieveRef";
 
 interface ResumeItemProps {
@@ -39,37 +36,46 @@ interface ResumeItemProps {
 const ResumeItem = ({ resume }: ResumeItemProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const router = useRouter();
-  const discountPercentage = Number(useRetrieveRef())
+  const discountPercentage = Number(useRetrieveRef());
 
-  const reactToPrintFn = useReactToPrint({
-    contentRef,
-    documentTitle: resume.title || "Resume",
-  });
+  const handlePrint = async () => {
 
-  const handlePrint = () => {
-    setTimeout(() => {
-      reactToPrintFn();
-    }, 500); // Small delay fixes mobile print issues
+    let apiRoute = '';
+    const template = resume.template
+
+    if(template === 'CLASSIC'){
+      apiRoute = 'api/download-resume/classic'
+    }else{
+      apiRoute = 'api/download-resume/ats-1'
+    }
+
+    try {
+      const response = await fetch(apiRoute, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          resume,
+        }),
+      });
+
+      if(response.ok){
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'resume.pdf';
+        a.click();
+        window.URL.revokeObjectURL(url);
+      }
+
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const wasUpdated = resume.updatedAt !== resume.createdAt;
-
-  const handleRequestDownload = async () => {
-    try {
-      const response = await requestDownloadFromAdmin(resume.id);
-
-      if (response) {
-        alert("Download request submitted successfully!");
-        router.refresh();
-      } else {
-        alert("Failed to submit download request.");
-      }
-    } catch (error) {
-      console.error("Failed to request download:", error);
-      alert("An error occurred while requesting the download.");
-    }
-  };
 
   return (
     <div className="group relative border rounded-lg border-transparent hover:border-border transition-colors bg-secondary p3">
@@ -105,20 +111,13 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
           size="lg"
           variant="premium"
           onClick={
-            resume.paid ? () => setShowDeleteConfirmation(true) : () => myClientComponent(resume.id, discountPercentage)
+            resume.paid
+              ? () => handlePrint()
+              : () => myClientComponent(resume.id, discountPercentage)
           }
           className="flex w-full"
         >
           Download
-        </Button>
-        <Button
-          size="lg"
-          variant="destructive"
-          disabled={!resume.paid}
-          onClick={handleRequestDownload}
-          className="flex w-full"
-        >
-          {resume.downloadRequest ? "Requested" : "Request Admin Download"}
         </Button>
         <DownloadConfirmationDialog
           open={showDeleteConfirmation}
@@ -129,7 +128,9 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
       <MoreMenu
         resumeId={resume.id}
         onPrintClick={
-          resume.paid ? handlePrint : () => myClientComponent(resume.id, discountPercentage)
+          resume.paid
+            ? handlePrint
+            : () => myClientComponent(resume.id, discountPercentage)
         }
       />
     </div>
@@ -286,11 +287,10 @@ function DownloadConfirmationDialog({
 }
 
 function myClientComponent(resumeId: string, discountPercentage: number) {
-  
   callApi();
   async function callApi() {
     const basePrice = 2400;
-    const taxRate = 0.15
+    const taxRate = 0.15;
     const discountedPrice = basePrice * (1 - discountPercentage / 100);
     const taxAmount = discountedPrice * taxRate;
     const totalAmount = discountedPrice + taxAmount;
@@ -300,28 +300,29 @@ function myClientComponent(resumeId: string, discountPercentage: number) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify( {amount: totalAmount,
+        body: JSON.stringify({
+          amount: totalAmount,
           currency: "ZAR",
           totalDiscount: basePrice * (discountPercentage / 100),
           totalTaxAmount: taxAmount,
           subtotalAmount: discountedPrice,
           lineItems: [
-              {
-                  displayName: "AI Resume",
-                  quantity: 1,
-                  pricingDetails: {
-                      price: discountedPrice,
-                  },
+            {
+              displayName: "AI Resume",
+              quantity: 1,
+              pricingDetails: {
+                price: discountedPrice,
               },
-              {
-                  displayName: "ATS",
-                  quantity: 1,
-                  pricingDetails: {
-                      price: 0,
-                  },
+            },
+            {
+              displayName: "ATS",
+              quantity: 1,
+              pricingDetails: {
+                price: 0,
               },
+            },
           ],
-      }),
+        }),
       });
 
       if (!response.ok) {
