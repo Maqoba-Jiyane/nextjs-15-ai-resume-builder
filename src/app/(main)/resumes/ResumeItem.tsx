@@ -117,7 +117,7 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
           }
           className="flex w-full"
         >
-          Download
+          {resume.paid ? 'Download' : 'Pay'}
         </Button>
         <DownloadConfirmationDialog
           open={showDeleteConfirmation}
@@ -289,7 +289,7 @@ function DownloadConfirmationDialog({
 function myClientComponent(resumeId: string, discountPercentage: number) {
   callApi();
   async function callApi() {
-    const basePrice = 2400;
+    const basePrice = 500;
     const taxRate = 0.15;
     const discountedPrice = basePrice * (1 - discountPercentage / 100);
     const taxAmount = discountedPrice * taxRate;
@@ -312,13 +312,6 @@ function myClientComponent(resumeId: string, discountPercentage: number) {
               quantity: 1,
               pricingDetails: {
                 price: discountedPrice,
-              },
-            },
-            {
-              displayName: "ATS",
-              quantity: 1,
-              pricingDetails: {
-                price: 0,
               },
             },
           ],
