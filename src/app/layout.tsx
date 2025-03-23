@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     absolute: "EonResume",
   },
   description: "Create professional resumes effortlessly with AI-powered templates and expert guidance.",
-  keywords: "resume builder, AI resume, job applications, online CV, professional resume",
+  keywords: "Resume Builder, Job Seeker Tools, ATS-Compatible Resume, Resume Templates, Resume Customization, Job Application, CV Creation, Resume Editing, Job Search Tools, Resume Formatting, Resume Optimization, Resume Generator, Digital Resume, Job Market Ready",
   openGraph: {
     title: "EonResume | AI Resume Builder",
     description: "Build professional resumes in minutes using AI-driven resume templates.",
