@@ -67,12 +67,12 @@ export async function POST(request: Request) {
     const pdfDoc = await PDFDocument.create();
 
     // Load the Poppins font files
-    const boldPoppinsPath = path.resolve("public/Poppins-Bold.ttf");
+    const boldPoppinsPath = path.resolve("public/verdana-Bold.ttf");
     const boldPoppinsBytes = fs.readFileSync(boldPoppinsPath);
     pdfDoc.registerFontkit(fontkit);
     const boldPoppins = await pdfDoc.embedFont(boldPoppinsBytes);
 
-    const regularPoppinsPath = path.resolve("public/Poppins-Regular.ttf");
+    const regularPoppinsPath = path.resolve("public/verdana.ttf");
     const regularPoppinsBytes = fs.readFileSync(regularPoppinsPath);
     const regularPoppins = await pdfDoc.embedFont(regularPoppinsBytes);
 
@@ -115,7 +115,7 @@ export async function POST(request: Request) {
     yOffset -= nameHeight; // Move down after the title
 
     // Subtitle (Contact info)
-    const contactInfo = `${resume.city}, ${resume.country} • ${resume.phone}`;
+    const contactInfo = `${resume.city}${resume.country && `, ${resume.country}`}${resume.phone && ` • ${resume.phone }`}${resume.email && ` • ${resume.email}`}`;
     const contactInfoWidth = regularPoppins.widthOfTextAtSize(contactInfo, fontSize);
     const contactInfoHeight = 20; // Height of the contact info
     checkForNewPage(contactInfoHeight); // Check if the contact info fits on the current page
@@ -127,20 +127,20 @@ export async function POST(request: Request) {
       color: rgb(0, 0, 0),
       maxWidth: width - 50
     });
-    yOffset -= contactInfoHeight; // Move down after the first line of contact info
+    yOffset -= contactInfoHeight + 20; // Move down after the first line of contact info
 
-    const emailAndLinkedIn = `${resume.email}`;
-    const emailWidth = regularPoppins.widthOfTextAtSize(emailAndLinkedIn, fontSize);
-    const emailHeight = 20; // Height of the email line
-    checkForNewPage(emailHeight); // Check if the email fits on the current page
-    page.drawText(emailAndLinkedIn, {
-      x: (width - emailWidth) / 2,
-      y: yOffset,
-      font: regularPoppins,
-      size: fontSize,
-      color: rgb(0, 0, 0),
-    });
-    yOffset -= emailHeight + 20; // Move down after the contact info
+    // const emailAndLinkedIn = `${resume.email}`;
+    // const emailWidth = regularPoppins.widthOfTextAtSize(emailAndLinkedIn, fontSize);
+    // const emailHeight = 20; // Height of the email line
+    // checkForNewPage(emailHeight); // Check if the email fits on the current page
+    // page.drawText(emailAndLinkedIn, {
+    //   x: (width - emailWidth) / 2,
+    //   y: yOffset,
+    //   font: regularPoppins,
+    //   size: fontSize,
+    //   color: rgb(0, 0, 0),
+    // });
+    // yOffset -= emailHeight + 20; // Move down after the contact info
 
     // Section: Summary
     if (resume.summary) {
@@ -187,11 +187,23 @@ export async function POST(request: Request) {
       yOffset -= educationTitleHeight; // Move down after the section title
 
       resume.educations.forEach((education: Education) => {
-        const educationText = `${education.degree}, ${education.school}`;
+        const educationText = `${education.school}`;
         const educationHeight = 15; // Height of each education entry
         checkForNewPage(educationHeight); // Check if the education entry fits on the current page
         page.drawText(educationText, {
           x: leftMargin,
+          y: yOffset,
+          font: boldPoppins,
+          size: fontSize,
+          color: rgb(0, 0, 0),
+        });
+        
+        const educationSchoolText = `, ${education.degree}`;
+        const educationSchoolTextHeight = 15; // Height of each education entry
+        const schoolWidth = boldPoppins.widthOfTextAtSize(educationText, fontSize);
+        checkForNewPage(educationSchoolTextHeight); // Check if the education entry fits on the current page
+        page.drawText(educationSchoolText, {
+          x: schoolWidth + leftMargin,
           y: yOffset,
           font: regularPoppins,
           size: fontSize,
