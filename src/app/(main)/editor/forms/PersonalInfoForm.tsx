@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { EditorFormProps } from "@/lib/types";
 import { personalInfoSchema, PersonalInfoValues } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 const PersonalInfoForm = ({ resumeData, setResumeData }: EditorFormProps) => {
@@ -41,7 +41,7 @@ const PersonalInfoForm = ({ resumeData, setResumeData }: EditorFormProps) => {
     return unsubscribe;
   }, [form, resumeData, setResumeData]);
 
-  const photoInputRef = useRef<HTMLInputElement>(null);
+  // const photoInputRef = useRef<HTMLInputElement>(null);
 
   return (
     <div className="max-w-xl mx-auto space-y-6">
@@ -51,7 +51,7 @@ const PersonalInfoForm = ({ resumeData, setResumeData }: EditorFormProps) => {
       </div>
       <Form {...form}>
         <form className="space-y-3">
-          <FormField
+          {/* <FormField
             control={form.control}
             name="photo"
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -87,7 +87,7 @@ const PersonalInfoForm = ({ resumeData, setResumeData }: EditorFormProps) => {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
           <div className="grid grid-cols-2 gap-3">
             <FormField
               control={form.control}

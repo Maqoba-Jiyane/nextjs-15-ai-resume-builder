@@ -1,9 +1,9 @@
 import { ResumeValues } from "@/lib/validation";
-import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+// import Image from "next/image";
+import React, {useRef } from "react";
 import { formatDate } from "date-fns";
 import { Badge } from "./ui/badge";
-import { BorderStyles } from "@/app/(main)/editor/BorderStyleButton";
+// import { BorderStyles } from "@/app/(main)/editor/BorderStyleButton";
 import { cn } from "@/lib/utils";
 import useDimensions from "@/hooks/useDimensions";
 
@@ -52,7 +52,7 @@ interface ResumeSectionProps {
   
   function PersonalInforHeader({ resumeData }: ResumeSectionProps) {
     const {
-      photo,
+      // photo,
       firstName,
       lastName,
       jobTitle,
@@ -60,20 +60,20 @@ interface ResumeSectionProps {
       country,
       phone,
       email,
-      borderStyle,
+      // borderStyle,
     } = resumeData;
-    const [photoSrc, setPhotoSrc] = useState(photo instanceof File ? "" : photo);
+    // const [photoSrc, setPhotoSrc] = useState(photo instanceof File ? "" : photo);
   
-    useEffect(() => {
-      const objectUrl = photo instanceof File ? URL.createObjectURL(photo) : "";
-      if (objectUrl) setPhotoSrc(objectUrl);
-      if (photo === null) setPhotoSrc("");
-      return () => URL.revokeObjectURL(objectUrl);
-    }, [photo]);
+    // useEffect(() => {
+    //   const objectUrl = photo instanceof File ? URL.createObjectURL(photo) : "";
+    //   if (objectUrl) setPhotoSrc(objectUrl);
+    //   if (photo === null) setPhotoSrc("");
+    //   return () => URL.revokeObjectURL(objectUrl);
+    // }, [photo]);
   
     return (
       <div className="flex items-center gap-6">
-        {photoSrc && (
+        {/* {photoSrc && (
           <Image
             src={photoSrc}
             width={100}
@@ -89,7 +89,7 @@ interface ResumeSectionProps {
                     : "10%",
             }}
           />
-        )}
+        )} */}
         <div className="space-y-2.5">
           <div className="space-y-1">
             <p className="text-3xl font-bold">
