@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUp, Contact, FileUser, HandHelping, House, LogOut } from "lucide-react";
+import { ArrowDown, ArrowUp, Contact, FileUser, HandHelping, House, LogOut, Rss } from "lucide-react";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -60,7 +60,7 @@ const PublicDropDownMenu = () => {
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href={"/blog/How-to-Write-a-Resume-That-Stands-Out"}>
-            <HandHelping />
+            <Rss />
               <span>Blog</span>
             </Link>
           </DropdownMenuItem>
