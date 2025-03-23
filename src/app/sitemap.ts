@@ -17,6 +17,10 @@ export default async function sitemap() {
       {
           url: `${baseUrl}/sign-up`,
           lastModified: new Date()
-      }
+      },
+      {
+          url: `${baseUrl}/blog/How-to-Write-a-Resume-That-Stands-Out`,
+          lastModified: new Date()
+      },
     ]
 }
