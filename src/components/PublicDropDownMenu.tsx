@@ -58,6 +58,12 @@ const PublicDropDownMenu = () => {
               <span>Help Center</span>
             </Link>
           </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href={"/blog/How-to-Write-a-Resume-That-Stands-Out"}>
+            <HandHelping />
+              <span>Blog</span>
+            </Link>
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
             <SignOutButton>
