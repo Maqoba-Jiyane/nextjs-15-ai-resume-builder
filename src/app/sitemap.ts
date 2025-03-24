@@ -26,5 +26,9 @@ export default async function sitemap() {
           url: `${baseUrl}/blog/top-5-skills-employers-look-for`,
           lastModified: new Date()
       },
+      {
+          url: `${baseUrl}/blog`,
+          lastModified: new Date()
+      },
     ]
 }
