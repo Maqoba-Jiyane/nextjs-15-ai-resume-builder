@@ -50,7 +50,7 @@ export default function BlogPost() {
             </ul>
             <p className="mt-2">
               🔥 Bonus: Tools like{" "}
-              <a href="https://eonresume.co.za" className="text-blue-600 underline font-medium">EonResume</a>{" "}
+              <a href="https://eonresume.co.za" className="text-blue-600 underline font-medium" target="_blank">EonResume</a>{" "}
               help you phrase achievements like these with impact.
             </p>
           </>
@@ -112,12 +112,12 @@ export default function BlogPost() {
         </ul>
         <p>
           An AI-powered resume tool like{" "}
-          <a href="https://eonresume.co.za" className="text-blue-600 underline font-medium">EonResume</a>{" "}
+          <a href="https://eonresume.co.za" className="text-blue-600 underline font-medium" target="_blank">EonResume</a>{" "}
           helps you highlight your strongest skills based on the roles you&apos;re applying to. It can even reword your experience to better align with what employers are looking for—without making it sound robotic.
         </p>
         <p className="mt-4">
           And when you’re ready to apply,{" "}
-          <a href="https://employmentecho.co.za" className="text-blue-600 underline font-medium">Employment Echo</a>{" "}
+          <a href="https://employmentecho.co.za" className="text-blue-600 underline font-medium" target="_blank">Employment Echo</a>{" "}
           can connect you with job opportunities that actually value the skills you bring to the table.
         </p>
       </section>

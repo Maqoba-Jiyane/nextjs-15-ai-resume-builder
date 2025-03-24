@@ -22,5 +22,9 @@ export default async function sitemap() {
           url: `${baseUrl}/blog/How-to-Write-a-Resume-That-Stands-Out`,
           lastModified: new Date()
       },
+      {
+          url: `${baseUrl}/blog/top-5-skills-employers-look-for`,
+          lastModified: new Date()
+      },
     ]
 }
