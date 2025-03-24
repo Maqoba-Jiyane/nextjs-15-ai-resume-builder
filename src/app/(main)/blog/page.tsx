@@ -74,7 +74,7 @@ export default function BlogLanding() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {otherPosts.map((post) => (
             <Link key={post.slug} href={`/blog/${post.slug}`}>
-              <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+              <div className="rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="h-48 relative">
                   <Image
                     src={post.image}
