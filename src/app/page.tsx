@@ -92,7 +92,7 @@ export default function Home() {
           </p> */}
           <div>
             <Button asChild size="lg" variant="premium">
-              <Link href="/to-get-started">Get started</Link>
+              <Link href="/resumes">Get started</Link>
             </Button>
           </div>
         </div>
