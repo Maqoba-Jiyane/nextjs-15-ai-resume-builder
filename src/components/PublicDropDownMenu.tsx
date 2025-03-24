@@ -59,7 +59,7 @@ const PublicDropDownMenu = () => {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href={"/blog/How-to-Write-a-Resume-That-Stands-Out"}>
+            <Link href={"/blog"}>
             <Rss />
               <span>Blog</span>
             </Link>
