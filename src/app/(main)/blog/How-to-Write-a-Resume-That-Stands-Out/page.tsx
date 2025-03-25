@@ -13,7 +13,7 @@ export async function generateMetadata() {
       description: description,
       images: [
         {
-          url: 'https://eonresume.co.za/blogs/photo-1562564055-71e051d33c19.avif',
+          url: 'https://eonresume.co.za/blogs/photo-1562564055-71e051d33c19.png',
           width: 1200,
           height: 600,
           alt: "Resume layout flat lay",
