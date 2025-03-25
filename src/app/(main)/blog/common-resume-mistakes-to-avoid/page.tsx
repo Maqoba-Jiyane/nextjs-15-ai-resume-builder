@@ -40,7 +40,7 @@ export async function generateMetadata() {
 
 export default function BlogPost() {
   return (
-    <article className="max-w-3xl mx-auto px-4 py-12 text-gray-800">
+    <article className="max-w-3xl mx-auto px-4 py-12">
       {/* Header */}
       <header className="mb-8">
         <h1 className="text-4xl font-bold mb-4">Common Resume Mistakes to Avoid</h1>
