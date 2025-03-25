@@ -4,8 +4,6 @@ export async function generateMetadata() {
   const title = "How to Write a Resume That Stands Out";
   const description =
     "Learn how to write a resume that grabs attention and lands interviews. Tips on tailoring, formatting, and showcasing achievements.";
-  const imageUrl =
-    "https://images.unsplash.com/photo-1562564055-71e051d33c19?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
   return {
     title: title,
@@ -15,7 +13,7 @@ export async function generateMetadata() {
       description: description,
       images: [
         {
-          url: imageUrl,
+          url: 'https://eonresume.co.za/blogs/photo-1562564055-71e051d33c19.avif',
           width: 1200,
           height: 600,
           alt: "Resume layout flat lay",
@@ -29,7 +27,13 @@ export async function generateMetadata() {
       card: "summary_large_image",
       title: title,
       description: description,
-      images: [imageUrl],
+      images: [
+        {
+          url: 'https://eonresume.co.za/blogs/photo-1562564055-71e051d33c19.avif',
+          width: 1200,
+          height: 600,
+          alt: "Resume layout flat lay",
+        },],
     },
   };
 }

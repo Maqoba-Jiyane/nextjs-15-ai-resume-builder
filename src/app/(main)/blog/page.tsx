@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const posts = [
   {
-    slug: "How-to-Write-a-Resume-That-Stands-Out",
+    slug: "how-to-write-a-resume-that-stands-out",
     title: "How to Write a Resume That Stands Out",
     excerpt: "Learn professional resume writing techniques...",
     date: "2025-03-23",

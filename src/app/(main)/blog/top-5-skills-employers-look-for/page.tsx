@@ -1,5 +1,43 @@
 import Image from "next/image";
 
+export async function generateMetadata() {
+  const title = "Top 5 Skills Employers Look For";
+  const description =
+    "Discover the essential skills that catch hiring managers' attention and how to showcase them on your resume.";
+
+  return {
+    title: title,
+    description: description,
+    openGraph: {
+      title: title,
+      description: description,
+      images: [
+        {
+          url: 'https://eonresume.co.za/blogs/photo-1576267423429-569309b31e84.webp',
+          width: 1200,
+          height: 600,
+          alt: "Resume layout flat lay",
+        },
+      ],
+      type: "article",
+      publishedTime: "2025-03-23T00:00:00Z", // Add the publication date
+      authors: ["EonResume"], // Add the author's name
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: title,
+      description: description,
+      images: [
+        {
+          url: 'https://eonresume.co.za/blogs/photo-1562564055-71e051d33c19.avif',
+          width: 1200,
+          height: 600,
+          alt: "Resume layout flat lay",
+        },],
+    },
+  };
+}
+
 export default function BlogPost() {
   return (
     <article className="max-w-3xl mx-auto px-4 py-12">
