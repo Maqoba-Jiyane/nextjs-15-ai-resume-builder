@@ -1,27 +1,42 @@
-import Link from 'next/link';
-import Image from 'next/image';
+import Link from "next/link";
+import Image from "next/image";
 
 const posts = [
-    {
-      "slug": "How-to-Write-a-Resume-That-Stands-Out",
-      "title": "How to Write a Resume That Stands Out",
-      "excerpt": "Learn professional resume writing techniques...",
-      "date": "2025-03-23",
-      "image": "https://images.unsplash.com/photo-1562564055-71e051d33c19?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "category": "Job Search",
-      "readTime": 6
-    },
-    {
-        "slug": "top-5-skills-employers-look-for",
-        "title": "Top 5 Skills Employers Look For",
-        "excerpt": "Discover the essential skills that catch hiring managers' attention and how to showcase them on your resume.",
-        "date": "2025-03-24",
-        "image": "https://images.unsplash.com/photo-1576267423429-569309b31e84?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "category": "Career Advice",
-        "readTime": 5,
-        "author": "Jane Smith"
-      },
-  ]
+  {
+    slug: "How-to-Write-a-Resume-That-Stands-Out",
+    title: "How to Write a Resume That Stands Out",
+    excerpt: "Learn professional resume writing techniques...",
+    date: "2025-03-23",
+    image:
+      "https://images.unsplash.com/photo-1562564055-71e051d33c19?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    category: "Job Search",
+    readTime: 6,
+  },
+  {
+    slug: "top-5-skills-employers-look-for",
+    title: "Top 5 Skills Employers Look For",
+    excerpt:
+      "Discover the essential skills that catch hiring managers' attention and how to showcase them on your resume.",
+    date: "2025-03-24",
+    image:
+      "https://images.unsplash.com/photo-1576267423429-569309b31e84?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    category: "Career Advice",
+    readTime: 5,
+    author: "Jane Smith",
+  },
+  {
+    slug: "common-resume-mistakes-to-avoid",
+    title: "Common Resume Mistakes to Avoid",
+    excerpt:
+      "Avoid these resume mistakes that could be silently hurting your chances of getting interviews—and learn how to fix them fast.",
+    date: "2025-03-25",
+    image:
+      "https://images.unsplash.com/photo-1565688534245-05d6b5be184a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Q29tbW9uJTIwUmVzdW1lJTIwTWlzdGFrZXMlMjB0byUyMEF2b2lkfGVufDB8fDB8fHwy",
+    category: "Career Advice",
+    readTime: 4,
+    author: "Jane Smith",
+  },
+];
 
 export default function BlogLanding() {
   const featuredPost = posts[0]; // First post is featured
@@ -31,7 +46,9 @@ export default function BlogLanding() {
     <div className="max-w-7xl mx-auto px-4 py-12">
       {/* Hero Section */}
       <section className="mb-16 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">Career Insights Blog</h1>
+        <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          Career Insights Blog
+        </h1>
         <p className="text-xl max-w-2xl mx-auto">
           Expert advice to help you land your dream job and grow your career
         </p>
@@ -55,7 +72,9 @@ export default function BlogLanding() {
                 <div className="uppercase tracking-wide text-sm text-indigo-600 font-semibold">
                   {featuredPost.category}
                 </div>
-                <h3 className="mt-2 text-2xl font-semibold">{featuredPost.title}</h3>
+                <h3 className="mt-2 text-2xl font-semibold">
+                  {featuredPost.title}
+                </h3>
                 <p className="mt-3 text-gray-600">{featuredPost.excerpt}</p>
                 <div className="mt-4 flex items-center">
                   <div className="text-sm text-gray-500">
