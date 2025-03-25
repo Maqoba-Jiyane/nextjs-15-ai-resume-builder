@@ -1,42 +1,26 @@
+import { Metadata } from "next";
 import Image from "next/image";
 
-export async function generateMetadata() {
-  const title = "Common Resume Mistakes to Avoid";
-  const description =
-    "Learn the common mistakes that might be costing you interviews.";
-
-  return {
-    title: title,
-    description: description,
-    openGraph: {
-      title: title,
-      description: description,
-      images: [
-        {
-          url: 'https://eonresume.co.za/blogs/photo-1565688534245-05d6b5be184a.webp',
-          width: 1200,
-          height: 600,
-          alt: "Resume layout flat lay",
-        },
-      ],
-      type: "article",
-      publishedTime: "2025-03-23T00:00:00Z", // Add the publication date
-      authors: ["EonResume"], // Add the author's name
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: title,
-      description: description,
-      images: [
-        {
-          url: 'https://eonresume.co.za/blogs/photo-1562564055-71e051d33c19.avif',
-          width: 1200,
-          height: 600,
-          alt: "Resume layout flat lay",
-        },],
-    },
-  };
-}
+export const metadata: Metadata = {
+  title: "Common Resume Mistakes to Avoid",
+  description: "Learn the common mistakes that might be costing you interviews.",
+  keywords: "Resume mistakes, common mistakes",
+  openGraph: {
+    title: "Common Resume Mistakes to Avoid",
+    description: "Learn the common mistakes that might be costing you interviews.",
+    url: "https://eonresume.co.za/blog/common-resume-mistakes-to-avoid",
+    siteName: "EonResume",
+    images: [
+      {
+        url: "https://eonresume.co.za/blogs/photo-1562564055-71e051d33c19.avif",
+        width: 1200,
+        height: 630,
+        alt: "EonResume Homepage",
+      },
+    ],
+    type: "article",
+  },
+};
 
 export default function BlogPost() {
   return (
