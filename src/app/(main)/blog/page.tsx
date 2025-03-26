@@ -36,6 +36,18 @@ const posts = [
     readTime: 4,
     author: "Jane Smith",
   },
+  {
+    slug: "how-to-tailor-your-resume-for-jobs",
+    title: "How to Tailor Your Resume for Jobs",
+    excerpt:
+      "Sending the same resume to every job won't cut it. Learn how to customize your resume for each application — and why it matters.",
+    date: "2025-03-26",
+    image:
+      "https://cdn.pixabay.com/photo/2021/09/15/15/49/resume-6627200_1280.jpg",
+    category: "Career Advice",
+    readTime: 5,
+    author: "Jane Smith",
+  },
 ];
 
 export default function BlogLanding() {
