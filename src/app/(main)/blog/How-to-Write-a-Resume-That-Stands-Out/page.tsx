@@ -1,5 +1,5 @@
 import Image from "next/image";
-
+ 
 export async function generateMetadata() {
   const title = "How to Write a Resume That Stands Out";
   const description =
