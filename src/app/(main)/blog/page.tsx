@@ -48,6 +48,18 @@ const posts = [
     readTime: 5,
     author: "Jane Smith",
   },
+  {
+    slug: "the-perfect-resume-length",
+    title: "The Perfect Resume Length",
+    excerpt:
+      "Wondering if your resume is too short or too long? Learn the ideal length based on your experience and role — and when to break the rules.",
+    date: "2025-03-26",
+    image:
+      "https://cdn.pixabay.com/photo/2016/03/26/13/09/work-1280538_1280.jpg",
+    category: "Career Advice",
+    readTime: 4,
+    author: "Jane Smith",
+  },
 ];
 
 export default function BlogLanding() {
