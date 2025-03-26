@@ -10,6 +10,7 @@ import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { useScreenWidth } from "@/hooks/useScreenWidth";
 import { usePathname } from "next/navigation"; // Use this for pathname instead of useRouter()
+import PublicDropDownMenu from "@/components/PublicDropDownMenu";
 
 function Navbar() {
   const { theme } = useTheme();
@@ -78,9 +79,7 @@ function Navbar() {
           </>
         ) : (
           <div className="flex">
-            <Button asChild size="default" variant="premium">
-              <Link href="/resumes">Start Now</Link>
-            </Button>
+            <PublicDropDownMenu />
           </div>
         )}
       </div>

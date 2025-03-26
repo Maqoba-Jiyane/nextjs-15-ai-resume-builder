@@ -6,6 +6,7 @@ const isPublicRoute = createRouteMatcher([
   "/api(.*)",
   "/sign-in(.*)",
   "/sign-up(.*)",
+  "/blog(.*)",
 ]);
 const isUnsafeRoute = createRouteMatcher(["/admin(.*)"]);
 
