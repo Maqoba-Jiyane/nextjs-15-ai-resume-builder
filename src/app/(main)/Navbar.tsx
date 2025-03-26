@@ -66,6 +66,9 @@ function Navbar() {
               <Link href="/resumes">
                 <Button variant="outline">Resumes</Button>
               </Link>
+              <Link href="/blog">
+                <Button variant="outline">Blog</Button>
+              </Link>
             </div>{" "}
             <div className="flex items-center gap-3">
               <ThemeToggle />

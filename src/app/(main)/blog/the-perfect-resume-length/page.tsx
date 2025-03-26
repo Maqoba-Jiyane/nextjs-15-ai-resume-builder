@@ -10,8 +10,8 @@ export const metadata: Metadata = {
     title: "The Perfect Resume Length",
     description:
       "Discover the ideal resume length to effectively showcase your experience and skills, tailored to your career stage.",
-    url: "https://www.yoursite.com/blog/the-perfect-resume-length",
-    siteName: "YourSite Blog",
+    url: "https://www.eonresume.co.za/blog/the-perfect-resume-length",
+    siteName: "EonResume Blog",
     images: [
       {
         url: "https://cdn.pixabay.com/photo/2016/03/26/13/09/work-1280538_1280.jpg",
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
         alt: "Person typing on a laptop with resume documents",
       },
     ],
-    locale: "en_US",
+    locale: "en_ZA",
     type: "article",
   },
   twitter: {

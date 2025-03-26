@@ -60,6 +60,88 @@ const posts = [
     readTime: 4,
     author: "Jane Smith",
   },
+  {
+    slug: "how-to-write-a-professional-summary",
+    title: "How to Write a Professional Summary",
+    excerpt:
+      "A strong professional summary grabs attention fast. Learn how to write one that highlights your value and gets your resume noticed.",
+    date: "2025-03-26",
+    image:
+      "https://cdn.pixabay.com/photo/2015/01/08/18/26/man-593333_960_720.jpg",
+    category: "Career Advice",
+    readTime: 5,
+    author: "Jane Smith",
+  },
+  {
+    slug: "using-action-verbs-in-your-resume",
+    title: "Using Action Verbs in Your Resume",
+    excerpt:
+      "Give your resume more power with action verbs that highlight your achievements and make every bullet point count.",
+    date: "2025-03-26",
+    image: "https://cdn.pixabay.com/photo/2018/10/05/17/34/cv-3726428_1280.jpg",
+    category: "Career Advice",
+    readTime: 4,
+    author: "Jane Smith",
+  },
+  {
+    slug: "how-to-highlight-achievements",
+    title: "How to Highlight Achievements",
+    excerpt:
+      "Achievements show employers what you’ve actually accomplished — not just what you were responsible for. Here’s how to highlight them right.",
+    date: "2025-03-26",
+    image:
+      "https://cdn.pixabay.com/photo/2022/06/27/08/09/graduation-7287004_1280.jpg",
+    category: "Career Advice",
+    readTime: 4,
+    author: "Jane Smith",
+  },
+  {
+    slug: "resume-formatting-tips",
+    title: "Resume Formatting Tips",
+    excerpt:
+      "Formatting matters. Here's how to structure your resume so it's clean, clear, and easy to scan — no design skills required.",
+    date: "2025-03-26",
+    image:
+      "https://cdn.pixabay.com/photo/2016/03/01/11/40/lego-blocks-1230133_1280.jpg",
+    category: "Career Advice",
+    readTime: 4,
+    author: "Jane Smith",
+  },
+  {
+    slug: "how-to-write-a-cover-letter",
+    title: "How to Write a Cover Letter",
+    excerpt:
+      "Your cover letter should sound like a real person wrote it. Here’s how to explain why you’re a strong fit — clearly, quickly, and with confidence.",
+    date: "2025-03-26",
+    image:
+      "https://cdn.pixabay.com/photo/2017/03/02/05/19/invitation-2110452_1280.jpg",
+    category: "Career Advice",
+    readTime: 5,
+    author: "Jane Smith",
+  },
+  {
+    slug: "how-eonresumes-ai-can-write-your-work-experience",
+    title: "How EonResume's AI Can Write Your Work Experience",
+    excerpt:
+      "Struggling to write your experience section? EonResume’s AI can turn your job history into clear, confident resume bullet points — in seconds.",
+    date: "2025-03-26",
+    image: "https://cdn.pixabay.com/photo/2023/05/08/08/41/ai-7977960_1280.jpg",
+    category: "AI & Tools",
+    readTime: 4,
+    author: "Jane Smith",
+  },
+  {
+    slug: "eonresume-one-click-professional-summaries",
+    title: "EonResume One-Click Professional Summaries",
+    excerpt:
+      "Struggling to write your resume summary? EonResume creates a strong, clear introduction for you in seconds — no guesswork needed.",
+    date: "2025-03-26",
+    image:
+      "https://cdn.pixabay.com/photo/2024/01/10/16/21/laptop-8499942_1280.jpg",
+    category: "AI & Tools",
+    readTime: 4,
+    author: "Jane Smith",
+  },
 ];
 
 export default function BlogLanding() {
