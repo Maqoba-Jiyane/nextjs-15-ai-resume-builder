@@ -13,7 +13,7 @@ export async function generateMetadata() {
       description: description,
       images: [
         {
-          url: 'https://eonresume.co.za/blogs/photo-1576267423429-569309b31e84.webp',
+          url: 'https://eonresume.co.za/blogs/photo-1576267423429-569309b31e84.png',
           width: 1200,
           height: 600,
           alt: "Resume layout flat lay",
@@ -29,7 +29,7 @@ export async function generateMetadata() {
       description: description,
       images: [
         {
-          url: 'https://eonresume.co.za/blogs/photo-1562564055-71e051d33c19.png',
+          url: 'https://eonresume.co.za/blogs/photo-1576267423429-569309b31e84.png',
           width: 1200,
           height: 600,
           alt: "Resume layout flat lay",
