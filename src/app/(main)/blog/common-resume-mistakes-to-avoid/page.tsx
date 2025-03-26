@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     siteName: "EonResume",
     images: [
       {
-        url: "https://eonresume.co.za/blogs/photo-1562564055-71e051d33c19.png",
+        url: "https://eonresume.co.za/blogs/photo-1565688534245-05d6b5be184a.png",
         width: 1200,
         height: 630,
         alt: "EonResume Homepage",
