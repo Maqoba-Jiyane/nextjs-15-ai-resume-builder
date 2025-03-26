@@ -1,5 +1,37 @@
 import Image from "next/image";
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'How to Tailor Your Resume for Jobs',
+  description:
+    'Learn how to customize your resume for each job application without starting from scratch. Real examples, smart tips, and tools to save time.',
+  openGraph: {
+    title: 'How to Tailor Your Resume for Jobs',
+    description:
+      'Learn how to customize your resume for each job application without starting from scratch. Real examples, smart tips, and tools to save time.',
+    url: 'https://www.yoursite.com/blog/how-to-tailor-your-resume-for-jobs',
+    siteName: 'EonResume Blog',
+    images: [
+      {
+        url: 'https://cdn.pixabay.com/photo/2021/09/15/15/49/resume-6627200_1280.jpg',
+        width: 1200,
+        height: 600,
+        alt: 'Tailored resume with highlighter on desk',
+      },
+    ],
+    locale: 'en_ZA',
+    type: 'article',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'How to Tailor Your Resume for Jobs',
+    description:
+      'Generic resumes don’t work. Here’s how to tailor yours to stand out — without rewriting the whole thing.',
+    images: ['https://cdn.pixabay.com/photo/2021/09/15/15/49/resume-6627200_1280.jpg'],
+  },
+};
+
 export default function BlogPost() {
   return (
     <article className="max-w-3xl mx-auto px-4 py-12">
