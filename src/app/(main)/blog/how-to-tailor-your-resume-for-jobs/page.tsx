@@ -1,5 +1,4 @@
 import Image from "next/image";
-
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -10,13 +9,13 @@ export const metadata: Metadata = {
     title: 'How to Tailor Your Resume for Jobs',
     description:
       'Learn how to customize your resume for each job application without starting from scratch. Real examples, smart tips, and tools to save time.',
-    url: 'https://www.yoursite.com/blog/how-to-tailor-your-resume-for-jobs',
+    url: 'https://www.eonresume.co.za/blog/how-to-tailor-your-resume-for-jobs',  // Correct URL
     siteName: 'EonResume Blog',
     images: [
       {
         url: 'https://cdn.pixabay.com/photo/2021/09/15/15/49/resume-6627200_1280.jpg',
         width: 1200,
-        height: 600,
+        height: 630, // Optimized dimensions
         alt: 'Tailored resume with highlighter on desk',
       },
     ],
@@ -31,6 +30,7 @@ export const metadata: Metadata = {
     images: ['https://cdn.pixabay.com/photo/2021/09/15/15/49/resume-6627200_1280.jpg'],
   },
 };
+
 
 export default function BlogPost() {
   return (
