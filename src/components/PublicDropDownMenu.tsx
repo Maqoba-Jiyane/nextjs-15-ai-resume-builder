@@ -1,4 +1,15 @@
-import { ArrowDown, ArrowUp, Contact, FileUser, HandHelping, House, LogOut, Rss } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUp,
+  Contact,
+  FileUser,
+  HandHelping,
+  House,
+  LogIn,
+  LogOut,
+  Rss,
+  User,
+} from "lucide-react";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -11,7 +22,13 @@ import {
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { SignOutButton,  } from "@clerk/nextjs";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignOutButton,
+  SignUpButton,
+} from "@clerk/nextjs";
 
 const PublicDropDownMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,43 +52,67 @@ const PublicDropDownMenu = () => {
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
             <Link href={"/"}>
-            <House />
+              <House />
               <span>Home</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Link href={"/resumes"}>
-            <FileUser />
+              <FileUser />
               <span>Resumes</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href={"/contact-us"}>
-            <Contact />
+              <Contact />
               <span>Contact Us</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href={"/help-center"}>
-            <HandHelping />
+              <HandHelping />
               <span>Help Center</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href={"/blog"}>
-            <Rss />
+              <Rss />
               <span>Blog</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <SignOutButton>
+            {/* <SignOutButton>
               <div className="flex items-center gap-2 text-red-500 cursor-pointer">
                 <LogOut />
                 <span>Sign Out</span>
               </div>
-            </SignOutButton>
+            </SignOutButton> */}
+            <div className="flex flex-col gap-3">
+              <SignedOut>
+                <SignInButton>
+                  <div className="flex items-center gap-2 cursor-pointer">
+                    <LogIn />
+                    <span>Sign In</span>
+                  </div>
+                </SignInButton>
+                <SignUpButton>
+                  <div className="flex items-center gap-2 cursor-pointer">
+                    <User />
+                    <span>Sign Up</span>
+                  </div>
+                </SignUpButton>
+              </SignedOut>
+              <SignedIn>
+                <SignOutButton>
+                  <div className="flex items-center gap-2 text-red-500 cursor-pointer">
+                    <LogOut />
+                    <span>Sign Out</span>
+                  </div>
+                </SignOutButton>
+              </SignedIn>
+            </div>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
