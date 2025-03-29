@@ -150,7 +150,7 @@ export default function Home() {
           </h2>
           <div className="shadow-lg rounded-lg bg-white p-8 ">
             <p className="text-lg text-gray-500 mb-6">
-              Pay only R24 for a professionally designed resume that is
+              Pay only R5.75 for a professionally designed resume that is
               ATS-friendly and ready for job applications.
             </p>
 
