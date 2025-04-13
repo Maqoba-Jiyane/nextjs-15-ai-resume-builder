@@ -16,8 +16,7 @@ export function fileReplacer(key:unknown, value: unknown) {
   } : value
 }
 
-export function mapToResumeValues(data: ResumeServerData): ResumeValues{
-
+export function mapToResumeValues(data: ResumeServerData): ResumeValues {
   return {
     id: data.id,
     title: data.title || undefined,
@@ -34,20 +33,22 @@ export function mapToResumeValues(data: ResumeServerData): ResumeValues{
     workExperiences: data.workExperiences.map((exp) => ({
       position: exp.position || undefined,
       company: exp.company || undefined,
-      startDate: exp.startDate?.toISOString().split('T')[0],
-      endDate: exp.endDate?.toISOString().split('T')[0],
+      startDate: exp.startDate ? new Date(exp.startDate) : undefined,
+      endDate: exp.endDate ? new Date(exp.endDate) : undefined,
       description: exp.description || undefined,
+      location: exp.location || undefined,
+      isCurrent: exp.isCurrent || undefined,
     })),
     educations: data.educations.map((edu) => ({
       degree: edu.degree || undefined,
       school: edu.school || undefined,
-      startDate: edu.startDate?.toISOString().split('T')[0],
-      endDate: edu.endDate?.toISOString().split('T')[0],
+      startDate: edu.startDate ? new Date(edu.startDate) : undefined,
+      endDate: edu.endDate ? new Date(edu.endDate) : undefined,
     })),
     skills: data.skills,
     borderStyle: data.borderStyle,
     colorHex: data.colorHex,
     summary: data.summary || undefined,
     template: data.template
-  }
+  };
 }
