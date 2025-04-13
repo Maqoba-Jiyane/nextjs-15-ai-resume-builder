@@ -41,7 +41,11 @@ const WorkExperienceForm = ({ resumeData, setResumeData }: EditorFormProps) => {
   const form = useForm<WorkExperienceValues>({
     resolver: zodResolver(workExperienceSchema),
     defaultValues: {
-      workExperiences: resumeData.workExperiences || [],
+      workExperiences: resumeData.workExperiences?.map(exp => ({
+        ...exp,
+        startDate: exp.startDate ? new Date(exp.startDate) : undefined,
+        endDate: exp.endDate ? new Date(exp.endDate) : undefined
+      })) || [],
     },
   });
 
@@ -123,8 +127,8 @@ const WorkExperienceForm = ({ resumeData, setResumeData }: EditorFormProps) => {
                 append({
                   position: "",
                   company: "",
-                  startDate: "",
-                  endDate: "",
+                  startDate: undefined,
+                  endDate: undefined,
                   description: "",
                 })
               }
@@ -162,6 +166,17 @@ function WorkExperienceItem({
     isDragging,
   } = useSortable({ id });
 
+  const formatDateForInput = (date: Date | undefined): string => {
+    if (!date) return "";
+    // Handle both string and Date objects
+    const dateObj = date instanceof Date ? date : new Date(date);
+    return dateObj.toISOString().split("T")[0];
+  };
+
+  const handleDateChange = (fieldName: `workExperiences.${number}.startDate` | `workExperiences.${number}.endDate`, value: string) => {
+    form.setValue(fieldName, value ? new Date(value) : undefined);
+  };
+
   return (
     <div
       className={cn(
@@ -182,7 +197,11 @@ function WorkExperienceItem({
       <div className="flex justify-center">
         <GenerateWorkExperinceButton
           onWorkExperienceGenerated={(exp) =>
-            form.setValue(`workExperiences.${index}`, exp)
+            form.setValue(`workExperiences.${index}`, {
+              ...exp,
+              startDate: exp.startDate ? new Date(exp.startDate) : undefined,
+              endDate: exp.endDate ? new Date(exp.endDate) : undefined
+            })
           }
         />
       </div>
@@ -221,9 +240,12 @@ function WorkExperienceItem({
               <FormLabel>Start date</FormLabel>
               <FormControl>
                 <Input
-                  {...field}
                   type="date"
-                  value={field.value?.slice(0, 10)}
+                  value={formatDateForInput(field.value)}
+                  onChange={(e) => handleDateChange(
+                    `workExperiences.${index}.startDate`,
+                    e.target.value
+                  )}
                 />
               </FormControl>
               <FormMessage />
@@ -238,9 +260,12 @@ function WorkExperienceItem({
               <FormLabel>End date</FormLabel>
               <FormControl>
                 <Input
-                  {...field}
                   type="date"
-                  value={field.value?.slice(0, 10)}
+                  value={formatDateForInput(field.value)}
+                  onChange={(e) => handleDateChange(
+                    `workExperiences.${index}.endDate`,
+                    e.target.value
+                  )}
                 />
               </FormControl>
               <FormMessage />
