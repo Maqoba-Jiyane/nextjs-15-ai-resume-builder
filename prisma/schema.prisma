@@ -1,14 +1,10 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
-// prisma/schema.prisma
 datasource db {
   provider  = "mongodb"
   url  	    = env("DATABASE_URL")
@@ -18,46 +14,62 @@ model Resume {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   userId String
 
+  // Basic Information
   title String?
   description String?
-
+  firstName String?
+  lastName String?
+  jobTitle String?
+  
+  // Contact Information
+  email String?
+  phone String?
+  city String?
+  country String?
+  website String?
+  linkedin String?
+  github String?
+  
+  // Appearance
   photoUrl String?
   colorHex String @default("#000000")
   borderStyle String @default("squircle")
   template String @default("CLASSIC")
+  
+  // Content
   summary String?
   jobDescription String?
-  firstName String?
-  lastName String?
-  jobTitle String?
-  city String?
-  country String?
-  phone String?
-  email String?
+  skills String[]
+  certifications Certification[]
+  languages String[]
+  
+  // Work & Education
+  workExperiences WorkExperience[]
+  educations Education[]
+  
+  // Payment & Status
   checkoutId String?
   paid Boolean @default(false)
   downloaded Boolean @default(false)
   downloadRequest Boolean @default(false)
-
-  skills String[]
-
-  workExperiences WorkExperience[]
-  educations Education[]
-
+  
+  // Metadata
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-@@map("resumes")
+  @@map("resumes")
 }
 
 model WorkExperience {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   position String?
   company String?
+  location String?
   startDate DateTime?
   endDate DateTime?
   description String?
-
+  isCurrent Boolean @default(false)
+  
   resumeId String
   resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 
@@ -67,17 +79,40 @@ model WorkExperience {
   @@map("work_experiences")
 }
 
-model Education{
+model Education {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   degree String?
   school String?
+  location String?
+  fieldOfStudy String?
   startDate DateTime?
   endDate DateTime?
+  description String?
+  isCurrent Boolean @default(false)
+  
   resumeId String
   resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("educations")
+}
+
+model Certification {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String?
+  issuer String?
+  date DateTime?
+  credentialUrl String?
+  
+  resumeId String
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("certifications")
 }
 
 model Coupon {
@@ -85,20 +120,20 @@ model Coupon {
   code        String   @unique
   discount    Float
   usageLimit  Int?
-  usageCount  Int      @default(0) // Tracks the number of times the coupon has been used
-  isActive    Boolean  @default(true) // Determines if the coupon is active
+  usageCount  Int      @default(0)
+  isActive    Boolean  @default(true)
   expiresAt   DateTime?
   createdAt   DateTime @default(now())
 
   @@map("coupons")
 }
 
-// Prisma schema example
 model Template {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId // Unique ID for each template
-  name      String // Name of the template (e.g., Modern Resume, Creative Resume)
-  image     String // Image URL or path for the template
-
-  createdAt DateTime @default(now()) // Timestamp when the template was created
-  updatedAt DateTime @updatedAt     // Timestamp when the template was last updated
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  image     String
+  isPremium Boolean   @default(false)
+  category  String?   // e.g., "ATS", "Creative", "Modern"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

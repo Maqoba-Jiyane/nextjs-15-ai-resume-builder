@@ -1,14 +1,14 @@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { EditorFormProps } from "@/lib/types";
-import { summarySchema, summaryValues } from "@/lib/validation";
+import { summarySchema, SummaryValues } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import GenerateSummaryButton from "./GenerateSummaryButton";
 
 const SummaryForm = ({ resumeData, setResumeData }: EditorFormProps) => {
-  const form = useForm<summaryValues>({
+  const form = useForm<SummaryValues>({
     resolver: zodResolver(summarySchema),
     defaultValues: {
       summary: resumeData.summary || "",

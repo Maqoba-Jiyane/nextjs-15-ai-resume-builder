@@ -336,7 +336,7 @@ export async function POST(request: Request) {
       status: 200,
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": 'attachment; filename="resume.pdf"',
+        "Content-Disposition": `attachment; filename="${resume.firstName}_${resume.lastName}.pdf"`,
       },
     });
   } catch (error) {

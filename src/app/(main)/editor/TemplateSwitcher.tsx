@@ -2,9 +2,8 @@ import { Button } from "@/components/ui/button";
 import { FileText, Layers } from "lucide-react";
 
 export const ResumeTemplates = {
-  CLASSIC: "CLASSIC",
-  MODERN: "MODERN",
-  // CREATIVE: "CREATIVE",
+  CLASSIC: "classic",
+  ATS1: "ats-1",
 };
 
 const templateStyles = Object.values(ResumeTemplates);

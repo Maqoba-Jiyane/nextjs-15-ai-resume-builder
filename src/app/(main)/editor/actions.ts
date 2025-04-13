@@ -8,10 +8,16 @@ import { del, put } from "@vercel/blob";
 export async function saveResume(values: ResumeValues) {
   const { id } = values;
 
-  const { photo, workExperiences, educations, ...resumeValues } =
-    resumeSchema.parse(values);
+  const {
+    photo,
+    workExperiences,
+    educations,
+    certifications,
+    ...resumeValues
+  } = resumeSchema.parse(values);
 
   const { userId } = await auth();
+  console.log(userId)
   if (!userId) {
     throw new Error("User not authenticated");
   }
@@ -53,7 +59,7 @@ export async function saveResume(values: ResumeValues) {
         ...resumeValues,
         photoUrl: newPhotoUrl,
         checkoutId: null,
-        paid: false,
+        paid: userId === "user_2tcB0BsJad8Y7nBA4Tyril9G7hG" ? true : false,
         downloaded: false,
         downloadRequest: false,
         workExperiences: {
@@ -70,6 +76,13 @@ export async function saveResume(values: ResumeValues) {
             ...edu,
             startDate: edu.startDate ? new Date(edu.startDate) : undefined,
             endDate: edu.endDate ? new Date(edu.endDate) : undefined,
+          })),
+        },
+        certifications: {
+          deleteMany: {},
+          create: certifications?.map((cert) => ({
+            ...cert,
+            date: cert.date ? new Date(cert.date) : undefined,
           })),
         },
       },
@@ -81,7 +94,7 @@ export async function saveResume(values: ResumeValues) {
         userId,
         photoUrl: newPhotoUrl,
         checkoutId: null,
-        paid: false,
+        paid: userId === "user_2tcB0BsJad8Y7nBA4Tyril9G7hG" ? true : false,
         downloadRequest: false,
         downloaded: false,
         workExperiences: {
@@ -96,6 +109,12 @@ export async function saveResume(values: ResumeValues) {
             ...edu,
             startDate: edu.startDate ? new Date(edu.startDate) : undefined,
             endDate: edu.endDate ? new Date(edu.endDate) : undefined,
+          })),
+        },
+        certifications: {
+          create: certifications?.map((cert) => ({
+            ...cert,
+            date: cert.date ? new Date(cert.date) : undefined,
           })),
         },
       },

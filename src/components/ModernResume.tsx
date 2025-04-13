@@ -1,7 +1,8 @@
-import useDimensions from "@/hooks/useDimensions";
-import { cn } from "@/lib/utils";
 import { ResumeValues } from "@/lib/validation";
-import { useRef, useState } from "react";
+import React, { useRef } from "react";
+import { formatDate } from "date-fns";
+import { cn } from "@/lib/utils";
+import useDimensions from "@/hooks/useDimensions";
 
 interface ModernResumeProps {
   resumeData: ResumeValues;
@@ -9,142 +10,32 @@ interface ModernResumeProps {
   contentRef?: React.Ref<HTMLDivElement>;
 }
 
-const ModernResume = ({
-  resumeData,
-  className,
-  contentRef,
-}: ModernResumeProps) => {
-
+const ModernResume = ({ resumeData, className, contentRef }: ModernResumeProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { width } = useDimensions(containerRef);
-  const {
-    firstName,
-    lastName,
-    jobTitle,
-    email,
-    phone,
-    summary,
-    skills,
-    educations,
-    workExperiences,
-    colorHex,
-  } = resumeData;
 
   return (
     <div
       className={cn(
         "bg-white text-black h-fit w-full aspect-[210/297]",
-        className,
+        className
       )}
       ref={containerRef}
     >
       <div
-        className={cn("space-y-6 p-6", !width && "invisible")}
+        className={cn("space-y-4 p-8", !width && "invisible")}
         style={{
           zoom: (1 / 794) * width,
         }}
         ref={contentRef}
         id="resumePreviewContent"
       >
-        {/* Header */}
-        <div className="pb-4 flex flex-col text-left">
-          <h1 className="text-3xl font-bold uppercase mt-2 text-black text-left">
-            {firstName} <span className="font-light">{lastName}</span>
-          </h1>
-          <div className="mt-2 text-sm text-gray-500">
-            <span className="mr-2">
-              Email: <span className="text-black">{email}</span>
-            </span>{" "}
-            |{" "}
-            <span className="ml-2">
-              Phone: <span className="text-black">{phone}</span>
-            </span>
-          </div>
-        </div>
-
-        {/* Summary */}
-        {summary && (
-          <div className="mt-6">
-            <h2
-              className="text-xl font-semibold pb-1"
-              style={{ color: colorHex }}
-            >
-              Profile
-            </h2>
-            <p className="text-lg mt-2 text-black">
-              <span className="underline font-semibold">{jobTitle}</span>{" "}
-              {summary}
-            </p>
-          </div>
-        )}
-
-        {/* Work Experience */}
-        {workExperiences && workExperiences?.length > 0 && (
-          <div className="mt-6">
-            <h2
-              className="text-xl font-semibold pb-1"
-              style={{ color: colorHex }}
-            >
-              Experience
-            </h2>
-            {workExperiences.map((exp, index) => (
-              <div key={index} className="grid grid-cols-2">
-                <div>
-                  <h3 className="text-lg font-semibold">{exp.company}</h3>
-                  <p>
-                    {exp.startDate} - {exp.endDate}
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold">{exp.position}</h3>
-                  <ol className="list-disc">
-                    {exp.description
-                      ?.split("-")
-                      .map((des, index) => des && <li key={index}>{des}</li>)}
-                  </ol>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Education */}
-        {educations && educations?.length > 0 && (
-          <div className="mt-6">
-            <h2
-              className="text-xl font-semibold pb-1"
-              style={{ color: colorHex }}
-            >
-              Education
-            </h2>
-            {educations.map((edu, index) => (
-              <div key={index} className="grid grid-cols-2">
-                <div>
-                  <h3 className="text-lg font-semibold">{edu.school}</h3>
-                  <p>
-                    {edu.startDate} - {edu.endDate}
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold">{edu.degree}</h3>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Skills */}
-        {skills && skills?.length > 0 && (
-          <div className="mt-6">
-            <h2
-              className="text-xl font-semibold pb-1"
-              style={{ color: colorHex }}
-            >
-              Skills
-            </h2>
-            <SkillsList skills={skills} color={colorHex}/>
-          </div>
-        )}
+        <HeaderSection resumeData={resumeData} />
+        <ContactSection resumeData={resumeData} />
+        <WorkExperienceSection resumeData={resumeData} />
+        <EducationSection resumeData={resumeData} />
+        <SkillsSection resumeData={resumeData} />
+        <CertificationsSection resumeData={resumeData} />
       </div>
     </div>
   );
@@ -152,61 +43,194 @@ const ModernResume = ({
 
 export default ModernResume;
 
-interface SkillsListProps {
-  skills: string[];
-  color: string | undefined
+interface ResumeSectionProps {
+  resumeData: ResumeValues;
 }
 
-export function SkillsList({ skills, color }: SkillsListProps) {
+function HeaderSection({ resumeData }: ResumeSectionProps) {
+  const { firstName, lastName, jobTitle } = resumeData;
+
   return (
-    <div className="flex flex-col mt-2 gap-2">
-      {skills.map((skill, skillIndex) => (
-        <SkillItem key={skillIndex} skill={skill} colorHex={color} />
+    <div className="space-y-2">
+      <h1 className="text-3xl font-bold uppercase tracking-wider">
+        {firstName} {lastName}
+      </h1>
+      <div className="h-1 w-full bg-gray-300" />
+      <p className="text-lg font-medium text-gray-700">{jobTitle}</p>
+    </div>
+  );
+}
+
+function ContactSection({ resumeData }: ResumeSectionProps) {
+  const { email, phone, city, country, website, linkedin } = resumeData;
+
+  return (
+    <div className="grid grid-cols-2 gap-1 text-sm">
+      {email && (
+        <div className="flex items-center">
+          <span className="font-semibold">Email:</span>
+          <span className="ml-1">{email}</span>
+        </div>
+      )}
+      {phone && (
+        <div className="flex items-center">
+          <span className="font-semibold">Phone:</span>
+          <span className="ml-1">{phone}</span>
+        </div>
+      )}
+      {(city || country) && (
+        <div className="flex items-center">
+          <span className="font-semibold">Location:</span>
+          <span className="ml-1">
+            {city}
+            {city && country ? ", " : ""}
+            {country}
+          </span>
+        </div>
+      )}
+      {website && (
+        <div className="flex items-center">
+          <span className="font-semibold">Website:</span>
+          <span className="ml-1">{website}</span>
+        </div>
+      )}
+      {linkedin && (
+        <div className="flex items-center">
+          <span className="font-semibold">LinkedIn:</span>
+          <span className="ml-1">{linkedin}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function WorkExperienceSection({ resumeData }: ResumeSectionProps) {
+  const { workExperiences } = resumeData;
+
+  const workExperiencesNotEmpty = workExperiences?.filter(
+    (exp) => Object.values(exp).filter(Boolean).length > 0
+  );
+
+  if (!workExperiencesNotEmpty?.length) return null;
+
+  return (
+    <div className="space-y-4">
+      <h2 className="border-b-2 border-gray-300 pb-1 text-xl font-bold uppercase">
+        Professional Experience
+      </h2>
+      {workExperiencesNotEmpty.map((exp, index) => (
+        <div className="break-inside-avoid space-y-1" key={index}>
+          <div className="flex justify-between">
+            <h3 className="text-lg font-semibold">{exp.position}</h3>
+            {exp.startDate && (
+              <span className="text-sm font-medium">
+                {formatDate(exp.startDate, "MMM yyyy")} -{" "}
+                {exp.endDate ? formatDate(exp.endDate, "MMM yyyy") : "Present"}
+              </span>
+            )}
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="font-medium italic">{exp.company}</span>
+            <span>{exp.location}</span>
+          </div>
+          {exp.description && (
+            <ul className="ml-5 list-disc text-sm">
+              {exp.description
+                .split("\n")
+                .filter((line) => line.trim())
+                .map((line, i) => (
+                  <li key={i}>{line}</li>
+                ))}
+            </ul>
+          )}
+        </div>
       ))}
     </div>
   );
 }
 
-interface SkillListProps {
-  skill: string
-  colorHex: string | undefined
-}
+function EducationSection({ resumeData }: ResumeSectionProps) {
+  const { educations } = resumeData;
 
-function SkillItem({ skill, colorHex }: SkillListProps) {
-  const totalCheckboxes = 5;
-  const [checkedCount, setCheckedCount] = useState(2);
+  const educationsNotEmpty = educations?.filter(
+    (edu) => Object.values(edu).filter(Boolean).length > 0
+  );
 
-  const handleCheckboxChange = (index: number) => {
-    if (index === checkedCount) {
-      setCheckedCount((prev) => prev + 1);
-    } else if (index === checkedCount - 1) {
-      setCheckedCount((prev) => prev - 1);
-    }
-  };
+  if (!educationsNotEmpty?.length) return null;
 
   return (
-    <span className="font-semibold flex justify-between">
-      {skill}
-      <div className="right flex gap-2">
-        {Array.from({ length: totalCheckboxes }).map((_, index) => (
-          <div key={index} className="flex items-center">
-            <input
-              id={`${skill}-${index}`}
-              type="checkbox"
-              className="hidden peer"
-              checked={index < checkedCount}
-              onChange={() => handleCheckboxChange(index)}
-            />
-            <label
-              htmlFor={`${skill}-${index}`}
-              className={`w-5 h-5 bg-blue-300 rounded-full peer-checked:bg-blue-500 cursor-pointer`}  
-              style={{ background: colorHex
-                
-               }}
-            ></label>
+    <div className="space-y-4">
+      <h2 className="border-b-2 border-gray-300 pb-1 text-xl font-bold uppercase">
+        Education
+      </h2>
+      {educationsNotEmpty.map((edu, index) => (
+        <div className="break-inside-avoid space-y-1" key={index}>
+          <div className="flex justify-between">
+            <h3 className="text-lg font-semibold">{edu.degree}</h3>
+            {edu.startDate && (
+              <span className="text-sm font-medium">
+                {formatDate(edu.startDate, "MMM yyyy")} -{" "}
+                {edu.endDate ? formatDate(edu.endDate, "MMM yyyy") : "Present"}
+              </span>
+            )}
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="font-medium italic">{edu.school}</span>
+            <span>{edu.location}</span>
+          </div>
+          {edu.description && (
+            <p className="whitespace-pre-line text-sm">{edu.description}</p>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function SkillsSection({ resumeData }: ResumeSectionProps) {
+  const { skills } = resumeData;
+
+  if (!skills?.length) return null;
+
+  return (
+    <div className="space-y-4">
+      <h2 className="border-b-2 border-gray-300 pb-1 text-xl font-bold uppercase">
+        Skills
+      </h2>
+      <div className="grid grid-cols-3 gap-2">
+        {skills.map((skill, index) => (
+          <div key={index} className="text-sm">
+            • {skill}
           </div>
         ))}
       </div>
-    </span>
+    </div>
+  );
+}
+
+function CertificationsSection({ resumeData }: ResumeSectionProps) {
+  const { certifications } = resumeData;
+
+  if (!certifications?.length) return null;
+
+  return (
+    <div className="space-y-4">
+      <h2 className="border-b-2 border-gray-300 pb-1 text-xl font-bold uppercase">
+        Certifications
+      </h2>
+      <div className="space-y-2">
+        {certifications.map((cert, index) => (
+          <div key={index} className="text-sm">
+            <div className="font-semibold">{cert.name}</div>
+            {cert.issuer && (
+              <div className="italic">{cert.issuer}</div>
+            )}
+            {cert.date && (
+              <div>{formatDate(cert.date, "MMM yyyy")}</div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

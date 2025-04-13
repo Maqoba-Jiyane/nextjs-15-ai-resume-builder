@@ -69,7 +69,7 @@ const ATSSuggestionsSection = ({
   return (
     <div
       className={cn(
-        "group relative hidden w-1/2 md:flex max-md:w-full",
+        "group relative",
         className,
       )}
     >

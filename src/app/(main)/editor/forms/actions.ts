@@ -6,10 +6,23 @@ import { AnalyzeResumeInput, analyzeResumeSchema, GenerateSummaryInput, generate
 export async function generateSummary(input: GenerateSummaryInput) {
   // TODO: Block non-prremium users
 
-  const { jobTitle, workExperiences, educations, skills } =
+  const { jobTitle, workExperiences, educations, skills, jobDescription } =
     generateSummarySchema.parse(input);
 
-  const systemMessage = `You are a job resume generator AI. Your task is to write a professional introduction summary for a resume given the user's provided data. Only return the summary and do not include any other information in the response. Keep it concise and professional.`;
+  const systemMessage = `You are a job resume generator AI. Your task is to write a professional introduction summary for a resume given the user's provided data. Only return the summary and do not include any other information in the response. Keep it concise and professional. How to Write a Professional Summary
+Scan the job description and match it with your key skills.
+Lead with a strong opener: Your title + experience.
+Highlight wins: Use real achievements, ideally with metrics.
+Keep it short: 3–5 lines max.
+Examples of Professional Summaries
+Marketing Manager
+Results-driven Marketing Manager with 8+ years of experience creating digital campaigns that drove a 25% boost in revenue. Skilled in SEO, paid ads, and brand positioning.
+
+Software Developer
+Full-stack developer with 5 years of experience in building scalable web apps. Proficient in React, Node.js, and cloud platforms. Led a project that reduced load time by 40%.
+
+Registered Nurse
+Compassionate RN with 10+ years in emergency and acute care. Recognized for reducing patient wait times by 30% and mentoring junior staff in patient-focused care.`;
 
   const userMessage = `Please generate a professional resume summary from this data:
     Job title: ${jobTitle || "N/A"}
@@ -30,7 +43,9 @@ export async function generateSummary(input: GenerateSummaryInput) {
       .join("\n\n")}
       
       Skills:
-      ${skills}`;
+      ${skills}
+      
+    Job Description: ${jobDescription || "N/A"}  `;
 
   const completion = await openai.chat.completions.create({
     model: "gpt-4o-mini",
@@ -55,51 +70,60 @@ export async function generateSummary(input: GenerateSummaryInput) {
   return aiResponse;
 }
 
+export async function generateWorkExperience(input: GenerateWorkExperienceInput) {
+  //TODO: Block for non-premium users
 
-export async function generateWorkExperience(input:GenerateWorkExperienceInput) {
-    //TODO: Block for non-premium users
+  const {description} = generateWorkExperienceSchema.parse(input)
 
-    const {description} = generateWorkExperienceSchema.parse(input)
+  const systemMessage = `You are a job resume generator AI. Your task is to generate a single work experience entry based on the user input. Your response must adhere to the following structure. You can omit fields if they can't be infered from the provided data, but don't add new ones.
+  
+  Job title: <job title>
+  Company: <company name>
+  Start date: <format: YYYY-MM-DD>(only if provided)
+  End date: <format: YYYY-MM-DD>(only if provided)
+  Description: <an optimised description in bullet format, might be infered from the job title>
+  `;
 
-    const systemMessage = `You are a job resume generator AI. Your task is to generate a single work experience entry based on the user input. Your response must adhere to the following structure. You can omit fields if they can't be infered from the provided data, but don't add new ones.
-    
-    Job title: <job title>
-    Company: <company name>
-    Start date: <format: YYYY-MM-DD>(only if provided)
-    End date: <format: YYYY-MM-DD>(only if provided)
-    Description: <an optimised description in bullet format, might be infered from the job title>
-    `;
+  const userMessage = `Please provide a work experience entry from this description: ${description}`;
 
-    const userMessage = `Please provide a work experience entry from this descriptio: ${description}`
+  const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content: systemMessage,
+        },
+        {
+          role: "user",
+          content: userMessage,
+        },
+      ],
+    });
+  
+    const aiResponse = completion.choices[0].message.content;
+  
+    if (!aiResponse) {
+      throw new Error("Failed to generate AI response.");
+    }
 
+    // Extract matched values
+    const position = aiResponse.match(/Job title:\s*(.*)/)?.[1] || "";
+    const company = aiResponse.match(/Company:\s*(.*)/)?.[1] || "";
+    const descriptionText = (aiResponse.match(/Description:\s*([\s\S]*)/)?.[1] || "").trim();
+    const startDateStr = aiResponse.match(/Start date:\s*(\d{4}-\d{2}-\d{2})/)?.[1];
+    const endDateStr = aiResponse.match(/End date:\s*(\d{4}-\d{2}-\d{2})/)?.[1];
 
-    const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "system",
-            content: systemMessage,
-          },
-          {
-            role: "user",
-            content: userMessage,
-          },
-        ],
-      });
-    
-      const aiResponse = completion.choices[0].message.content;
-    
-      if (!aiResponse) {
-        throw new Error("Failed to generate AI response.");
-      }
-    
-      return {
-        position: aiResponse.match(/Job title:\s*(.*)/)?.[1] || "",
-        company: aiResponse.match(/Company:\s*(.*)/)?.[1] || "",
-        description: (aiResponse.match(/Description:\s*([\s\S]*)/)?.[1] || "").trim(),
-        startDate: aiResponse.match(/Start date:\s*(\d{4}-\d{2}-\d{2})/)?.[1],
-        endDate: aiResponse.match(/End date:\s*(\d{4}-\d{2}-\d{2})/)?.[1],
-      } satisfies WorkExperience;
+    // Convert date strings to Date objects if they exist
+    const startDate = startDateStr ? new Date(startDateStr) : undefined;
+    const endDate = endDateStr ? new Date(endDateStr) : undefined;
+  
+    return {
+      position,
+      company,
+      description: descriptionText,
+      startDate,
+      endDate,
+    } satisfies WorkExperience;
 }
 
 export async function generateSkills(input: GenerateSummaryInput) {

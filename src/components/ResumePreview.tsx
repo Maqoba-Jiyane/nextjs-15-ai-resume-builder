@@ -1,20 +1,21 @@
 import { ResumeValues } from "@/lib/validation";
 import ClassicResume from "./ClassicResume";
 import ATS1 from "./ATS1";
+// import ATS1 from "./ATS1";
 // import ModernResume from "./ModernResume"; // Future template support
 
 interface ResumePreviewProps {
   resumeData: ResumeValues;
   contentRef?: React.Ref<HTMLDivElement>;
   className?: string;
-  template?: "CLASSIC" | "ATS1" | 'CREATIVE';
+  template?: "classic" | "ats-1" | 'CREATIVE';
 }
 
 const ResumePreview = ({ resumeData, contentRef, className }: ResumePreviewProps) => {
   console.log('ResumePreview: ', resumeData.template)
   return (
     <div className="w-full">
-      {resumeData.template === "CLASSIC" ? (
+      {resumeData.template === "classic" ? (
         <ClassicResume resumeData={resumeData} className={className} contentRef={contentRef} />
       ) :  (
         <ATS1 resumeData={resumeData} className={className} contentRef={contentRef}/>

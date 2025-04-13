@@ -1,6 +1,13 @@
 import { z } from "zod";
 
 export const optionalString = z.string().trim().optional().or(z.literal(""));
+export const optionalDate = z.union([z.date(), z.string().pipe(z.coerce.date())]).optional();
+
+export const templateSelectorSchema = z.object({
+  template: optionalString,
+});
+
+export type TemplateSelectorValues = z.infer<typeof templateSelectorSchema>;
 
 export const generateInfoSchema = z.object({
   title: optionalString,
@@ -28,6 +35,9 @@ export const personalInfoSchema = z.object({
   country: optionalString,
   phone: optionalString,
   email: optionalString,
+  website: optionalString,
+  linkedin: optionalString,
+  github: optionalString,
 });
 
 export type PersonalInfoValues = z.infer<typeof personalInfoSchema>;
@@ -38,8 +48,10 @@ export const workExperienceSchema = z.object({
       z.object({
         position: optionalString,
         company: optionalString,
-        startDate: optionalString,
-        endDate: optionalString,
+        location: optionalString,
+        startDate: optionalDate,
+        endDate: optionalDate,
+        isCurrent: z.boolean().optional(),
         description: optionalString,
       }),
     )
@@ -47,7 +59,6 @@ export const workExperienceSchema = z.object({
 });
 
 export type WorkExperienceValues = z.infer<typeof workExperienceSchema>;
-
 export type WorkExperience = NonNullable<z.infer<typeof workExperienceSchema>['workExperiences']>[number];
 
 export const educationSchema = z.object({
@@ -56,14 +67,35 @@ export const educationSchema = z.object({
       z.object({
         degree: optionalString,
         school: optionalString,
-        startDate: optionalString,
-        endDate: optionalString,
+        fieldOfStudy: optionalString,
+        location: optionalString,
+        startDate: optionalDate,
+        endDate: optionalDate,
+        isCurrent: z.boolean().optional(),
+        description: optionalString,
       }),
     )
     .optional(),
 });
 
 export type EducationValues = z.infer<typeof educationSchema>;
+export type Education = NonNullable<z.infer<typeof educationSchema>['educations']>[number];
+
+export const certificationSchema = z.object({
+  certifications: z
+    .array(
+      z.object({
+        name: optionalString,
+        issuer: optionalString,
+        date: optionalDate,
+        credentialUrl: optionalString,
+      }),
+    )
+    .optional(),
+});
+
+export type CertificationValues = z.infer<typeof certificationSchema>;
+export type Certification = NonNullable<z.infer<typeof certificationSchema>['certifications']>[number];
 
 export const skillsSchema = z.object({
   skills: z.array(z.string().trim()).optional(),
@@ -71,29 +103,43 @@ export const skillsSchema = z.object({
 
 export type SkillsValues = z.infer<typeof skillsSchema>;
 
+export const languagesSchema = z.object({
+  languages: z.array(z.string().trim()).optional(),
+});
+
+export type LanguagesValues = z.infer<typeof languagesSchema>;
+
 export const summarySchema = z.object({
   summary: optionalString,
 });
 
-export type summaryValues = z.infer<typeof summarySchema>;
+export type SummaryValues = z.infer<typeof summarySchema>;
 
 export const jobDescriptionSchema = z.object({
   jobDescription: optionalString,
 });
 
-export type jobDescriptionValues = z.infer<typeof jobDescriptionSchema>;
+export type JobDescriptionValues = z.infer<typeof jobDescriptionSchema>;
+
+export const appearanceSchema = z.object({
+  colorHex: optionalString,
+  borderStyle: optionalString,
+  template: optionalString,
+});
+
+export type AppearanceValues = z.infer<typeof appearanceSchema>;
 
 export const resumeSchema = z.object({
   ...generateInfoSchema.shape,
   ...personalInfoSchema.shape,
   ...workExperienceSchema.shape,
   ...educationSchema.shape,
+  ...certificationSchema.shape,
   ...skillsSchema.shape,
+  ...languagesSchema.shape,
   ...summarySchema.shape,
   ...jobDescriptionSchema.shape,
-  colorHex: optionalString,
-  borderStyle: optionalString,
-  template: optionalString,
+  ...appearanceSchema.shape,
 });
 
 export type ResumeValues = Omit<z.infer<typeof resumeSchema>, "photo"> & {
@@ -106,12 +152,10 @@ export const generateWorkExperienceSchema = z.object({
     .string()
     .trim()
     .min(1, "Required")
-    .min(20, "Must be atleast 20 characters"),
+    .min(20, "Must be at least 20 characters"),
 });
 
-export type GenerateWorkExperienceInput = z.infer<
-  typeof generateWorkExperienceSchema
->;
+export type GenerateWorkExperienceInput = z.infer<typeof generateWorkExperienceSchema>;
 
 export const analyzeResumeSchema = z.object({
   jobTitle: optionalString,
@@ -122,16 +166,17 @@ export const analyzeResumeSchema = z.object({
   ...summarySchema.shape
 });
 
-export type   AnalyzeResumeInput = z.infer<typeof analyzeResumeSchema>;
+export type AnalyzeResumeInput = z.infer<typeof analyzeResumeSchema>;
 
 export const generateSummarySchema = z.object({
   jobTitle: optionalString,
   ...workExperienceSchema.shape,
   ...educationSchema.shape,
   ...skillsSchema.shape,
+  jobDescription: optionalString
 });
 
-export type   GenerateSummaryInput = z.infer<typeof generateSummarySchema>;
+export type GenerateSummaryInput = z.infer<typeof generateSummarySchema>;
 
 export const generateSkillsSchema = z.object({
   jobTitle: optionalString,
@@ -139,4 +184,4 @@ export const generateSkillsSchema = z.object({
   ...educationSchema.shape,
 });
 
-export type   GenerateSkillsInput = z.infer<typeof generateSkillsSchema>;
+export type GenerateSkillsInput = z.infer<typeof generateSkillsSchema>;

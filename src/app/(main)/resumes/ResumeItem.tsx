@@ -42,8 +42,8 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
 
     let apiRoute = '';
     const template = resume.template
-
-    if(template === 'CLASSIC'){
+    console.log(template)
+    if(template === 'classic'){
       apiRoute = 'api/download-resume/classic'
     }else{
       apiRoute = 'api/download-resume/ats-1'
@@ -65,7 +65,7 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'resume.pdf';
+        a.download = `${resume.firstName}_${resume.lastName}.pdf`;
         a.click();
         window.URL.revokeObjectURL(url);
       }

@@ -8,6 +8,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea"; // Add this import
 import { EditorFormProps } from "@/lib/types";
 import { educationSchema, EducationValues } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,11 +36,15 @@ import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/utils";
 
 const EducationForm = ({ resumeData, setResumeData }: EditorFormProps) => {
-
   const form = useForm<EducationValues>({
     resolver: zodResolver(educationSchema),
     defaultValues: {
-      educations: resumeData.educations || [],
+      educations: resumeData.educations?.map(edu => ({
+        ...edu,
+        startDate: edu.startDate ? new Date(edu.startDate) : undefined,
+        endDate: edu.endDate ? new Date(edu.endDate) : undefined,
+        description: edu.description || "" // Initialize description field
+      })) || [],
     },
   });
 
@@ -50,7 +55,11 @@ const EducationForm = ({ resumeData, setResumeData }: EditorFormProps) => {
       if (!isValid) return;
       setResumeData({
         ...resumeData,
-        educations: values.educations?.filter((edu) => edu !== undefined) || [],
+        educations: values.educations?.filter((edu) => edu !== undefined).map(edu => ({
+          ...edu,
+          startDate: edu.startDate ? new Date(edu.startDate) : undefined,
+          endDate: edu.endDate ? new Date(edu.endDate) : undefined
+        })) || [],
       });
     });
 
@@ -77,7 +86,6 @@ const EducationForm = ({ resumeData, setResumeData }: EditorFormProps) => {
       const newIndex = fields.findIndex((field) => field.id === over.id);
 
       move(oldIndex, newIndex);
-
       return arrayMove(fields, oldIndex, newIndex);
     }
   }
@@ -120,8 +128,9 @@ const EducationForm = ({ resumeData, setResumeData }: EditorFormProps) => {
                 append({
                   degree: "",
                   school: "",
-                  startDate: "",
-                  endDate: "",
+                  startDate: new Date(),
+                  endDate: new Date(),
+                  description: "" // Add empty description when appending new education
                 })
               }
             >
@@ -152,17 +161,29 @@ function EducationItem({ id, form, index, remove }: EducationItemProps) {
     transition,
     isDragging,
   } = useSortable({ id });
+
+  const formatDateValue = (date: Date | string | undefined) => {
+    if (!date) return "";
+    if (typeof date === "string") return date;
+    return date.toISOString().slice(0, 10);
+  };
+
   return (
-    <div className={cn("space-y-3 border rounded-md bg-background p-3",
-    isDragging && "shadow-xl z-50 cursor-grab relative",
-  )}
-  ref={setNodeRef}
-  style={{ transform: CSS.Transform.toString(transform), transition }}>
+    <div
+      className={cn(
+        "space-y-3 border rounded-md bg-background p-3",
+        isDragging && "shadow-xl z-50 cursor-grab relative"
+      )}
+      ref={setNodeRef}
+      style={{ transform: CSS.Transform.toString(transform), transition }}
+    >
       <div className="flex justify-between gap-2">
         <span className="font-semibold">Education {index + 1}</span>
-        <GripHorizontal className="size-5 cursor-grab text-muted-foreground focus:outline-none"
+        <GripHorizontal
+          className="size-5 cursor-grab text-muted-foreground focus:outline-none"
           {...attributes}
-          {...listeners} />
+          {...listeners}
+        />
       </div>
       <FormField
         control={form.control}
@@ -201,7 +222,8 @@ function EducationItem({ id, form, index, remove }: EducationItemProps) {
                 <Input
                   {...field}
                   type="date"
-                  value={field.value?.slice(0, 10)}
+                  value={formatDateValue(field.value)}
+                  onChange={(e) => field.onChange(e.target.value)}
                 />
               </FormControl>
               <FormMessage />
@@ -218,7 +240,8 @@ function EducationItem({ id, form, index, remove }: EducationItemProps) {
                 <Input
                   {...field}
                   type="date"
-                  value={field.value?.slice(0, 10)}
+                  value={formatDateValue(field.value)}
+                  onChange={(e) => field.onChange(e.target.value)}
                 />
               </FormControl>
               <FormMessage />
@@ -226,6 +249,23 @@ function EducationItem({ id, form, index, remove }: EducationItemProps) {
           )}
         />
       </div>
+      <FormField
+        control={form.control}
+        name={`educations.${index}.description`}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Description</FormLabel>
+            <FormControl>
+              <Textarea
+                {...field}
+                placeholder="Include relevant coursework, achievements, or honors"
+                className="min-h-[80px]"
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
       <Button variant="destructive" type="button" onClick={() => remove(index)}>
         Remove
       </Button>
