@@ -11,22 +11,22 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    template: `%s - EonResume`,
-    absolute: "EonResume",
+    template: `%s - Eon Resume`,
+    absolute: "Eon Resume",
   },
   description: "Create professional resumes effortlessly with AI-powered templates and expert guidance.",
-  keywords: "Resume Builder, Job Seeker Tools, ATS-Compatible Resume, Resume Templates, Resume Customization, Job Application, CV Creation, Resume Editing, Job Search Tools, Resume Formatting, Resume Optimization, Resume Generator, Digital Resume, Job Market Ready, EonResume, Eon Resume",
+  keywords: "Resume Builder, Job Seeker Tools, ATS-Compatible Resume, Resume Templates, Resume Customization, Job Application, CV Creation, Resume Editing, Job Search Tools, Resume Formatting, Resume Optimization, Resume Generator, Digital Resume, Job Market Ready, Eon Resume",
   openGraph: {
-    title: "EonResume | AI Resume Builder",
+    title: "Eon Resume | AI Resume Builder",
     description: "Build professional resumes in minutes using AI-driven resume templates.",
     url: "https://eonresume.co.za",
-    siteName: "EonResume",
+    siteName: "Eon Resume",
     images: [
       {
         url: "https://eonresume.co.za/opengraph-image.jpg",
         width: 1200,
         height: 630,
-        alt: "EonResume Homepage",
+        alt: "Eon Resume Homepage",
       },
     ],
     type: "website",
