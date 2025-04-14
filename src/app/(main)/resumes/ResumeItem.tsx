@@ -65,7 +65,7 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${resume.firstName}_${resume.lastName}${resume.title ? '_'+resume.title.replaceAll(' ', '_'): ''}${resume.description ? '_'+resume.description.replaceAll(' ', '_'): ''}.pdf`;
+        a.download = `${resume.firstName}_${resume.lastName}${resume.title && `${'_'+resume.title.replaceAll(' ', '_')}`}${resume.description && `${'_'+resume.description.substring(0, 40).replaceAll(' ', '_')}`}.pdf`;
         a.click();
         window.URL.revokeObjectURL(url);
       }
