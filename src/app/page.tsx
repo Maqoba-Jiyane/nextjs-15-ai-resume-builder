@@ -67,7 +67,7 @@ const testimonials = [
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-gray-100 px-5 py-12 text-gray-900 text-center md:text-start lg:gap-12">
+    <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-gray-100 py-12 text-gray-900 text-center md:text-start lg:gap-12">
       {/* Main Content */}
       <div className="flex items-center max-md:flex-col gap-12">
         <div className="max-w-prose space-y-3 flex flex-col justify-center items-center">
@@ -207,8 +207,55 @@ export default function Home() {
             </div>
           </div>
         </div>
-
         <HelpCenter />
+        {/* <footer className="bg-gray-50 py-16   ` px-4 sm:px-6 lg:px-8 border-t border-gray-200">
+          <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8"> */}
+            {/* Branding/Mission */}
+            {/* <div className="space-y-2">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Get noticed.
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Stand out with tools that get you hired.
+              </p>
+            </div> */}
+
+            {/* Social Links */}
+            {/* <div className="space-y-2">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Follow for interview tips
+              </h3>
+              <div className="flex space-x-4 justify-center">
+                <a href="#" className="text-blue-600 hover:text-blue-800">
+                  Facebook
+                </a>
+                <a href="#" className="text-blue-600 hover:text-blue-800">
+                  LinkedIn
+                </a>
+              </div>
+            </div> */}
+
+            {/* Support */}
+            {/* <div className="space-y-2">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Need help?
+              </h3>
+              <p className="text-gray-600 text-sm">
+                <a
+                  href="mailto:support@eonresume.com"
+                  className="underline hover:text-gray-900"
+                >
+                  Just ask—we&apos;ve got you.
+                </a>
+              </p>
+            </div>
+          </div> */}
+
+          {/* Copyright */}
+          {/* <div className="mt-8 pt-8 border-t border-gray-200 text-center text-sm text-gray-500">
+            © {new Date().getFullYear()} Eon Resume. All rights reserved.
+          </div>
+        </footer> */}
       </div>
     </main>
   );
