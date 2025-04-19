@@ -199,10 +199,10 @@ export async function POST(request: Request) {
         fontSize,
         width - 100,
       );
-
-      const summaryHeight = summaryLines.length * 15; // Height of the summary text
-      checkForNewPage(summaryHeight); // Check if the summary text fits on the current page
       summaryLines.forEach((line) => {
+
+        const summaryHeight = 15; // Height of the summary text
+        checkForNewPage(summaryHeight); // Check if the summary text fits on the current page
         page.drawText(line, {
           x: leftMargin,
           y: yOffset,
@@ -285,10 +285,10 @@ export async function POST(request: Request) {
             fontSize,
             width - 100,
           ); // Split description by new lines
-          const descriptionHeight = descriptionLines.length * 15; // Height of the description
-          checkForNewPage(descriptionHeight); // Check if the description fits on the current page
 
           descriptionLines.forEach((line) => {
+            const lineHeight = 15; // Height of the description
+            checkForNewPage(lineHeight); // Check if the description fits on the current page
             if (line.trim() !== "") {
               // Skip empty lines
               page.drawText(
@@ -383,7 +383,7 @@ export async function POST(request: Request) {
       yOffset -= spaceBetween; // Move down after the first line of contact info
 
       const skillsTitle = "Skills";
-      const skillsTitleHeight = 30; // Height of the skills title
+      const skillsTitleHeight = 12; // Height of the skills title
       checkForNewPage(skillsTitleHeight); // Check if the skills title fits on the current page
       page.drawText(skillsTitle, {
         x: leftMargin,
@@ -395,8 +395,8 @@ export async function POST(request: Request) {
       yOffset -= headingToContentSpace; // Move down after the first line of contact info
       let xOffset = leftMargin;
 
-      const skillsHeight = resume.skills.length * 15; // Height of the summary text
-      checkForNewPage(skillsHeight); // Check if the skill fits on the current page
+      // const skillsHeight = resume.skills.length * 15; // Height of the summary text
+      // checkForNewPage(skillsHeight); // Check if the skill fits on the current page
       resume.skills.forEach((skill) => {
         const skillText = `${skill}  `; // Add some padding to the skill text
         const skillWidth = regularPoppins.widthOfTextAtSize(
@@ -419,6 +419,8 @@ export async function POST(request: Request) {
           xOffset = leftMargin; // Reset X position to the left margin
         }
 
+        const skillsHeight = 10; // Height of the skills title
+        checkForNewPage(skillsHeight); // Check if the skills title fits on the current page
         // Draw a black background rectangle for the skill
         page.drawRectangle({
           x: xOffset, // X position of the rectangle
