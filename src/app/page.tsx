@@ -21,7 +21,7 @@ const testimonials = [
     testimonial:
       "The resume builder on EonResume helped me to perfectly highlight my skills and experience, which led to multiple interview invitations.",
     image:
-      "https://images.unsplash.com/photo-1532136672867-8eff8c949b63?q=80&w=1372&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://images.unsplash.com/photo-1565884280295-98eb83e41c65?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     name: "Mahlatsi Masemula",
@@ -37,7 +37,7 @@ const testimonials = [
     testimonial:
       "I used EonResume to build my resume and was blown away by how easy and effective it was. It streamlined my job application process.",
     image:
-      "https://images.unsplash.com/photo-1512361436605-a484bdb34b5f?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://images.unsplash.com/photo-1611432579402-7037e3e2c1e4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmxhY2slMjB3b21hbnxlbnwwfHwwfHx8MA%3D%3D",
   },
   {
     name: "Aarav Patel",
