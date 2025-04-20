@@ -41,9 +41,9 @@ const GeneralInfoForm = ({resumeData, setResumeData}: EditorFormProps) => {
           name="title"
           render={({field}) => (
             <FormItem>
-              <FormLabel>Project name</FormLabel>
+              <FormLabel>Role applying for...</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="My cool resume" autoFocus/>
+                <Input {...field} placeholder="Junior Developer" autoFocus/>
               </FormControl>
               <FormMessage/>
             </FormItem>
@@ -52,9 +52,9 @@ const GeneralInfoForm = ({resumeData, setResumeData}: EditorFormProps) => {
           name="description"
           render={({field}) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>Company applying to...</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="A resume for my next job"/>
+                <Input {...field} placeholder="Microsoft"/>
               </FormControl>
               <FormDescription>Describe what this resume is for.</FormDescription>
               <FormMessage/>
