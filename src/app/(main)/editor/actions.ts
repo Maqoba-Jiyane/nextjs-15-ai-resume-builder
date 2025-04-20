@@ -59,7 +59,7 @@ export async function saveResume(values: ResumeValues) {
         ...resumeValues,
         photoUrl: newPhotoUrl,
         checkoutId: null,
-        paid: userId === "user_2t2ctUODvvFhRvqZU9GCbFZHyY8" ? true : false,
+        paid: userId === "user_2tcB0BsJad8Y7nBA4Tyril9G7hG" ? true : false,
         downloaded: false,
         downloadRequest: false,
         workExperiences: {
@@ -94,7 +94,7 @@ export async function saveResume(values: ResumeValues) {
         userId,
         photoUrl: newPhotoUrl,
         checkoutId: null,
-        paid: userId === "user_2t2ctUODvvFhRvqZU9GCbFZHyY8" ? true : false,
+        paid: userId === "user_2tcB0BsJad8Y7nBA4Tyril9G7hG" ? true : false,
         downloadRequest: false,
         downloaded: false,
         workExperiences: {
