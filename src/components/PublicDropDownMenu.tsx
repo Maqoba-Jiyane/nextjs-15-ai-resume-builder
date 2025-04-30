@@ -9,6 +9,7 @@ import {
   LogOut,
   Rss,
   User,
+  UserPen,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import {
@@ -57,6 +58,12 @@ const PublicDropDownMenu = () => {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
+          <DropdownMenuItem asChild>
+            <Link href={"/profile"}>
+            <UserPen />
+              <span>Profile</span>
+            </Link>
+          </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href={"/resumes"}>
               <FileUser />
