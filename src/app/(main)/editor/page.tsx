@@ -5,7 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { resumeDataInclude, userDataInclude } from "@/lib/types";
 
 interface PageProps {
-  searchParams: { resumeId?: string };
+  searchParams: Promise<{resumeId?: string}>
 }
 
 export const metadata: Metadata = {
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 async function Page({ searchParams }: PageProps) {
-  const { resumeId } = searchParams;
+  const { resumeId } = await searchParams;
 
   const { userId } = await auth();
 

@@ -40,6 +40,8 @@ useEffect(() => {
   const updatedFields: Partial<PersonalInfoValues> = {};
 
   (Object.keys(defaults) as (keyof PersonalInfoValues)[]).forEach((key) => {
+    if (key === "photo") return;
+    
     if (!resumeData[key] && personalDetails[key]) {
       updatedFields[key] = personalDetails[key];
     }

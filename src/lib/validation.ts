@@ -27,7 +27,7 @@ export const personalInfoSchema = z.object({
     .refine(
       (file) => !file || file.size <= 1024 * 1024 * 4,
       "File must be less than 4MB",
-    ),
+    ).optional(),
   firstName: optionalString,
   lastName: optionalString,
   jobTitle: optionalString,
