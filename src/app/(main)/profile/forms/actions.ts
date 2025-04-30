@@ -1,9 +1,7 @@
 "use server";
 
 import openai from "@/lib/openai";
-import prisma from "@/lib/prisma";
 import { AnalyzeResumeInput, analyzeResumeSchema, GenerateSummaryInput, generateSummarySchema, GenerateWorkExperienceInput, generateWorkExperienceSchema, WorkExperience } from "@/lib/validation";
-import { auth } from "@clerk/nextjs/server";
 
 export async function generateSummary(input: GenerateSummaryInput) {
   // TODO: Block non-prremium users
@@ -131,16 +129,13 @@ export async function generateWorkExperience(input: GenerateWorkExperienceInput)
 export async function generateSkills(input: GenerateSummaryInput) {
   // TODO: Block non-prremium users
 
-  const { jobTitle, workExperiences, educations, jobDescription } =
+  const { jobTitle, workExperiences, educations } =
     generateSummarySchema.parse(input);
 
-  const systemMessage = `You are a job resume generator AI. Your task is to generate skills that are comma separated from the user's provided data. Only return the skills and do not include any other information in the response. Return hard and soft skills required by the Job Description if any exists, but ensure that the hard skills align with the users experience, education, or certifications. Please don't include any skills that are not part of the experience. Keep it concise and professional.`;
+  const systemMessage = `You are a job resume generator AI. Your task is to generate skills that are comma separated from the user's provided data. Only return the skills and do not include any other information in the response. Keep it concise and professional.`;
 
   const userMessage = `Please generate skills for the resume from this data:
     Job title: ${jobTitle || "N/A"}
-
-    Job description: ${jobDescription || "N/A"}
-
     Work experience: ${workExperiences
       ?.map(
         (
@@ -289,82 +284,3 @@ const userMessage = `
     throw new Error("An error occurred while analyzing the resume.");
   }
 }
-
-export async function getPromptsFromDB() {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Not signed in");
-  return prisma.workExperiencePrompt.findMany({ where: { userId } });
-}
-
-export async function addOrUpdateWorkExperience(
-  experiences: WorkExperience[],
-  resumeId: string
-) {
-  console.log(resumeId)
-  try {
-    const { userId } = await auth();
-    if (!userId) throw new Error("User not authenticated");
-
-    // Sanity check (optional): Ensure resumeId exists
-    const resume = await prisma.resume.findUnique({ where: { id: resumeId } });
-    if (!resume) throw new Error("Resume not found");
-
-    // Proceed to update
-    const updatedResume = await prisma.resume.update({
-      where: { id: resumeId },
-      data: {
-        workExperiences: {
-          deleteMany: {}, // Clear previous
-          create: experiences.map((exp) => ({
-            position: exp.position || null,
-            company: exp.company || null,
-            location: exp.location || null,
-            startDate: exp.startDate ?? undefined,
-            endDate: exp.endDate ?? undefined,
-            isCurrent: exp.isCurrent ?? false,
-            description: exp.description || null,
-          })),
-        },
-      },
-    });
-
-    return updatedResume;
-  } catch (error) {
-    // console.error("Failed to update work experiences:", error);
-
-    // Optional: Handle Prisma-specific errors
-    if(error instanceof Error){
-      if (error.name === "P2025") {
-        throw new Error("Resume not found or already deleted");
-      }
-  
-      throw new Error(
-        error.message || "An unexpected error occurred while updating work experiences"
-      );
-    }
-  }
-}
-
-export async function addOrUpdateSummary(
-  summary: string,
-  resumeId: string
-) {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Not signed in");
-
-  return prisma.resume.update({
-    where: { id: resumeId },
-    data: {summary }
-  })}
-
-  export async function addOrUpdateSkills(
-    skills: string[],
-    resumeId: string
-  ) {
-    const { userId } = await auth();
-    if (!userId) throw new Error("Not signed in");
-  
-    return prisma.resume.update({
-      where: { id: resumeId },
-      data: {skills }
-    })}

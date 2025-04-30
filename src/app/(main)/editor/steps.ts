@@ -18,12 +18,12 @@ export const steps: {
     component: TemplateSelectorForm,
     key: "template-selector",
   },
+  { title: "General info", component: GeneralInfoForm, key: "general-info" },
   {
     title: "Job description",
     component: JobDescriptionForm,
     key: "job-description",
   },
-  { title: "General info", component: GeneralInfoForm, key: "general-info" },
   {
     title: "Personal info",
     component: PersonalInfoForm,

@@ -10,57 +10,36 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { EditorFormProps } from "@/lib/types";
+import {   PersonalDetailsFormProps } from "@/lib/types";
 import { personalInfoSchema, PersonalInfoValues } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-const PersonalInfoForm = ({ resumeData, setResumeData, personalDetails }: EditorFormProps) => {
-  const defaults: PersonalInfoValues = {
-    firstName: resumeData.firstName  ?? personalDetails.firstName  ?? "",
-    lastName:  resumeData.lastName   ?? personalDetails.lastName   ?? "",
-    jobTitle:  resumeData.jobTitle   ?? personalDetails.jobTitle   ?? "",
-    country:   resumeData.country    ?? personalDetails.country    ?? "",
-    city:      resumeData.city       ?? personalDetails.city       ?? "",
-    phone:     resumeData.phone      ?? personalDetails.phone      ?? "",
-    email:     resumeData.email      ?? personalDetails.email      ?? "",
-    website:   resumeData.website    ?? personalDetails.website    ?? "",
-    linkedin:  resumeData.linkedin   ?? personalDetails.linkedin   ?? "",
-    github:    resumeData.github     ?? personalDetails.github     ?? "",
-    photo:     undefined,  // leave file uploads empty by default
-  };
-
+const PersonalInfoForm = ({ personalDetailsData, setPersonalDetailsData }: PersonalDetailsFormProps) => {
   const form = useForm<PersonalInfoValues>({
     resolver: zodResolver(personalInfoSchema),
-    defaultValues: defaults,
+    defaultValues: {
+      firstName: personalDetailsData.firstName || "",
+      lastName: personalDetailsData.lastName || "",
+      jobTitle: personalDetailsData.jobTitle || "",
+      country: personalDetailsData.country || "",
+      city: personalDetailsData.city || "",
+      phone: personalDetailsData.phone || "",
+      email: personalDetailsData.email || "",
+    },
   });
-
-useEffect(() => {
-  const updatedFields: Partial<PersonalInfoValues> = {};
-
-  (Object.keys(defaults) as (keyof PersonalInfoValues)[]).forEach((key) => {
-    if (!resumeData[key] && personalDetails[key]) {
-      updatedFields[key] = personalDetails[key];
-    }
-  });
-
-  if (Object.keys(updatedFields).length > 0) {
-    setResumeData({ ...resumeData, ...updatedFields });
-  }
-}, []); // Runs only once on mount
-
 
   useEffect(() => {
     const { unsubscribe } = form.watch(async (values) => {
       const isValid = await form.trigger();
 
       if (!isValid) return;
-      setResumeData({ ...resumeData, ...values });
+      setPersonalDetailsData({ ...personalDetailsData, ...values });
     });
 
     return unsubscribe;
-  }, [form, resumeData, setResumeData]);
+  }, [form, personalDetailsData, setPersonalDetailsData]);
 
   // const photoInputRef = useRef<HTMLInputElement>(null);
 
@@ -137,19 +116,6 @@ useEffect(() => {
               )}
             />
           </div>
-          <FormField
-            control={form.control}
-            name="jobTitle"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Job title</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <div className="grid grid-cols-2 gap-3">
             <FormField
               control={form.control}

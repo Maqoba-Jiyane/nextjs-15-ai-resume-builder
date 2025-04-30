@@ -57,6 +57,9 @@ model Resume {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  
+
   @@map("resumes")
 }
 
@@ -130,10 +133,85 @@ model Coupon {
 
 model Template {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId String
   name      String
   image     String
   isPremium Boolean   @default(false)
   category  String?   // e.g., "ATS", "Creative", "Modern"
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("template")
+}
+
+model User {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String @unique
+  email          String?   @unique
+  name           String?
+  image          String?  // profile picture
+
+  // 🔹 Personal Details
+  firstName      String?
+  lastName       String?
+  jobTitle       String?
+  phone          String?
+  city           String?
+  country        String?
+  website        String?
+  linkedin       String?
+  github         String?
+
+  // 🔹 Resume Metadata (used for autofill)
+  summary        String?
+  skills         String[]     // tags, for example
+  languages      String[]     // list of spoken languages
+
+  // 🔹 Timestamps
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // 🔹 Relations (expandable)
+  resumes        Resume[]     // User can have multiple resumes
+  workExperiencePrompts WorkExperiencePrompt[]
+  educations UserEducation[]
+  // subscription   Subscription? // optional relation if using Stripe/etc.
+
+  @@map("user")
+}
+
+model WorkExperiencePrompt {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String?   // e.g., "Junior Frontend Developer"
+
+  prompt  String? // Prompt description or instruction for AI
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Optional: link to User (if personalized prompts are allowed)
+  userId   String?  
+  user        User?    @relation(fields: [userId], references: [userId])
+  
+  @@map("work_experience_prompt")
+}
+
+model UserEducation {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  degree String?
+  school String?
+  location String?
+  fieldOfStudy String?
+  startDate DateTime?
+  endDate DateTime?
+  description String?
+  isCurrent Boolean @default(false)
+
+  userId   String?  
+  user        User?    @relation(fields: [userId], references: [userId])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("user_educations")
 }

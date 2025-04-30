@@ -185,3 +185,66 @@ export const generateSkillsSchema = z.object({
 });
 
 export type GenerateSkillsInput = z.infer<typeof generateSkillsSchema>;
+
+export const workExperiencePromptSchema = z.object({
+  prompts: z
+  .array(
+    z.object({
+      title: optionalString,
+      prompt: optionalString,
+    }),
+  )
+  .optional(),
+});
+
+export type WorkExperiencePromptValues = z.infer<typeof workExperiencePromptSchema>;
+
+export const userEducationSchema = z.object({
+  educations: z
+    .array(
+      z.object({
+        degree: optionalString,
+        school: optionalString,
+        fieldOfStudy: optionalString,
+        location: optionalString,
+        startDate: optionalDate,
+        endDate: optionalDate,
+        isCurrent: z.boolean().optional(),
+        description: optionalString,
+      }),
+    )
+    .optional(),
+});
+
+export type UserEducationValues = z.infer<typeof userEducationSchema>;
+
+export const userDetailsSchema = z.object({
+  photo: z
+    .custom<File | undefined>()
+    .refine(
+      (file) =>
+        !file || (file instanceof File && file.type.startsWith("image/")),
+      "Must be an image file",
+    )
+    .refine(
+      (file) => !file || file.size <= 1024 * 1024 * 4,
+      "File must be less than 4MB",
+    ),
+  firstName: optionalString,
+  lastName: optionalString,
+  jobTitle: optionalString,
+  phone: optionalString,
+  city: optionalString,
+  country: optionalString,
+  website: optionalString,
+  linkedin: optionalString,
+  github: optionalString,
+  email: optionalString, // from auth or editable
+  ...workExperiencePromptSchema.shape,
+  ...userEducationSchema.shape
+});
+
+export type UserDetailsValues =Omit<z.infer<typeof userDetailsSchema>, "photo"> & {
+  id?: string;
+  photo?: File | undefined;
+};

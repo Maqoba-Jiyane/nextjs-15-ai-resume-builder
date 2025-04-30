@@ -1,34 +1,49 @@
-import { Metadata } from "next"
-import ResumeEditor from "./ResumeEditor"
-import prisma from "@/lib/prisma"
-import { auth } from "@clerk/nextjs/server"
-import { resumeDataInclude } from "@/lib/types"
+import { Metadata } from "next";
+import ResumeEditor from "./ResumeEditor";
+import prisma from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server";
+import { resumeDataInclude, userDataInclude } from "@/lib/types";
 
 interface PageProps {
-  searchParams: Promise<{resumeId?: string}>
+  searchParams: { resumeId?: string };
 }
 
 export const metadata: Metadata = {
-    title: 'Design your resume'
-}
+  title: "Design your resume",
+};
 
-async function Page({searchParams}: PageProps) {
-  const {resumeId} = await searchParams
+async function Page({ searchParams }: PageProps) {
+  const { resumeId } = searchParams;
 
-  const {userId} = await auth()
+  const { userId } = await auth();
 
-  if(!userId){
-    return null
+  if (!userId) {
+    return null;
   }
 
-const resumeToEdit = resumeId ? await prisma.resume.findUnique({
-  where: {
-    id: resumeId, userId
-  },
-  include: resumeDataInclude
-}) : null
+  const resumeToEdit = resumeId
+    ? await prisma.resume.findUnique({
+        where: {
+          id: resumeId,
+          userId,
+        },
+        include: resumeDataInclude,
+      })
+    : null;
 
-  return <ResumeEditor resumeToEdit={resumeToEdit}/>
+  const userDataToAssign = await prisma.user.findFirst({
+    where: {
+      userId,
+    },
+    include: userDataInclude,
+  });
+
+  return (
+    <ResumeEditor
+      resumeToEdit={resumeToEdit}
+      personalInfoDetailsToAssign={userDataToAssign}
+    />
+  );
 }
 
-export default Page
+export default Page;

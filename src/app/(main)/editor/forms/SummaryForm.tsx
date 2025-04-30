@@ -28,6 +28,7 @@ const SummaryForm = ({ resumeData, setResumeData }: EditorFormProps) => {
 
     return unsubscribe;
   }, [form, resumeData, setResumeData]);
+  
 
   return (
     <div className="max-w-xl mx-auto space-y-6">

@@ -79,7 +79,7 @@ export async function POST(request: Request) {
     // Font sizes
     const fontSize = 10;
     const headingFontSize = 12;
-    const namesFontSize = 14;
+    const namesFontSize = 16;
   
 
     // Minimum margin from the bottom of the page

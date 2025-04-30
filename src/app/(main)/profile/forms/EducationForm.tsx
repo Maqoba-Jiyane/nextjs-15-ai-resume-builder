@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea"; // Add this import
-import { EditorFormProps } from "@/lib/types";
+import { PersonalDetailsFormProps } from "@/lib/types";
 import { educationSchema, EducationValues } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GripHorizontal } from "lucide-react";
@@ -36,35 +36,19 @@ import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/utils";
 
 const EducationForm = ({
-  resumeData,
-  setResumeData,
-  personalDetails,
-}: EditorFormProps) => {
-  const sourceEdus = resumeData.educations?.length
-    ? resumeData.educations
-    : personalDetails.educations || [];
-
-  const normalizedEducations = sourceEdus.map((edu, i) => {
-    const pdEdu = personalDetails.educations?.[i] ?? {};
-    return {
-      degree: edu.degree ?? pdEdu.degree ?? "",
-      school: edu.school ?? pdEdu.school ?? "",
-      fieldOfStudy: edu.fieldOfStudy ?? pdEdu.fieldOfStudy ?? "",
-      location: edu.location ?? pdEdu.location ?? "",
-      isCurrent: edu.isCurrent ?? pdEdu.isCurrent ?? false,
-      startDate: edu.startDate
-        ? new Date(edu.startDate)
-        : (pdEdu.startDate ?? undefined),
-      endDate: edu.endDate
-        ? new Date(edu.endDate)
-        : (pdEdu.endDate ?? undefined),
-      description: edu.description ?? pdEdu.description ?? "",
-    };
-  });
+  personalDetailsData,
+  setPersonalDetailsData,
+}: PersonalDetailsFormProps) => {
   const form = useForm<EducationValues>({
     resolver: zodResolver(educationSchema),
     defaultValues: {
-      educations: normalizedEducations,
+      educations:
+        personalDetailsData.educations?.map((edu) => ({
+          ...edu,
+          startDate: edu.startDate ? new Date(edu.startDate) : undefined,
+          endDate: edu.endDate ? new Date(edu.endDate) : undefined,
+          description: edu.description || "", // Initialize description field
+        })) || [],
     },
   });
 
@@ -73,8 +57,8 @@ const EducationForm = ({
       const isValid = await form.trigger();
 
       if (!isValid) return;
-      setResumeData({
-        ...resumeData,
+      setPersonalDetailsData({
+        ...personalDetailsData,
         educations:
           values.educations
             ?.filter((edu) => edu !== undefined)
@@ -87,7 +71,7 @@ const EducationForm = ({
     });
 
     return unsubscribe;
-  }, [form, resumeData, setResumeData]);
+  }, [form, personalDetailsData, setPersonalDetailsData]);
 
   const { fields, append, remove, move } = useFieldArray({
     control: form.control,

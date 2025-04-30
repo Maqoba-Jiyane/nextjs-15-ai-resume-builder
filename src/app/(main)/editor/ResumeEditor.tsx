@@ -5,22 +5,26 @@ import { useSearchParams } from "next/navigation";
 import { steps } from "./steps";
 import Breadcrumbs from "./Breadcrumbs";
 import Footer from "./Footer";
-import { ResumeValues } from "@/lib/validation";
+import { ResumeValues, UserDetailsValues } from "@/lib/validation";
 import ResumePreviewSection from "./ResumePreviewSection";
-import { cn, mapToResumeValues } from "@/lib/utils";
+import { cn, mapToResumeValues, mapToUserDetailsValues } from "@/lib/utils";
 import useAutoSaveResume from "./useAutoSaveResume";
 import useUnloadWarning from "@/hooks/useUnloadWarning";
-import { ResumeServerData } from "@/lib/types";
+import { ResumeServerData, UserServerData } from "@/lib/types";
 import { ATSAnalysisProps } from "@/components/Interfaces";
 
 interface ResumeEditorProps {
   resumeToEdit: ResumeServerData | null;
+  personalInfoDetailsToAssign: UserServerData | null
 }
 
-function ResumeEditor({ resumeToEdit }: ResumeEditorProps) {
+function ResumeEditor({ resumeToEdit, personalInfoDetailsToAssign }: ResumeEditorProps) {
   const searchParams = useSearchParams();
   const [resumeData, setResumeData] = useState<ResumeValues>(
     resumeToEdit ? mapToResumeValues(resumeToEdit) : {},
+  );
+  const [personalInfoDetails] = useState<UserDetailsValues>(
+    personalInfoDetailsToAssign ? mapToUserDetailsValues(personalInfoDetailsToAssign) : {},
   );
   const [showSmResumePreview, setShowSmResumePreview] = useState(false);
   const [showATSSuggestions, setShowATSSuggestions] = useState(false);
@@ -108,6 +112,7 @@ function ResumeEditor({ resumeToEdit }: ResumeEditorProps) {
               <FormComponent
                 resumeData={resumeData}
                 setResumeData={setResumeData}
+                personalDetails={personalInfoDetails}
               />
             )}
           </div>
