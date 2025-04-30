@@ -1,7 +1,7 @@
 "use client";
 
 import { useToast } from "@/hooks/use-toast";
-import { Ellipsis, WandSparkles } from "lucide-react";
+import {  Loader, WandSparkles } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -102,7 +102,7 @@ export default function AutoFillButton({
       type="button"
     >
       {loading ? (
-        <Ellipsis />
+        <Loader/>
       ) : (
         <>
           <WandSparkles className="size-4 mr-2" />
