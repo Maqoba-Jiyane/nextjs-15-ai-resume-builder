@@ -224,7 +224,7 @@ function DeleteConfirmationDialog({
             undone.
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter>
+        <DialogFooter className="max-md:gap-2 flex">
           <LoadingButton
             variant="destructive"
             onClick={handleDelte}
