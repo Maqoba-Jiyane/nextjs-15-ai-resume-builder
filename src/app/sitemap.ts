@@ -11,6 +11,10 @@ export default async function sitemap() {
           lastModified: new Date()
       },
       {
+          url: `${baseUrl}/profile`,
+          lastModified: new Date()
+      },
+      {
           url: `${baseUrl}/sign-in`,
           lastModified: new Date()
       },

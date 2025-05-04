@@ -39,12 +39,12 @@ export default function AutoFillButton({
     setLoading(true);
     try {
       if (!resumeData.jobDescription || resumeData.jobDescription === "") {
-        throw new Error("Job description required for autofill.");
+        throw new Error("Job description required.");
       }
       // Load prompts
       const prompts = await getPromptsFromDB();
       if (!prompts || prompts.length === 0) {
-        throw new Error("Describe your work Experience for autofill.");
+        throw new Error("Complete your profile.");
       }
 
       // Generate work experiences
