@@ -5,9 +5,6 @@ import { Button } from "@/components/ui/button";
 import { ResumeServerData } from "@/lib/types";
 import { mapToResumeValues } from "@/lib/utils";
 import { useRef } from "react";
-import { useReactToPrint } from "react-to-print";
-import { markResumeAsDownloaded } from "./actions";
-import { useRouter } from "next/navigation";
 import { formatDate } from "date-fns";
 
 interface ResumeItemAdminProps {
@@ -16,23 +13,42 @@ interface ResumeItemAdminProps {
 
 const ResumeItemAdmin = ({ resume }: ResumeItemAdminProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
 
-  const reactToPrintFn = useReactToPrint({
-    contentRef,
-    documentTitle: resume.email || "Resume",
-    onAfterPrint: async () => {
-      if (!resume.downloaded) {
-        await markResumeAsDownloaded(resume.id);
-        router.refresh();
+  const handlePrint = async () => {
+
+    let apiRoute = '';
+    const template = resume.template
+    console.log('admin ',template)
+    if(template.toLocaleLowerCase() === 'classic'){
+      apiRoute = '../api/download-resume/classic'
+    }else{
+      apiRoute = '../api/download-resume/ats-1'
+    }
+
+    try {
+      const response = await fetch(apiRoute, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          resume,
+        }),
+      });
+
+      if(response.ok){
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${resume.firstName}_${resume.lastName}${resume.title && '_'+resume.title.replaceAll(' ', '_')}${resume.description && '_'+resume.description.substring(0, 40).replaceAll(' ', '_')}.pdf`;
+        a.click();
+        window.URL.revokeObjectURL(url);
       }
-    },
-  });
 
-  const handlePrint = () => {
-    setTimeout(() => {
-      reactToPrintFn();
-    }, 500); // Small delay fixes mobile print issues
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleCopyToClipboard = (text: string) => {
