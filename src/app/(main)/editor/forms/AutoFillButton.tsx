@@ -1,7 +1,7 @@
 "use client";
 
 import { useToast } from "@/hooks/use-toast";
-import {  Loader, WandSparkles } from "lucide-react";
+import { Loader, WandSparkles } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,12 +21,14 @@ interface AutoFillButtonProps {
   resumeData: ResumeValues;
   setResumeData: (data: ResumeValues) => void;
   validJobSecription: boolean;
+  onAiUsed: (aiUsed: boolean) => void; 
 }
 
 export default function AutoFillButton({
   resumeId,
   resumeData,
-  setResumeData,validJobSecription
+  setResumeData,
+  validJobSecription,onAiUsed
 }: AutoFillButtonProps) {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -34,7 +36,7 @@ export default function AutoFillButton({
   const searchParams = useSearchParams();
 
   const handleClick = async () => {
-    console.log(resumeId)
+    console.log(resumeId);
     const resumeId2 = searchParams.get("resumeId") || "";
     setLoading(true);
     try {
@@ -74,6 +76,7 @@ export default function AutoFillButton({
         summary: aiSummary,
         skills: aiSkills.split(","),
       });
+      onAiUsed(true); 
       // Refresh page to show updates
       router.refresh();
       toast({
@@ -102,7 +105,7 @@ export default function AutoFillButton({
       type="button"
     >
       {loading ? (
-        <Loader/>
+        <Loader />
       ) : (
         <>
           <WandSparkles className="size-4 mr-2" />

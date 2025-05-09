@@ -37,7 +37,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/utils";
 import GenerateWorkExperinceButton from "./GenerateWorkExperinceButton";
 
-const WorkExperienceForm = ({ resumeData, setResumeData }: EditorFormProps) => {
+const WorkExperienceForm = ({ resumeData, setResumeData, onAiUsed }: EditorFormProps) => {
   const form = useForm<WorkExperienceValues>({
     resolver: zodResolver(workExperienceSchema),
     defaultValues: {
@@ -116,6 +116,7 @@ const WorkExperienceForm = ({ resumeData, setResumeData }: EditorFormProps) => {
                   form={form}
                   index={index}
                   remove={remove}
+                  onAiUsed={onAiUsed}
                 />
               ))}
             </SortableContext>
@@ -149,13 +150,14 @@ interface WorkExperienceItemProps {
   index: number;
   remove: (index: number) => void;
   id: string;
+  onAiUsed: (aiUsed: boolean) => void;
 }
 
 function WorkExperienceItem({
   id,
   form,
   index,
-  remove,
+  remove,onAiUsed
 }: WorkExperienceItemProps) {
   const {
     attributes,
@@ -202,7 +204,7 @@ function WorkExperienceItem({
               startDate: exp.startDate ? new Date(exp.startDate) : undefined,
               endDate: exp.endDate ? new Date(exp.endDate) : undefined
             })
-          }
+          }onAiUsed={onAiUsed}
         />
       </div>
       <FormField

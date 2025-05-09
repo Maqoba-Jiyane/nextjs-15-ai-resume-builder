@@ -5,7 +5,7 @@ import { resumeSchema, ResumeValues } from "@/lib/validation";
 import { auth } from "@clerk/nextjs/server";
 import { del, put } from "@vercel/blob";
 
-export async function saveResume(values: ResumeValues) {
+export async function saveResume(values: ResumeValues, aiUsed = false) {
   const { id } = values;
 
   const {
@@ -59,7 +59,7 @@ export async function saveResume(values: ResumeValues) {
         ...resumeValues,
         photoUrl: newPhotoUrl,
         checkoutId: null,
-        paid: userId === "user_2t2ctUODvvFhRvqZU9GCbFZHyY8" ? true : false,
+        paid: aiUsed ? (userId === "user_2t2ctUODvvFhRvqZU9GCbFZHyY8") : undefined,
         downloaded: false,
         downloadRequest: false,
         workExperiences: {
@@ -94,7 +94,7 @@ export async function saveResume(values: ResumeValues) {
         userId,
         photoUrl: newPhotoUrl,
         checkoutId: null,
-        paid: userId === "user_2t2ctUODvvFhRvqZU9GCbFZHyY8" ? true : false,
+        paid: true,
         downloadRequest: false,
         downloaded: false,
         workExperiences: {

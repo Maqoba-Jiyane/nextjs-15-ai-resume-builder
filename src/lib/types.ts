@@ -8,6 +8,7 @@ export interface EditorFormProps {
   resumeData: ResumeValues;
   personalDetails: UserDetailsValues;
   setResumeData: (data: ResumeValues) => void;
+  onAiUsed: (aiUsed: boolean) => void;
 }
 
 export const resumeDataInclude = {

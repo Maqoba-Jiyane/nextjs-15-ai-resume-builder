@@ -15,7 +15,7 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import GenerateSkillsButton from "./GenerateSkillsButton";
 
-const SkillsForm = ({ resumeData, setResumeData }: EditorFormProps) => {
+const SkillsForm = ({ resumeData, setResumeData, onAiUsed }: EditorFormProps) => {
   const form = useForm<SkillsValues>({
     resolver: zodResolver(skillsSchema),
     defaultValues: {
@@ -69,7 +69,10 @@ const SkillsForm = ({ resumeData, setResumeData }: EditorFormProps) => {
                 <FormMessage/>
                 <GenerateSkillsButton
                 resumeData={resumeData}
-                onSkillsGenerated={skills => form.setValue('skills', skills.split(', '))}
+                onSkillsGenerated={({ skills, aiUsed }) => {
+                  form.setValue('skills', skills.split(', '));
+                  onAiUsed(aiUsed);
+                }}
                 />
               </FormItem>
             )}

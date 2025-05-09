@@ -7,12 +7,12 @@ import { generateSummary } from "./actions";
 
 interface GenerateSummaryButtonProps {
   resumeData: ResumeValues;
-  onSummaryGenerated: (summary: string) => void;
+  onSummaryGenerated: (payload: { summary: string; aiUsed: boolean }) => void;
 }
 
 const GenerateSummaryButton = ({
   resumeData,
-  onSummaryGenerated,
+  onSummaryGenerated, 
 }: GenerateSummaryButtonProps) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -23,7 +23,7 @@ const GenerateSummaryButton = ({
     try {
         setLoading(true)
         const aiResponse = await generateSummary(resumeData);
-        onSummaryGenerated(aiResponse)
+        onSummaryGenerated({ summary: aiResponse, aiUsed: true })
     } catch (error) {
         console.error(error)
         toast({

@@ -30,10 +30,11 @@ import LoadingButton from "@/components/LoadingButton";
 
 interface GenerateWorkExperinceButtonProps {
   onWorkExperienceGenerated: (workExperience: WorkExperience) => void;
+  onAiUsed: (aiUsed: boolean) => void;
 }
 
 const GenerateWorkExperinceButton = ({
-  onWorkExperienceGenerated,
+  onWorkExperienceGenerated, onAiUsed
 }: GenerateWorkExperinceButtonProps) => {
   const [showInputDialog, setShowInputDialog] = useState(false);
 
@@ -54,6 +55,7 @@ const GenerateWorkExperinceButton = ({
         onWorkExperienceGenerated={(workExperience) => {
           onWorkExperienceGenerated(workExperience);
           setShowInputDialog(false);
+          onAiUsed(true);
         }}
       />
     </>

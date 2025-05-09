@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import AutoFillButton from "./AutoFillButton";
 import { useRouter } from "next/navigation";
 
-const JobDescriptionForm = ({ resumeData, setResumeData }: EditorFormProps) => {
+const JobDescriptionForm = ({ resumeData, setResumeData, onAiUsed }: EditorFormProps) => {
   const router = useRouter();
   const form = useForm<JobDescriptionValues>({
     resolver: zodResolver(jobDescriptionSchema),
@@ -72,6 +72,7 @@ const JobDescriptionForm = ({ resumeData, setResumeData }: EditorFormProps) => {
                     resumeData={resumeData}
                     setResumeData={setResumeData}
                     validJobSecription={!resumeData.jobDescription?.trim()}
+                    onAiUsed={onAiUsed}
                   />
                 </div>
               </FormItem>

@@ -29,7 +29,8 @@ function ResumeEditor({ resumeToEdit, personalInfoDetailsToAssign }: ResumeEdito
   const [showSmResumePreview, setShowSmResumePreview] = useState(false);
   const [showATSSuggestions, setShowATSSuggestions] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
-  const { isSaving, hasUnsavedChanges } = useAutoSaveResume(resumeData);
+  const [aiUsed, setAiUsed] = useState(false);
+  const { isSaving, hasUnsavedChanges } = useAutoSaveResume(resumeData, aiUsed);
   const [atsSuggestions, setAtsSuggestions ] = useState<ATSAnalysisProps>({
     overall_score: 120,
     keywords_match: {
@@ -113,6 +114,7 @@ function ResumeEditor({ resumeToEdit, personalInfoDetailsToAssign }: ResumeEdito
                 resumeData={resumeData}
                 setResumeData={setResumeData}
                 personalDetails={personalInfoDetails}
+                onAiUsed={setAiUsed}
               />
             )}
           </div>

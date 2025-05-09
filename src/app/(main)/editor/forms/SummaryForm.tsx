@@ -7,7 +7,7 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import GenerateSummaryButton from "./GenerateSummaryButton";
 
-const SummaryForm = ({ resumeData, setResumeData }: EditorFormProps) => {
+const SummaryForm = ({ resumeData, setResumeData, onAiUsed }: EditorFormProps) => {
   const form = useForm<SummaryValues>({
     resolver: zodResolver(summarySchema),
     defaultValues: {
@@ -53,7 +53,11 @@ const SummaryForm = ({ resumeData, setResumeData }: EditorFormProps) => {
                 <FormMessage/>
                 <GenerateSummaryButton
                 resumeData={resumeData}
-                onSummaryGenerated={summary => form.setValue('summary', summary)}
+                onSummaryGenerated={({ summary, aiUsed }) => {
+                  form.setValue('summary', summary);
+                  onAiUsed(aiUsed);
+                }}
+
                 />
               </FormItem>
             )}
