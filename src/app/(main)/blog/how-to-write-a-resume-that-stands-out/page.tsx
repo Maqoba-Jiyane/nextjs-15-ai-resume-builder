@@ -21,7 +21,7 @@ export async function generateMetadata() {
       ],
       type: "article",
       publishedTime: "2025-03-23T00:00:00Z", // Add the publication date
-      authors: ["EonResume"], // Add the author's name
+      authors: ["Eon Resume"], // Add the author's name
     },
     twitter: {
       card: "summary_large_image",
@@ -88,7 +88,7 @@ export default function BlogPost() {
             <p>
               Use keywords the company uses — <strong>they matter</strong> for both hiring managers and applicant tracking systems (ATS).
               <span className="block mt-2">
-                Tools like <a href="https://eonresume.co.za" className="text-blue-600 underline font-medium" target="_blank">EonResume</a> can help you tailor your resume instantly using AI to match job descriptions.
+                Tools like <a href="https://eonresume.co.za" className="text-blue-600 underline font-medium" target="_blank">Eon Resume</a> can help you tailor your resume instantly using AI to match job descriptions.
               </span>
             </p>
           </>
@@ -158,7 +158,7 @@ export default function BlogPost() {
               <li>Send as a <strong>PDF</strong></li>
             </ul>
             <p>
-              Canva or Word templates can help. Just don&apos;t over-design unless you&apos;re in a creative role. If you want a fast, professional layout without the hassle, <a href="https://eonresume.co.za" className="text-blue-600 underline font-medium" target="_blank">EonResume</a> gives you sleek templates optimized for recruiters and ATS.
+              Canva or Word templates can help. Just don&apos;t over-design unless you&apos;re in a creative role. If you want a fast, professional layout without the hassle, <a href="https://eonresume.co.za" className="text-blue-600 underline font-medium" target="_blank">Eon Resume</a> gives you sleek templates optimized for recruiters and ATS.
             </p>
           </>
         }

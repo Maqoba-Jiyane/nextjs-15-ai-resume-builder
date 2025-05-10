@@ -20,7 +20,7 @@ const HelpCenter = () => {
       <div className="text-center mb-8">
         <h1 className="text-4xl font-extrabold mb-4">Help Center</h1>
         <p className="text-lg">
-          Find out how EonResume can help you create an ATS-friendly resume and
+          Find out how Eon Resume can help you create an ATS-friendly resume and
           boost your job application success.
         </p>
       </div>
@@ -29,9 +29,9 @@ const HelpCenter = () => {
       <div className="space-y-8">
         {[
           {
-            title: "What is EonResume?",
+            title: "What is Eon Resume?",
             content:
-              "EonResume is an online platform designed to help individuals create professional, well-formatted resumes. Our platform integrates with the latest Applicant Tracking Systems (ATS) to ensure that your resume is optimized for job applications.",
+              "Eon Resume is an online platform designed to help individuals create professional, well-formatted resumes. Our platform integrates with the latest Applicant Tracking Systems (ATS) to ensure that your resume is optimized for job applications.",
           },
           {
             title: "What is an ATS-Friendly Resume?",
@@ -39,9 +39,9 @@ const HelpCenter = () => {
               "An ATS-friendly resume is designed to be easily read and processed by Applicant Tracking Systems (ATS). These systems are used by many companies to filter resumes, so ensuring your resume is ATS-friendly increases the chances it will be seen by a hiring manager.",
           },
           {
-            title: "How Does EonResume Ensure ATS-Friendly Design?",
+            title: "How Does Eon Resume Ensure ATS-Friendly Design?",
             content:
-              "EonResume ensures that your resume is ATS-friendly by using simple formatting, optimizing keywords for job descriptions, and structuring your content in a way that ATS can easily process.",
+              "Eon Resume ensures that your resume is ATS-friendly by using simple formatting, optimizing keywords for job descriptions, and structuring your content in a way that ATS can easily process.",
           },
           {
             title: "Why Should I Choose an ATS-Friendly Resume?",
@@ -50,14 +50,14 @@ const HelpCenter = () => {
           },
           {
             title:
-              "How to Make Sure My Resume is ATS-Friendly Using EonResume?",
+              "How to Make Sure My Resume is ATS-Friendly Using Eon Resume?",
             content:
-              "Select an ATS-friendly template, input relevant keywords from job descriptions, and structure your resume clearly with headings and bullet points. EonResume helps ensure your resume passes through ATS systems.",
+              "Select an ATS-friendly template, input relevant keywords from job descriptions, and structure your resume clearly with headings and bullet points. Eon Resume helps ensure your resume passes through ATS systems.",
           },
           {
-            title: "What Features Does EonResume Offer?",
+            title: "What Features Does Eon Resume Offer?",
             content:
-              "EonResume offers ATS-optimized templates, a keyword analyzer, real-time feedback on ATS compatibility, and customizable sections to tailor your resume to specific jobs.",
+              "Eon Resume offers ATS-optimized templates, a keyword analyzer, real-time feedback on ATS compatibility, and customizable sections to tailor your resume to specific jobs.",
           },
           {
             title: "How Can I Download My Resume?",

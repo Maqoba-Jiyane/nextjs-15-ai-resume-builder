@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { NextRequest } from "next/server";
 import crypto from "crypto";
+// import { revalidatePath } from "next/cache";
 
 export async function POST(req: NextRequest) {
   try {
@@ -112,6 +113,7 @@ export async function POST(req: NextRequest) {
         where: { id: resume.id },
         data: { paid: true },
       });
+      // revalidatePath(`/resumes`);
       console.log("✅ Resume marked as paid");
     }
 

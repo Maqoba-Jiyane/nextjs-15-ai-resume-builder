@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     description:
       "Discover the ideal resume length to effectively showcase your experience and skills, tailored to your career stage.",
     url: "https://www.eonresume.co.za/blog/the-perfect-resume-length",
-    siteName: "EonResume Blog",
+    siteName: "Eon Resume Blog",
     images: [
       {
         url: "https://cdn.pixabay.com/photo/2016/03/26/13/09/work-1280538_1280.jpg",

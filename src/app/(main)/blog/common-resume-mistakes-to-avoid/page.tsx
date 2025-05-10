@@ -9,13 +9,13 @@ export const metadata: Metadata = {
     title: "Common Resume Mistakes to Avoid",
     description: "Learn the common mistakes that might be costing you interviews.",
     url: "https://eonresume.co.za/blog/common-resume-mistakes-to-avoid",
-    siteName: "EonResume",
+    siteName: "Eon Resume",
     images: [
       {
         url: "https://eonresume.co.za/blogs/photo-1565688534245-05d6b5be184a.png",
         width: 1200,
         height: 630,
-        alt: "EonResume Homepage",
+        alt: "Eon Resume Homepage",
       },
     ],
     type: "article",
@@ -61,7 +61,7 @@ export default function BlogPost() {
             <p>
               Tools like{" "}
               <a href="https://www.eonresume.co.za" className="text-blue-600 underline font-medium">
-                EonResume
+                Eon Resume
               </a>{" "}
               make this easier by comparing your resume to the job you are applying for.
             </p>
@@ -109,7 +109,7 @@ export default function BlogPost() {
             </p>
             <p>
               <a href="https://www.eonresume.co.za" className="text-blue-600 underline font-medium">
-                EonResume
+                Eon Resume
               </a>{" "}
               gives you clean, recruiter-ready layouts that don’t get mangled by ATS systems.
             </p>
@@ -140,7 +140,7 @@ export default function BlogPost() {
         <p className="mt-4">
           If you want help building a resume that’s clean, optimized, and tailored—check out{" "}
           <a href="https://www.eonresume.co.za" className="text-blue-600 underline font-medium">
-            EonResume
+            Eon Resume
           </a>
           . And once you&apos;re ready to apply, explore fresh roles on{" "}
           <a href="https://www.employmentecho.co.za" className="text-blue-600 underline font-medium">

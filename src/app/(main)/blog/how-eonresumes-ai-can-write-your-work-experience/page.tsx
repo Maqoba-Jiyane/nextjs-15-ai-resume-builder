@@ -2,15 +2,15 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "How EonResume's AI Can Write Your Work Experience",
+  title: "How Eon Resume's AI Can Write Your Work Experience",
   description:
-    "See how EonResume uses AI to turn your job history into professional, tailored resume content that gets attention.",
+    "See how Eon Resume uses AI to turn your job history into professional, tailored resume content that gets attention.",
   openGraph: {
-    title: "How EonResume's AI Can Write Your Work Experience",
+    title: "How Eon Resume's AI Can Write Your Work Experience",
     description:
-      "See how EonResume uses AI to turn your job history into professional, tailored resume content that gets attention.",
+      "See how Eon Resume uses AI to turn your job history into professional, tailored resume content that gets attention.",
     url: "https://www.eonresume.co.za/blog/how-eonresumes-ai-can-write-your-work-experience",
-    siteName: "EonResume",
+    siteName: "Eon Resume",
     images: [
       {
         url: "https://cdn.pixabay.com/photo/2023/05/08/08/41/ai-7977960_1280.jpg",
@@ -24,9 +24,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "How EonResume's AI Can Write Your Work Experience",
+    title: "How Eon Resume's AI Can Write Your Work Experience",
     description:
-      "Let EonResume help you write clear, tailored work experience bullet points in seconds. Here's how it works.",
+      "Let Eon Resume help you write clear, tailored work experience bullet points in seconds. Here's how it works.",
     images: [
       "https://cdn.pixabay.com/photo/2023/05/08/08/41/ai-7977960_1280.jpg",
     ],
@@ -39,7 +39,7 @@ export default function BlogPost() {
       {/* Header */}
       <header className="mb-8">
         <h1 className="text-4xl font-bold mb-4">
-          How EonResume&apos;s AI Can Write Your Work Experience
+          How Eon Resume&apos;s AI Can Write Your Work Experience
         </h1>
         <Image
           src="https://cdn.pixabay.com/photo/2023/05/08/08/41/ai-7977960_1280.jpg"
@@ -58,7 +58,7 @@ export default function BlogPost() {
           to make it sound “professional.”
         </p>
         <p className="mt-4">
-          EonResume takes the guesswork out of this. Our AI turns your job
+          Eon Resume takes the guesswork out of this. Our AI turns your job
           titles and key tasks into bullet points that highlight real skills,
           results, and impact — tailored to the role you want.
         </p>
@@ -69,7 +69,7 @@ export default function BlogPost() {
         content={
           <>
             <p>
-              You enter a basic job title and describe what you did. EonResume
+              You enter a basic job title and describe what you did. Eon Resume
               uses that input to create clear, confident bullet points that show
               your value.
             </p>
@@ -87,7 +87,7 @@ export default function BlogPost() {
         content={
           <>
             <p>
-              EonResume doesn’t just write generic experience. The AI scans job
+              Eon Resume doesn’t just write generic experience. The AI scans job
               ads or lets you paste one in — then adjusts your phrasing and
               keywords to better match what recruiters are looking for.
             </p>
@@ -104,7 +104,7 @@ export default function BlogPost() {
         content={
           <>
             <p>
-              Writing for yourself is hard. EonResume helps strike the right
+              Writing for yourself is hard. Eon Resume helps strike the right
               tone — polished and confident, but never exaggerated or fake. It
               knows how to translate everyday work into resume language that
               feels honest and strong.
@@ -138,7 +138,7 @@ export default function BlogPost() {
           updating your resume — you’re not alone. But now, it doesn’t have to.
         </p>
         <p className="mt-2">
-          Let the AI do the heavy lifting. You bring the experience — EonResume
+          Let the AI do the heavy lifting. You bring the experience — Eon Resume
           helps you say it right.
         </p>
       </section>

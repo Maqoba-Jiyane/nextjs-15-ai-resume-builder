@@ -11,7 +11,7 @@ const testimonials = [
     name: "Olivia Jacobs",
     title: "Software Engineer",
     testimonial:
-      "EonResume made my job search a lot easier! The resume builder is intuitive, and it helped me land interviews quickly.",
+      "Eon Resume made my job search a lot easier! The resume builder is intuitive, and it helped me land interviews quickly.",
     image:
       "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
@@ -19,7 +19,7 @@ const testimonials = [
     name: "Thato Mokoena",
     title: "Software Developer",
     testimonial:
-      "The resume builder on EonResume helped me to perfectly highlight my skills and experience, which led to multiple interview invitations.",
+      "The resume builder on Eon Resume helped me to perfectly highlight my skills and experience, which led to multiple interview invitations.",
     image:
       "https://images.unsplash.com/photo-1565884280295-98eb83e41c65?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
@@ -27,7 +27,7 @@ const testimonials = [
     name: "Mahlatsi Masemula",
     title: "Marketing Intern",
     testimonial:
-      "EonResume made my job search a lot easier! The resume builder is intuitive, and it helped me land interviews quickly.",
+      "Eon Resume made my job search a lot easier! The resume builder is intuitive, and it helped me land interviews quickly.",
     image:
       "https://images.unsplash.com/photo-1531727991582-cfd25ce79613?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
@@ -35,7 +35,7 @@ const testimonials = [
     name: "Zanele Ndlovu",
     title: "HR Specialist",
     testimonial:
-      "I used EonResume to build my resume and was blown away by how easy and effective it was. It streamlined my job application process.",
+      "I used Eon Resume to build my resume and was blown away by how easy and effective it was. It streamlined my job application process.",
     image:
       "https://images.unsplash.com/photo-1611432579402-7037e3e2c1e4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmxhY2slMjB3b21hbnxlbnwwfHwwfHx8MA%3D%3D",
   },
@@ -51,7 +51,7 @@ const testimonials = [
     name: "Mpho Khumalo",
     title: "UX Designer",
     testimonial:
-      "EonResume made it so much easier for me to structure my portfolio and resume. I received great feedback from employers, thanks to its professional layout.",
+      "Eon Resume made it so much easier for me to structure my portfolio and resume. I received great feedback from employers, thanks to its professional layout.",
     image:
       "https://images.unsplash.com/photo-1532136672867-8eff8c949b63?q=80&w=1372&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
@@ -59,7 +59,7 @@ const testimonials = [
     name: "Robert Brown",
     title: "Graphic Designer",
     testimonial:
-      "EonResume helped me present my skills and experience in a more professional way, leading to several job offers.",
+      "Eon Resume helped me present my skills and experience in a more professional way, leading to several job offers.",
     image:
       "https://images.unsplash.com/flagged/photo-1552054814-8c580ce130d1?q=80&w=1398&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },

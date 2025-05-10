@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     description:
       'Learn how to customize your resume for each job application without starting from scratch. Real examples, smart tips, and tools to save time.',
     url: 'https://www.eonresume.co.za/blog/how-to-tailor-your-resume-for-jobs',  // Correct URL
-    siteName: 'EonResume Blog',
+    siteName: 'Eon Resume Blog',
     images: [
       {
         url: 'https://cdn.pixabay.com/photo/2021/09/15/15/49/resume-6627200_1280.jpg',
@@ -145,7 +145,7 @@ export default function BlogPost() {
             <p>
               Platforms like{" "}
               <a href="https://www.eonresume.co.za" className="text-blue-600 underline font-medium">
-                EonResume
+                Eon Resume
               </a>{" "}
               help you quickly tailor and reformat your resume for each job — without starting over every time.
             </p>

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     description:
       "Make your resume easier to read and more effective with formatting tips that help you stand out to recruiters.",
     url: "https://www.eonresume.co.za/blog/resume-formatting-tips",
-    siteName: "EonResume",
+    siteName: "Eon Resume",
     images: [
       {
         url: "https://cdn.pixabay.com/photo/2016/03/01/11/40/lego-blocks-1230133_1280.jpg",
@@ -200,7 +200,7 @@ export default function BlogPost() {
             target="_blank"
             className="text-blue-600 underline font-medium"
           >
-            EonResume
+            Eon Resume
           </a>{" "}
           to build beautiful, recruiter-ready resumes that get noticed.
         </p>

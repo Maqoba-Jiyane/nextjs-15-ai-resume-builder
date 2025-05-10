@@ -121,9 +121,9 @@ const posts = [
   },
   {
     slug: "how-eonresumes-ai-can-write-your-work-experience",
-    title: "How EonResume's AI Can Write Your Work Experience",
+    title: "How Eon Resume's AI Can Write Your Work Experience",
     excerpt:
-      "Struggling to write your experience section? EonResume’s AI can turn your job history into clear, confident resume bullet points — in seconds.",
+      "Struggling to write your experience section? Eon Resume’s AI can turn your job history into clear, confident resume bullet points — in seconds.",
     date: "2025-03-26",
     image: "https://cdn.pixabay.com/photo/2023/05/08/08/41/ai-7977960_1280.jpg",
     category: "AI & Tools",
@@ -132,9 +132,9 @@ const posts = [
   },
   {
     slug: "eonresume-one-click-professional-summaries",
-    title: "EonResume One-Click Professional Summaries",
+    title: "Eon Resume One-Click Professional Summaries",
     excerpt:
-      "Struggling to write your resume summary? EonResume creates a strong, clear introduction for you in seconds — no guesswork needed.",
+      "Struggling to write your resume summary? Eon Resume creates a strong, clear introduction for you in seconds — no guesswork needed.",
     date: "2025-03-26",
     image:
       "https://cdn.pixabay.com/photo/2024/01/10/16/21/laptop-8499942_1280.jpg",

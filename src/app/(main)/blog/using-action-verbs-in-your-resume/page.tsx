@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     description:
       "Enhance your resume by incorporating strong action verbs that effectively showcase your skills and achievements to potential employers.",
     url: "https://www.eonresume.co.za/blog/using-action-verbs-in-your-resume",
-    siteName: "EonResume",
+    siteName: "Eon Resume",
     images: [
       {
         url: "https://cdn.pixabay.com/photo/2018/10/05/17/34/cv-3726428_1280.jpg",
@@ -222,7 +222,7 @@ export default function BlogPost() {
         </p>
         <p className="mt-2">
           If you&apos;re struggling to phrase your experience in a way that pops, try using a resume builder like{" "}
-          <a href="https://www.eonresume.co.za" className="text-blue-600 underline font-medium" target="_blank">EonResume</a>. It helps you auto-generate bullet points with powerful verbs based on your role.
+          <a href="https://www.eonresume.co.za" className="text-blue-600 underline font-medium" target="_blank">Eon Resume</a>. It helps you auto-generate bullet points with powerful verbs based on your role.
         </p>
         <p className="mt-2">
           And once it’s ready, head over to{" "}

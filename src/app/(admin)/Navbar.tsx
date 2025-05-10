@@ -28,7 +28,7 @@ function Navbar() {
             className="rounded-full filter hue-rotate-90"
           />
           <span className="text-lg font-bold tracking-tight hidden md:flex">
-            EonResume
+            Eon Resume
           </span>
         </Link>
         {width > 1074 ? (

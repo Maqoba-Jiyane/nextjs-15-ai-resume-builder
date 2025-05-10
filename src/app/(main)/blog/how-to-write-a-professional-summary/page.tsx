@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     description:
       "Learn how to craft a compelling professional summary that highlights your key skills and experiences, making your resume stand out to employers.",
     url: "https://www.eonresume.co.za/blog/how-to-write-a-professional-summary",
-    siteName: "EonResume Blog",
+    siteName: "Eon Resume Blog",
     images: [
       {
         url: "https://cdn.pixabay.com/photo/2015/01/08/18/26/man-593333_960_720.jpg",

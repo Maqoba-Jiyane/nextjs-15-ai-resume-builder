@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     description:
       "A practical, no-fluff guide to writing a cover letter that’s clear, confident, and actually gets read.",
     url: "https://www.eonresume.co.za/blog/how-to-write-a-cover-letter",
-    siteName: "EonResume",
+    siteName: "Eon Resume",
     images: [
       {
         url: "https://cdn.pixabay.com/photo/2017/03/02/05/19/invitation-2110452_1280.jpg",

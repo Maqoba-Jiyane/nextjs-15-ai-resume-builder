@@ -2,15 +2,15 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "EonResume One-Click Professional Summaries",
+  title: "Eon Resume One-Click Professional Summaries",
   description:
-    "Skip the guesswork. EonResume's AI writes a clear, tailored professional summary for you in one click — so you can focus on getting hired.",
+    "Skip the guesswork. Eon Resume's AI writes a clear, tailored professional summary for you in one click — so you can focus on getting hired.",
   openGraph: {
-    title: "EonResume One-Click Professional Summaries",
+    title: "Eon Resume One-Click Professional Summaries",
     description:
-      "Skip the guesswork. EonResume's AI writes a clear, tailored professional summary for you in one click — so you can focus on getting hired.",
+      "Skip the guesswork. Eon Resume's AI writes a clear, tailored professional summary for you in one click — so you can focus on getting hired.",
     url: "https://www.eonresume.co.za/blog/eonresume-one-click-professional-summaries",
-    siteName: "EonResume",
+    siteName: "Eon Resume",
     images: [
       {
         url: "https://cdn.pixabay.com/photo/2024/01/10/16/21/laptop-8499942_1280.jpg",
@@ -24,9 +24,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "EonResume One-Click Professional Summaries",
+    title: "Eon Resume One-Click Professional Summaries",
     description:
-      "Let AI write your resume summary in seconds. Here's how EonResume helps you skip the hardest part of the process.",
+      "Let AI write your resume summary in seconds. Here's how Eon Resume helps you skip the hardest part of the process.",
     images: [
       "https://cdn.pixabay.com/photo/2024/01/10/16/21/laptop-8499942_1280.jpg",
     ],
@@ -39,7 +39,7 @@ export default function BlogPost() {
       {/* Header */}
       <header className="mb-8">
         <h1 className="text-4xl font-bold mb-4">
-          EonResume One-Click Professional Summaries
+          Eon Resume One-Click Professional Summaries
         </h1>
         <Image
           src="https://cdn.pixabay.com/photo/2024/01/10/16/21/laptop-8499942_1280.jpg"
@@ -59,7 +59,7 @@ export default function BlogPost() {
           few lines.
         </p>
         <p className="mt-4">
-          With EonResume’s One-Click Summary feature, you can skip the blank
+          With Eon Resume’s One-Click Summary feature, you can skip the blank
           page and get a polished, tailored introduction written for you —
           instantly.
         </p>
@@ -71,7 +71,7 @@ export default function BlogPost() {
           <>
             <p>
               You enter your job title, career focus, or paste in a job ad —
-              and EonResume’s AI gets to work. It creates a professional summary
+              and Eon Resume’s AI gets to work. It creates a professional summary
               that matches your profile and the role you want, using clear,
               confident language.
             </p>
@@ -132,7 +132,7 @@ export default function BlogPost() {
             <p>
               Writing a good summary on your own can take hours. You might not
               know what tone to use, what details to include, or how to make it
-              sound sharp. EonResume removes the friction so you can move
+              sound sharp. Eon Resume removes the friction so you can move
               forward with a solid start — fast.
             </p>
             <p>
@@ -149,7 +149,7 @@ export default function BlogPost() {
         <h2 className="text-2xl font-semibold mb-4 underline">Final Thought</h2>
         <p>
           Your summary is the headline of your resume. Don’t let it hold you
-          back. With EonResume, you get a strong opening line — even if writing
+          back. With Eon Resume, you get a strong opening line — even if writing
           isn’t your thing.
         </p>
         <p className="mt-2">

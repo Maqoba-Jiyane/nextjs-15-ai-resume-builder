@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     description:
       "Learn how to effectively showcase your accomplishments on your resume to impress employers and stand out from other applicants.",
     url: "https://www.eonresume.co.za/blog/how-to-highlight-achievements",
-    siteName: "EonResume",
+    siteName: "Eon Resume",
     images: [
       {
         url: "https://cdn.pixabay.com/photo/2022/06/27/08/09/graduation-7287004_1280.jpg",
@@ -157,7 +157,7 @@ export default function BlogPost() {
             target="_blank"
             className="text-blue-600 underline font-medium"
           >
-            EonResume
+            Eon Resume
           </a>{" "}
           help you phrase and format your experience with AI that speaks recruiter.
         </p>

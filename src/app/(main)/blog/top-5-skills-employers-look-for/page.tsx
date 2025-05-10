@@ -110,7 +110,7 @@ export default function BlogPost() {
                 className="text-blue-600 underline font-medium"
                 target="_blank"
               >
-                EonResume
+                Eon Resume
               </a>{" "}
               help you phrase achievements like these with impact.
             </p>
@@ -219,7 +219,7 @@ export default function BlogPost() {
             className="text-blue-600 underline font-medium"
             target="_blank"
           >
-            EonResume
+            Eon Resume
           </a>{" "}
           helps you highlight your strongest skills based on the roles
           you&apos;re applying to. It can even reword your experience to better
