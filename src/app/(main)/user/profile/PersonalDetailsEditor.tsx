@@ -39,7 +39,7 @@ function PersonalDetailsEditor({ personalDetailsToEdit }: PersonalDetailsEditorP
   )?.component;
 
   return (
-    <div className="flex grow flex-col">
+    <div className="flex grow flex-col z-0">
       <header className="space-y-1.5 border-b px-3 py-5 text-center">
         <h1 className="text-2xl font-bold">Fill in your details</h1>
         <p className="text-sm text-muted-foreground">

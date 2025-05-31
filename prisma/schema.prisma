@@ -58,9 +58,12 @@ model Resume {
   updatedAt DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  Payment Payment[]
   
 
   @@map("resumes")
+  @@index([userId, createdAt, updatedAt])
 }
 
 model WorkExperience {
@@ -145,40 +148,47 @@ model Template {
 }
 
 model User {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId          String @unique
-  email          String?   @unique
-  name           String?
-  image          String?  // profile picture
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String   @unique                     // Clerk user ID
+  email            String?  @unique
+  image            String?                              // Clerk profile picture
 
-  // 🔹 Personal Details
-  firstName      String?
-  lastName       String?
-  jobTitle       String?
-  phone          String?
-  city           String?
-  country        String?
-  website        String?
-  linkedin       String?
-  github         String?
+  // 🔹 Personal Details (editable by user)
+  firstName        String?
+  lastName         String?
+  jobTitle         String?
+  phone            String?
+  city             String?
+  country          String?
+  website          String?
+  linkedin         String?
+  github           String?
 
-  // 🔹 Resume Metadata (used for autofill)
-  summary        String?
-  skills         String[]     // tags, for example
-  languages      String[]     // list of spoken languages
+  // 🔹 Resume Metadata (for autofill, smart features)
+  summary          String?
+  skills           String[]     // tags (e.g. JavaScript, UI Design)
+  languages        String[]     // list of spoken languages
+
+  // 🔹 Referral System
+  referralCode     String?   @unique @default(uuid())     // each user gets a unique referral code
+  referredByCode   String?                                // FK to another user’s referralCode
+  referredBy       User?    @relation("Referrer", fields: [referredByCode], references: [referralCode], onDelete: NoAction, onUpdate: NoAction)
+  referrals        User[]   @relation("Referrer")
+
+  // 🔹 Relations
+  resumes              Resume[]
+  workExperiencePrompts WorkExperiencePrompt[]
+  educations           UserEducation[]
 
   // 🔹 Timestamps
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  // 🔹 Relations (expandable)
-  resumes        Resume[]     // User can have multiple resumes
-  workExperiencePrompts WorkExperiencePrompt[]
-  educations UserEducation[]
-  // subscription   Subscription? // optional relation if using Stripe/etc.
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  affiliate        Boolean @default(false)
 
   @@map("user")
+  @@index([referredByCode])
 }
+
 
 model WorkExperiencePrompt {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -214,4 +224,27 @@ model UserEducation {
   updatedAt DateTime @updatedAt
 
   @@map("user_educations")
+}
+
+model Payment {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  checkoutId  String   @unique
+  userId      String
+  resumeId    String
+  referralCode  String?
+  resume      Resume   @relation(fields: [resumeId], references: [id])
+  amountPaid  Float
+  paidAt      DateTime
+
+  @@map("resume_payments")
+}
+
+model Referral {
+  id           String   @id @default(uuid()) @map("_id")
+  referrerId   String
+  referredId   String?
+  createdAt    DateTime @default(now())
+  type         String   // "click", "signup", "conversion"
+  
+  @@map("referrals")
 }

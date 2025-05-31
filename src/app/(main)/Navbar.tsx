@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import ThemeToggle from "@/components/ThemeToggle";
 import { dark } from "@clerk/themes";
 import { useTheme } from "next-themes";
@@ -58,33 +58,48 @@ function Navbar() {
           </div>
         </Link>
         {width > 1074 ? (
-          <>
-            <div className="flex gap-3">
-              <Link href="/">
-                <Button variant="outline">Home</Button>
+          <div className="flex items-end">
+            <div
+              className={`flex gap-5 items-center text-md ${theme === "dark" ? "text-white" : "text-black "}`}
+            >
+              <Link href="/" className="hover:text-blue-600">
+                Home
               </Link>
-              <Link href="/resumes">
-                <Button variant="outline">Resumes</Button>
+              <Link href="/resumes" className="hover:text-blue-600">
+                Resumes
               </Link>
-              <Link href="/blog">
-                <Button variant="outline">Blog</Button>
+              <Link href="/blog" className="hover:text-blue-600">
+                Blog
               </Link>
-            </div>{" "}
-            <div className="flex items-center gap-3">
-              <ThemeToggle />
-              <UserButton
-                appearance={{
-                  baseTheme: theme === "dark" ? dark : undefined,
-                  elements: {
-                    avatarBox: {
-                      width: 35,
-                      height: 35,
-                    },
-                  },
-                }}
-              />
+              <Link href="/contact-us" className="hover:text-blue-600">
+                Contact
+              </Link>
+
+              <div className="flex flex-col gap-3">
+                <SignedOut>
+                  <Button asChild size="default" variant="premium">
+                    <Link href="/resumes">Get started</Link>
+                  </Button>
+                </SignedOut>
+                <SignedIn>
+                  <div className="flex gap-4">
+                    <ThemeToggle />
+                    <UserButton
+                      appearance={{
+                        baseTheme: theme === "dark" ? dark : undefined,
+                        elements: {
+                          avatarBox: {
+                            width: 35,
+                            height: 35,
+                          },
+                        },
+                      }}
+                    />
+                  </div>
+                </SignedIn>
+              </div>
             </div>
-          </>
+          </div>
         ) : (
           <div className="flex">
             <ThemeToggle />

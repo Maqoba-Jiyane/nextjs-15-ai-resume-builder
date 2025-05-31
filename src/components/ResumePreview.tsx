@@ -12,7 +12,7 @@ interface ResumePreviewProps {
 }
 
 const ResumePreview = ({ resumeData, contentRef, className }: ResumePreviewProps) => {
-  console.log('ResumePreview: ', resumeData.template)
+  
   return (
     <div className="w-full">
       {resumeData.template === "classic" ? (

@@ -1,20 +1,37 @@
 import { Button } from "@/components/ui/button";
 import prisma from "@/lib/prisma";
 import { resumeDataInclude } from "@/lib/types";
-import { auth } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import { PlusSquare } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import ResumeItem from "./ResumeItem";
+import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
   title: "Your resumes",
 };
 
 export default async function Page() {
+  const cookieStore = await cookies();
+  const refCode = cookieStore.get('refCode')?.value;
+  
   const { userId } = await auth();
   if (!userId) {
     return null;
+  }
+  
+  if(refCode && userId){
+    try {
+      const client = await clerkClient()
+
+      await client.users.updateUserMetadata(userId, {
+        publicMetadata: { refCode },
+      });
+
+      } catch (err) {
+      console.error('Failed to send refCode:', err);
+    }
   }
 
   // 2. Fetch data from prisma

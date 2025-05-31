@@ -59,7 +59,7 @@ const PublicDropDownMenu = () => {
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link href={"/profile"}>
+            <Link href={"/user"}>
             <UserPen />
               <span>Profile</span>
             </Link>
@@ -90,12 +90,6 @@ const PublicDropDownMenu = () => {
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            {/* <SignOutButton>
-              <div className="flex items-center gap-2 text-red-500 cursor-pointer">
-                <LogOut />
-                <span>Sign Out</span>
-              </div>
-            </SignOutButton> */}
             <div className="flex flex-col gap-3">
               <SignedOut>
                 <SignInButton>

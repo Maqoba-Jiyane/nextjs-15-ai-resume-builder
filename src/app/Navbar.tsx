@@ -3,14 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
-import { UserButton } from "@clerk/nextjs";
-import ThemeToggle from "@/components/ThemeToggle";
-import { dark } from "@clerk/themes";
 import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/button";
 import { useScreenWidth } from "@/hooks/useScreenWidth";
 import { usePathname } from "next/navigation"; // Use this for pathname instead of useRouter()
 import PublicDropDownMenu from "@/components/PublicDropDownMenu";
+import { Button } from "@/components/ui/button";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 
 function Navbar() {
   const { theme } = useTheme();
@@ -34,39 +33,43 @@ function Navbar() {
   return (
     <header className="shadow-sm bg-gray-100 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto p-3 flex items-center justify-between gap-3">
-        <Link href="/" className="flex items-center gap-2">
-          <Image
-            src={'/assets/logo2.png'}
-            alt="logo"
-            width={50}
-            height={50}
-            className="rounded-full"
-          />
-          <div className={`max-md:hidden`}>
-          <Image
-            src={'/assets/logo3.png'}
-            alt="logo"
-            width={213}
-            height={69}
-            className="rounded-full"
-          />
-          </div>
-        </Link>
+        <div className="flex items-start">
+          <Link href="/" className="flex items-center gap-2">
+            <Image
+              src={"/assets/logo2.png"}
+              alt="logo"
+              width={50}
+              height={50}
+              className="rounded-full"
+            />
+            <div className={`max-md:hidden`}>
+              <Image
+                src={"/assets/logo3.png"}
+                alt="logo"
+                width={213}
+                height={69}
+                className="rounded-full"
+              />
+            </div>
+          </Link>
+        </div>
         {width > 1074 ? (
-          <>
-            <div className="flex gap-3">
-              <Link href="/">
-                <Button variant="outline">Home</Button>
-              </Link>
-              <Link href="/resumes">
-                <Button variant="outline">Resumes</Button>
-              </Link>
-              <Link href="/blog">
-                <Button variant="outline">Blog</Button>
-              </Link>
-            </div>{" "}
-            <div className="flex items-center gap-3">
-              <ThemeToggle />
+          <div className="flex items-end">
+            <div
+              className={`flex gap-5 items-center text-md ${theme === "dark" ? "text-white" : "text-black "}`}
+            >
+              <Link href="/" className="hover:text-blue-600">Home</Link>
+              <Link href="/resumes" className="hover:text-blue-600">Resumes</Link>
+              <Link href="/blog" className="hover:text-blue-600">Blog</Link>
+              <Link href="/contact-us" className="hover:text-blue-600">Contact</Link>
+              
+            <div className="flex flex-col gap-3">
+              <SignedOut>
+              <Button asChild size="default" variant="premium">
+                <Link href="/resumes">Get started</Link>
+              </Button>
+              </SignedOut>
+              <SignedIn>
               <UserButton
                 appearance={{
                   baseTheme: theme === "dark" ? dark : undefined,
@@ -78,8 +81,10 @@ function Navbar() {
                   },
                 }}
               />
+              </SignedIn>
             </div>
-          </>
+            </div>
+          </div>
         ) : (
           <div className="flex">
             <PublicDropDownMenu />

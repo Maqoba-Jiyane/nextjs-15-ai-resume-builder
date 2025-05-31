@@ -97,7 +97,7 @@ export async function POST(req: NextRequest) {
 
     const resume = await prisma.resume.findFirst({
       where: { checkoutId: checkoutId },
-      select: { id: true },
+      select: { id: true, userId: true, user: true },
     });
 
     if (!resume || !resume.id) {
@@ -113,6 +113,14 @@ export async function POST(req: NextRequest) {
         where: { id: resume.id },
         data: { paid: true },
       });
+
+      const paymentCreated = await prisma.payment.create({
+        data: {resumeId: resume.id, userId: resume.userId, amountPaid: body.payload?.amount, checkoutId: body.payload?.metadata?.checkoutId, paidAt: new Date(), referralCode: resume.user.referredByCode }
+      })
+
+      if(!paymentCreated){
+        console.log("Payment not created!");
+      }
       // revalidatePath(`/resumes`);
       console.log("✅ Resume marked as paid");
     }

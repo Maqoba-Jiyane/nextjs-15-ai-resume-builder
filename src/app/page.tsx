@@ -1,10 +1,10 @@
-"use client";
-
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Star } from "lucide-react";
 import HelpCenter from "./(main)/help-center/page";
+import { auth,} from "@clerk/nextjs/server";
+import { cookies } from "next/headers";
 
 const testimonials = [
   {
@@ -65,7 +65,26 @@ const testimonials = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const cookieStore = await cookies();
+  const refCode = cookieStore.get('refCode')?.value;
+  const { userId } = await auth();
+  console.log(userId)
+  
+  if(refCode && userId){
+    try {
+      await fetch('https://d283-197-185-165-12.ngrok-free.app/api/set-referral', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refCode }),
+      });
+  
+      // Optional: remove the cookie so you don’t send it again
+      } catch (err) {
+      console.error('Failed to send refCode:', err);
+    }
+  }
+  
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-gray-100 py-12 text-gray-900 text-center md:text-start lg:gap-12">
       {/* Main Content */}

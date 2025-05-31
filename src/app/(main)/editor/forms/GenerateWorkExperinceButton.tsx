@@ -87,7 +87,7 @@ function InputDialog({
   async function onSubmit(input: GenerateWorkExperienceInput) {
     try {
       const response = await generateWorkExperience(input);
-
+console.log(response)
       onWorkExperienceGenerated(response);
     } catch (error) {
       console.error(error);

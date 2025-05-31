@@ -81,8 +81,8 @@ export async function generateWorkExperience(input: GenerateWorkExperienceInput)
   
   Job title: <job title>
   Company: <company name>
-  Start date: <format: YYYY-MM-DD>(only if provided)
-  End date: <format: YYYY-MM-DD>(only if provided)
+  Start date: <format: YYYY-MM-DD>(only if provided, ensure to check for any start date)
+  End date: <format: YYYY-MM-DD>(only if provided, ensure to check for any end date)
   Description: <an optimised description in bullet format, might be infered from the job title>
   `;
 
