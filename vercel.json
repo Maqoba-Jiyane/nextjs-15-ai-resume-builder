@@ -1,6 +1,6 @@
 {
     "functions": {
-      "api/pupeteer/route.ts": {
+      "app/api/puppeteer/route.ts": {
         "memory": 1024,
         "maxDuration": 30
       }
