@@ -52,7 +52,8 @@ export async function POST(req: NextRequest) {
     console.warn('⚠️ Not authenticated — attempting login via Clerk UI.')
 
     await page.type('#identifier-field', process.env.CLERK_EMAIL!)
-    await page.click('button:has-text("Continue")')
+    await page.click('button.cl-formButtonPrimary')
+
 
     // await page.waitForTimeout(1500)
 
