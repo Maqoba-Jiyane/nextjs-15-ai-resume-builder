@@ -51,13 +51,17 @@ export async function POST(req: NextRequest) {
   if (page.url().includes('/sign-in')) {
     console.warn('⚠️ Not authenticated — attempting login via Clerk UI.')
 
+    console.log('putting in the email')
     await page.type('#identifier-field', process.env.CLERK_EMAIL!)
+    console.log('Submitting email')
     await page.click('button.cl-formButtonPrimary')
 
 
     // await page.waitForTimeout(1500)
 
+    console.log('Inserting password')
     await page.type('input[type="password"]', process.env.CLERK_PASSWORD!)
+    console.log('Clicking the submit button')
     await page.click('button[type="submit"]')
     await page.waitForNavigation({ waitUntil: 'networkidle0' })
 
