@@ -59,6 +59,17 @@ export async function POST(req: NextRequest) {
 
     // await page.waitForTimeout(1500)
 
+    const screenshotBuffer = await page.screenshot({ fullPage: true })
+
+return new Response(screenshotBuffer, {
+  status: 200,
+  headers: {
+    'Content-Type': 'image/png',
+    'Content-Disposition': 'inline; filename="debug-screenshot.png"',
+  },
+})
+
+
     console.log('Inserting password')
     await page.type('input[type="password"]', process.env.CLERK_PASSWORD!)
     console.log('Clicking the submit button')
