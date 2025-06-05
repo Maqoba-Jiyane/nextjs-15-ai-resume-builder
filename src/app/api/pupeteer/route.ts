@@ -6,7 +6,9 @@ import { NextRequest } from 'next/server'
 export async function POST(req: NextRequest) {
   const browser = await puppeteer.launch({
     args: chromium.args,
-    executablePath: await chromium.executablePath('https://github.com/Sparticuz/chromium/releases/download/v133.0.0/chromium-v133.0.0-pack.tar'),
+    executablePath: await chromium.executablePath(
+      'https://github.com/Sparticuz/chromium/releases/download/v133.0.0/chromium-v133.0.0-pack.tar'
+    ),
     headless: chromium.headless,
   })
 
@@ -14,6 +16,7 @@ export async function POST(req: NextRequest) {
 
   const cookieStore = await cookies()
   const allCookieEntries = cookieStore.getAll()
+
   const clerkCookieEntries = allCookieEntries.filter(({ name }) =>
     name.startsWith('__session') ||
     name.startsWith('__client_uat') ||
@@ -40,7 +43,26 @@ export async function POST(req: NextRequest) {
   } catch {}
 
   const origin = req.nextUrl.origin
-  await page.goto(`${origin}/preview-for-download?resumeId=${resumeId}`, { waitUntil: 'networkidle0' })
+  const previewUrl = `${origin}/preview-for-download?resumeId=${resumeId}`
+
+  await page.goto(previewUrl, { waitUntil: 'networkidle0' })
+
+  // 🔐 Check if we landed on the sign-in page (Clerk)
+  if (page.url().includes('/sign-in')) {
+    console.warn('⚠️ Not authenticated — attempting login via Clerk UI.')
+
+    await page.type('input[type="email"]', process.env.CLERK_EMAIL!)
+    await page.click('button[type="submit"]')
+    // await page.waitForTimeout(1500)
+
+    await page.type('input[type="password"]', process.env.CLERK_PASSWORD!)
+    await page.click('button[type="submit"]')
+    await page.waitForNavigation({ waitUntil: 'networkidle0' })
+
+    // Retry navigating to the preview page
+    await page.goto(previewUrl, { waitUntil: 'networkidle0' })
+  }
+
   await page.emulateMediaType('screen')
 
   const idList = ['resumePreviewContent']
