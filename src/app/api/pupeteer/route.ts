@@ -5,7 +5,7 @@ import { NextRequest } from 'next/server'
 
 export async function POST( req:NextRequest ) {
   const browser = await puppeteer.launch({
-    // headless: 'shell',
+    headless: 'shell',
     executablePath: puppeteer.executablePath(), // Vercel will use the path to installed Chrome
     args: ["--no-sandbox", "--disable-setuid-sandbox"], // these args are important for serverless
   })
