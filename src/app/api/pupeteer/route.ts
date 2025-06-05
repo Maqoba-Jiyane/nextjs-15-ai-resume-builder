@@ -91,12 +91,14 @@ export async function POST(req: NextRequest) {
     });
 
     // Click the button using Puppeteer
+    await page.screenshot({ path: "before-click.png" });
     await page.click('button[data-localization-key="formButtonPrimary"]');
+    await page.screenshot({ path: "after-click.png" });
 
     await page.waitForNavigation({ waitUntil: "networkidle0" });
 
     // Retry navigating to the preview page
-    await page.goto(previewUrl, { waitUntil: "networkidle0" });
+    await page.goto(previewUrl, { waitUntil: "networkidle0", timeout: 6000 });
   }
 
   await page.emulateMediaType("screen");
