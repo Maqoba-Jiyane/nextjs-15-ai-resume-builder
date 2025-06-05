@@ -4,7 +4,11 @@ import { cookies } from 'next/headers'
 import { NextRequest } from 'next/server'
 
 export async function POST( req:NextRequest ) {
-  const browser = await puppeteer.launch()
+  const browser = await puppeteer.launch({
+    // headless: 'shell',
+    executablePath: puppeteer.executablePath(), // Vercel will use the path to installed Chrome
+    args: ["--no-sandbox", "--disable-setuid-sandbox"], // these args are important for serverless
+  })
   const page = await browser.newPage()
 
   const cookieStore = await cookies()
