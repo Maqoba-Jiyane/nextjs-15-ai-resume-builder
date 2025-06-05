@@ -64,7 +64,8 @@ export async function POST(req: NextRequest) {
       const btn = document.querySelector('button.cl-formButtonPrimary')
       if (btn) btn.scrollIntoView({ behavior: 'smooth', block: 'center' })
     })
-    
+    await page.screenshot({ path: 'before-click.png', fullPage: true })
+
     // Click after ensuring it's clickable
     await page.click('button.cl-formButtonPrimary')
     
