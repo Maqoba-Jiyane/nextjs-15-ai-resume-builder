@@ -54,7 +54,20 @@ export async function POST(req: NextRequest) {
     console.log('putting in the email')
     await page.type('#identifier-field', process.env.CLERK_EMAIL!)
     console.log('Submitting email')
+    await page.waitForSelector('button.cl-formButtonPrimary', {
+      visible: true, // ensures it's visible in the DOM
+      timeout: 5000, // optional: throws if not found within 5s
+    })
+    
+    // Scroll into view if needed
+    await page.evaluate(() => {
+      const btn = document.querySelector('button.cl-formButtonPrimary')
+      if (btn) btn.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    })
+    
+    // Click after ensuring it's clickable
     await page.click('button.cl-formButtonPrimary')
+    
 
 
     // await page.waitForTimeout(1500)
