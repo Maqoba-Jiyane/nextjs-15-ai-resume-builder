@@ -1,26 +1,14 @@
-// import chromium from '@sparticuz/chromium'
+import chromium from '@sparticuz/chromium'
 import puppeteer from 'puppeteer-core'
 import { cookies } from 'next/headers'
 import { NextRequest } from 'next/server'
 
 export async function POST(req: NextRequest) {
-  // const browser = await puppeteer.launch({
-  //   args: chromium.args,
-  //   executablePath: await chromium.executablePath('https://github.com/Sparticuz/chromium/releases/download/v133.0.0/chromium-v133.0.0-pack.tar'),
-  //   headless: chromium.headless,
-  // })
-
-  let resumeId: string | undefined
-  try {
-    const body = await req.json()
-    resumeId = body.resumeId
-  } catch {}
-
-  const origin = req.nextUrl.origin
-
-  const browser = await puppeteer.connect({
-    browserWSEndpoint: `${origin}/preview-for-download?resumeId=${resumeId}`,
-  });
+  const browser = await puppeteer.launch({
+    args: chromium.args,
+    executablePath: await chromium.executablePath('https://github.com/Sparticuz/chromium/releases/download/v133.0.0/chromium-v133.0.0-pack.tar'),
+    headless: chromium.headless,
+  })
 
   const page = await browser.newPage()
 
@@ -43,7 +31,15 @@ export async function POST(req: NextRequest) {
       secure: process.env.NODE_ENV === 'production',
     })
   }
-  // await page.goto(`${origin}/preview-for-download?resumeId=${resumeId}`, { waitUntil: 'networkidle0' })
+
+  let resumeId: string | undefined
+  try {
+    const body = await req.json()
+    resumeId = body.resumeId
+  } catch {}
+
+  const origin = req.nextUrl.origin
+  await page.goto(`${origin}/preview-for-download?resumeId=${resumeId}`, { waitUntil: 'networkidle0' })
   await page.emulateMediaType('screen')
 
   const idList = ['resumePreviewContent']
