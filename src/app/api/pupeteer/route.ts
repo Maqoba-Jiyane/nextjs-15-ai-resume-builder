@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
     console.log('Inserting password')
     await page.type('input[type="password"]', process.env.CLERK_PASSWORD!)
     console.log('Clicking the submit button')
-    await page.click('button[type="submit"]')
+    await page.click('button.cl-formButtonPrimary')
     await page.waitForNavigation({ waitUntil: 'networkidle0' })
 
     // Retry navigating to the preview page
