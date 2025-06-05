@@ -1,3 +1,5 @@
+"use client"
+
 import { ResumeValues } from "@/lib/validation";
 import ClassicResume from "./ClassicResume";
 import ATS1 from "./ATS1";

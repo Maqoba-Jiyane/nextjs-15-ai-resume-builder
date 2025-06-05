@@ -106,9 +106,9 @@ const ATS1: React.FC<ATS1Props> = ({ resumeData, className, contentRef }) => {
                     </p>
                   </div>
                   {experience.description && (
-                    <ul className="list-disc list-inside  mt-2">
+                    <ul className="mt-2">
                       {experience.description.split("\n").map((line, i) => (
-                        <li key={i} className="ml-3">
+                        <li key={i} className="pl-3 -indent-3">
                           {line.trim().replace("- ", "")}
                         </li>
                       ))}
@@ -123,9 +123,9 @@ const ATS1: React.FC<ATS1Props> = ({ resumeData, className, contentRef }) => {
         {resumeData.skills && resumeData.skills.length > 0 && (
           <div className="mb-6">
             <h2 className="text-xl font-bold mb-2">Skills</h2>
-            <div className="flex flex-col flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2">
               {resumeData.skills.map((skill, index) => (
-                <span key={index} className="px-3 py-1 text-sm">
+                <span key={index} className="px-3 py-1 text-[16px]">
                   • {skill}
                 </span>
               ))}

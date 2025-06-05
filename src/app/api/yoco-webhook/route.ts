@@ -24,6 +24,7 @@ export async function POST(req: NextRequest) {
     }
 
     const signatureHeader = headers.get("webhook-signature");
+    console.log(signatureHeader)
 
     if (!signatureHeader) {
       return new Response("Signature required", { status: 400 });

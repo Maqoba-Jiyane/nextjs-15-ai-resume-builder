@@ -1,11 +1,12 @@
 import { ResumeValues } from "@/lib/validation";
 // import Image from "next/image";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { formatDate } from "date-fns";
 import { Badge } from "./ui/badge";
-// import { BorderStyles } from "@/app/(main)/editor/BorderStyleButton";
+import { BorderStyles } from "@/app/(main)/editor/BorderStyleButton";
 import { cn } from "@/lib/utils";
 import useDimensions from "@/hooks/useDimensions";
+import Image from "next/image";
 
 interface ClassicResumeProps {
   resumeData: ResumeValues;
@@ -54,7 +55,7 @@ interface ResumeSectionProps {
 
 function PersonalInforHeader({ resumeData }: ResumeSectionProps) {
   const {
-    // photo,
+    photo,
     firstName,
     lastName,
     jobTitle,
@@ -62,38 +63,43 @@ function PersonalInforHeader({ resumeData }: ResumeSectionProps) {
     country,
     phone,
     email,
-    // borderStyle,
+    borderStyle,
   } = resumeData;
-  // const [photoSrc, setPhotoSrc] = useState(photo instanceof File ? "" : photo);
+  const [photoSrc, setPhotoSrc] = useState(photo instanceof File ? "" : photo);
 
-  // useEffect(() => {
-  //   const objectUrl = photo instanceof File ? URL.createObjectURL(photo) : "";
-  //   if (objectUrl) setPhotoSrc(objectUrl);
-  //   if (photo === null) setPhotoSrc("");
-  //   return () => URL.revokeObjectURL(objectUrl);
-  // }, [photo]);
+  useEffect(() => {
+    const objectUrl = photo instanceof File ? URL.createObjectURL(photo) : "";
+    if (objectUrl) setPhotoSrc(objectUrl);
+    if (photo === null) setPhotoSrc("");
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [photo]);
 
   return (
     <div className="flex items-center gap-6">
-      {/* {photoSrc && (
-          <Image
-            src={photoSrc}
-            width={100}
-            height={100}
-            alt="Author photo"
-            className="aspect-square object-cover"
-            style={{
-              borderRadius:
-                borderStyle === BorderStyles.SQUARE
-                  ? "0px"
-                  : borderStyle === BorderStyles.CIRCLE
-                    ? "9999px"
-                    : "10%",
-            }}
-          />
-        )} */}
+      {photoSrc && (
+        <Image
+          src={photoSrc}
+          width={100}
+          height={100}
+          alt="Author photo"
+          className="aspect-square object-cover"
+          style={{
+            borderRadius:
+              borderStyle === BorderStyles.SQUARE
+                ? "0px"
+                : borderStyle === BorderStyles.CIRCLE
+                  ? "9999px"
+                  : "10%",
+          }}
+        />
+      )}
       <div className="space-y-2.5">
-        <div className="space-y-1">
+        <div
+          className="space-y-1"
+          style={{
+            color: resumeData.colorHex,
+          }}
+        >
           <p className="text-3xl font-bold">
             {firstName} {lastName}
           </p>
@@ -116,9 +122,21 @@ function SummarySection({ resumeData }: ResumeSectionProps) {
 
   return (
     <>
-      <hr className="border-2" />
+      <hr
+        className="border-2"
+        style={{
+          borderColor: resumeData.colorHex,
+        }}
+      />
       <div className="space-y-3 break-inside-avoid">
-        <p className="text-lg font-semibold">Professional Summary</p>
+        <p
+          className="text-lg font-semibold"
+          style={{
+            color: resumeData.colorHex,
+          }}
+        >
+          Professional Summary
+        </p>
         <div className="whitespace-pre-line text-sm">{summary}</div>
       </div>
     </>
@@ -136,18 +154,40 @@ function WorkExperienceSection({ resumeData }: ResumeSectionProps) {
 
   return (
     <>
-      <hr className="border-2" />
+      <hr
+        className="border-2"
+        style={{
+          borderColor: resumeData.colorHex,
+        }}
+      />
       <div className="space-y-3">
-        <p className="text-lg font-semibold">Work experience</p>
+        <p
+          className="text-lg font-semibold"
+          style={{
+            color: resumeData.colorHex,
+          }}
+        >
+          Work experience
+        </p>
         {workExperiencesNotEmpty.map((exp, index) => (
           <div className="break-inside-avoid space-y-1 pb-2" key={index}>
             <div className="flex items-center justify-between text-sm font-semibold pb-4">
-              <p className="text-sm font-bold">
+              <p
+                className="text-sm font-bold"
+                style={{
+                  color: resumeData.colorHex,
+                }}
+              >
                 {exp.company?.trim()},{" "}
                 <span className="font-normal">{exp.position}</span>
               </p>
               {exp.startDate && (
-                <span className="font-normal">
+                <span
+                  className="font-bold"
+                  style={{
+                    color: resumeData.colorHex,
+                  }}
+                >
                   {formatDate(exp.startDate, "MMM yyyy")} -{" "}
                   {exp.endDate
                     ? formatDate(exp.endDate, "MMM yyyy")
@@ -156,10 +196,10 @@ function WorkExperienceSection({ resumeData }: ResumeSectionProps) {
               )}
             </div>
             {exp.description
-              ?.split("- ")
+              ?.split("•")
               .filter(Boolean)
               .map((line, idx) => (
-                <div key={idx} className="text-sm pl-4 -indent-2">
+                <div key={idx} className="text-sm pl-4 -indent-3">
                   • {line.trim()}
                 </div>
               ))}
@@ -183,15 +223,38 @@ function EducationSection({ resumeData }: ResumeSectionProps) {
 
   return (
     <>
-      <hr className="border-2" />
+      <hr
+        className="border-2"
+        style={{
+          borderColor: resumeData.colorHex,
+        }}
+      />
       <div className="space-y-3">
-        <p className="text-lg font-semibold">Education</p>
+        <p
+          className="text-lg font-semibold"
+          style={{
+            color: resumeData.colorHex,
+          }}
+        >
+          Education
+        </p>
         {educationsNotEmpty.map((edu, index) => (
           <div className="break-inside-avoid space-y-1" key={index}>
             <div className="flex items-center justify-between text-sm font-semibold">
-              <span>{edu.degree}</span>
+              <span
+                style={{
+                  color: resumeData.colorHex,
+                }}
+              >
+                {edu.degree}
+              </span>
               {edu.startDate && (
-                <span className="font-normal">
+                <span
+                  className="font-bold"
+                  style={{
+                    color: resumeData.colorHex,
+                  }}
+                >
                   {formatDate(edu.startDate, "MMM yyyy")} -{" "}
                   {edu.endDate
                     ? formatDate(edu.endDate, "MMM yyyy")
@@ -214,16 +277,29 @@ function SkillsSection({ resumeData }: ResumeSectionProps) {
 
   return (
     <>
-      <hr className="border-2" />
+      <hr
+        className="border-2"
+        style={{
+          borderColor: resumeData.colorHex,
+        }}
+      />
       <div className="break-inside-avoid space-y-3">
-        <p className="text-lg font-semibold">Skills</p>
+        <p
+          className="text-lg font-semibold"
+          style={{
+            color: resumeData.colorHex,
+          }}
+        >
+          Skills
+        </p>
         <div className="flex break-inside-avoid flex-wrap gap-2">
           {skills.map((skill, index) => (
             <Badge
               key={index}
-              className="bg-black text-white rounded-md hover:bg-black"
+              className={`rounded-md hover:bg-black ${resumeData.colorHex !== '#0000' ? 'text-white' : undefined}`}
               style={{
-                borderRadius: "0px",
+                borderRadius: `${resumeData.borderStyle === "circle" ? "10px" : resumeData.borderStyle === "squircle" ? "5px" : "0px"}`,
+                background: resumeData.colorHex,
               }}
             >
               {skill}

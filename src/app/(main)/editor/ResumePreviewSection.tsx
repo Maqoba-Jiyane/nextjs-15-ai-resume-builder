@@ -6,7 +6,9 @@ import ATSAnalysis from "@/components/ATSAnalysis";
 import AnalyzeResumeButton from "./forms/AnalyzeResumeButton";
 import { ATSAnalysisProps } from "@/components/Interfaces";
 import { Button } from "@/components/ui/button";
-import { ArrowRightLeft,  } from "lucide-react";
+import { ArrowRightLeft, SquareMenu,  } from "lucide-react";
+import ColorPicker from "./ColorPicker";
+import BorderStyleButton from "./BorderStyleButton";
 
 interface ResumePreviewSectionProps {
   resumeData: ResumeValues;
@@ -29,15 +31,15 @@ const ResumePreviewSection = ({
   setShowAts,
   showAts,
   openMenu,
-  // setOpenMenu,
+  setOpenMenu,
 }: ResumePreviewSectionProps) => {
   function handleClick() {
     setShowAts(!showAts);
   }
 
-  // function handleMenu() {
-  //   setOpenMenu(!openMenu);
-  // }
+  function handleMenu() {
+    setOpenMenu(!openMenu);
+  }
 
   return (
     <div
@@ -47,7 +49,7 @@ const ResumePreviewSection = ({
       )}
     >
       <div className="opacity-50 2xl:opacity-100 group-hover:opacity-100 transition-opacity absolute left-1 top-1 flex flex-col gap-3 flex-none lg:left-3 lg:top-3">
-        {/* <div className={`${showAts && "hidden"}`}>
+        <div className={`${showAts && "hidden"}`}>
           <Button
             variant="outline"
             size="icon"
@@ -56,11 +58,11 @@ const ResumePreviewSection = ({
           >
             <SquareMenu />
           </Button>
-        </div> */}
+        </div>
         <div
           className={`flex flex-col gap-3 ${showAts && "hidden"} ${openMenu && "hidden"}`}
         >
-          {/* <ColorPicker
+          <ColorPicker
             color={resumeData.colorHex}
             onChange={(color) =>
               setResumeData({ ...resumeData, colorHex: color.hex })
@@ -71,7 +73,7 @@ const ResumePreviewSection = ({
             onChange={(borderStyle) =>
               setResumeData({ ...resumeData, borderStyle })
             }
-          /> */}
+          />
           <TemplateSwitcher
             template={resumeData.template}
             onChange={(template) => setResumeData({ ...resumeData, template })}

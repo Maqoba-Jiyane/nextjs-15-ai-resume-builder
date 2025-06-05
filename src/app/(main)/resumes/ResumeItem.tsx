@@ -12,12 +12,10 @@ import { useToast } from "@/hooks/use-toast";
 import { ResumeServerData } from "@/lib/types";
 import { mapToResumeValues } from "@/lib/utils";
 import { formatDate } from "date-fns";
-import { CreditCard, MoreVertical, Trash2 } from "lucide-react";
+import { CreditCard, MoreVertical, ShipWheel, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState, useTransition } from "react";
-import deleteResume, {
-  updateResumeForPayment,
-} from "./actions";
+import deleteResume, { updateResumeForPayment } from "./actions";
 import {
   Dialog,
   DialogContent,
@@ -37,40 +35,42 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const discountPercentage = Number(useRetrieveRef());
+  const [downloading, setDownloading] = useState(false);
 
   const handlePrint = async () => {
-
-    let apiRoute = '';
-    const template = resume.template
-    console.log(template)
-    if(template === 'classic'){
-      apiRoute = 'api/download-resume/classic'
-    }else{
-      apiRoute = 'api/download-resume/ats-1'
+    let apiRoute = "";
+    const template = resume.template;
+    console.log(template);
+    if (template === "classic") {
+      apiRoute = "api/pupeteer";
+    } else {
+      apiRoute = "api/pupeteer";
     }
 
     try {
+      setDownloading(true);
       const response = await fetch(apiRoute, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          resume,
+          resumeId: resume.id,
         }),
       });
 
-      if(response.ok){
+      if (response.ok) {
+        setDownloading(false);
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
+        const a = document.createElement("a");
         a.href = url;
-        a.download = `${resume.firstName}_${resume.lastName}${resume.title && '_'+resume.title.replaceAll(' ', '_')}${resume.description && '_'+resume.description.substring(0, 40).replaceAll(' ', '_')}.pdf`;
+        a.download = `${resume.firstName}_${resume.lastName}${resume.title && "_" + resume.title.replaceAll(" ", "_")}${resume.description && "_" + resume.description.substring(0, 40).replaceAll(" ", "_")}.pdf`;
         a.click();
         window.URL.revokeObjectURL(url);
       }
-
     } catch (error) {
+      setDownloading(false);
       console.error(error);
     }
   };
@@ -115,9 +115,21 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
               ? () => handlePrint()
               : () => myClientComponent(resume.id, discountPercentage)
           }
-          className="flex w-full"
+          className="flex w-full items-center justify-center gap-2"
+          disabled={downloading}
         >
-          {resume.paid ? 'Download' : 'Pay'}
+          {resume.paid ? (
+            downloading ? (
+              <>
+                <ShipWheel className="h-4 w-4 animate-spin" />
+                Downloading...
+              </>
+            ) : (
+              "Download"
+            )
+          ) : (
+            "Pay"
+          )}
         </Button>
         <DownloadConfirmationDialog
           open={showDeleteConfirmation}
@@ -289,7 +301,7 @@ function DownloadConfirmationDialog({
 function myClientComponent(resumeId: string, discountPercentage: number) {
   callApi();
   async function callApi() {
-    const basePrice = 500;
+    const basePrice = 5217.6;
     const taxRate = 0.15;
     const discountedPrice = basePrice * (1 - discountPercentage / 100);
     const taxAmount = discountedPrice * taxRate;

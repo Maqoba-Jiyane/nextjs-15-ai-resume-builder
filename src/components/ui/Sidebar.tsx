@@ -1,7 +1,7 @@
 // components/ui/Sidebar.tsx
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
@@ -14,7 +14,15 @@ export default function Sidebar({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const { theme } = useTheme();
-  const pathname = usePathname();
+  const pathname = usePathname();  
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  // Don't render anything until after hydration
+  if (!hasMounted) return null;
 
   return (
     <>

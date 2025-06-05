@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 // import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,22 +14,26 @@ import { Input } from "@/components/ui/input";
 import { EditorFormProps } from "@/lib/types";
 import { personalInfoSchema, PersonalInfoValues } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 
-const PersonalInfoForm = ({ resumeData, setResumeData, personalDetails }: EditorFormProps) => {
+const PersonalInfoForm = ({
+  resumeData,
+  setResumeData,
+  personalDetails,
+}: EditorFormProps) => {
   const defaults: PersonalInfoValues = {
-    firstName: resumeData.firstName  ?? personalDetails.firstName  ?? "",
-    lastName:  resumeData.lastName   ?? personalDetails.lastName   ?? "",
-    jobTitle:  resumeData.jobTitle   ?? personalDetails.jobTitle   ?? "",
-    country:   resumeData.country    ?? personalDetails.country    ?? "",
-    city:      resumeData.city       ?? personalDetails.city       ?? "",
-    phone:     resumeData.phone      ?? personalDetails.phone      ?? "",
-    email:     resumeData.email      ?? personalDetails.email      ?? "",
-    website:   resumeData.website    ?? personalDetails.website    ?? "",
-    linkedin:  resumeData.linkedin   ?? personalDetails.linkedin   ?? "",
-    github:    resumeData.github     ?? personalDetails.github     ?? "",
-    photo:     undefined,  // leave file uploads empty by default
+    firstName: resumeData.firstName ?? personalDetails.firstName ?? "",
+    lastName: resumeData.lastName ?? personalDetails.lastName ?? "",
+    jobTitle: resumeData.jobTitle ?? personalDetails.jobTitle ?? "",
+    country: resumeData.country ?? personalDetails.country ?? "",
+    city: resumeData.city ?? personalDetails.city ?? "",
+    phone: resumeData.phone ?? personalDetails.phone ?? "",
+    email: resumeData.email ?? personalDetails.email ?? "",
+    website: resumeData.website ?? personalDetails.website ?? "",
+    linkedin: resumeData.linkedin ?? personalDetails.linkedin ?? "",
+    github: resumeData.github ?? personalDetails.github ?? "",
+    photo: undefined, // leave file uploads empty by default
   };
 
   const form = useForm<PersonalInfoValues>({
@@ -36,22 +41,21 @@ const PersonalInfoForm = ({ resumeData, setResumeData, personalDetails }: Editor
     defaultValues: defaults,
   });
 
-useEffect(() => {
-  const updatedFields: Partial<PersonalInfoValues> = {};
+  useEffect(() => {
+    const updatedFields: Partial<PersonalInfoValues> = {};
 
-  (Object.keys(defaults) as (keyof PersonalInfoValues)[]).forEach((key) => {
-    if (key === "photo") return;
-    
-    if (!resumeData[key] && personalDetails[key]) {
-      updatedFields[key] = personalDetails[key];
+    (Object.keys(defaults) as (keyof PersonalInfoValues)[]).forEach((key) => {
+      if (key === "photo") return;
+
+      if (!resumeData[key] && personalDetails[key]) {
+        updatedFields[key] = personalDetails[key];
+      }
+    });
+
+    if (Object.keys(updatedFields).length > 0) {
+      setResumeData({ ...resumeData, ...updatedFields });
     }
-  });
-
-  if (Object.keys(updatedFields).length > 0) {
-    setResumeData({ ...resumeData, ...updatedFields });
-  }
-}, []); // Runs only once on mount
-
+  }, []); // Runs only once on mount
 
   useEffect(() => {
     const { unsubscribe } = form.watch(async (values) => {
@@ -64,7 +68,7 @@ useEffect(() => {
     return unsubscribe;
   }, [form, resumeData, setResumeData]);
 
-  // const photoInputRef = useRef<HTMLInputElement>(null);
+  const photoInputRef = useRef<HTMLInputElement>(null);
 
   return (
     <div className="max-w-xl mx-auto space-y-6">
@@ -74,7 +78,7 @@ useEffect(() => {
       </div>
       <Form {...form}>
         <form className="space-y-3">
-          {/* <FormField
+          <FormField
             control={form.control}
             name="photo"
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -99,8 +103,8 @@ useEffect(() => {
                     type="button"
                     onClick={() => {
                       fieldValues.onChange(null);
-                      if(photoInputRef.current){
-                        photoInputRef.current.value = ''
+                      if (photoInputRef.current) {
+                        photoInputRef.current.value = "";
                       }
                     }}
                   >
@@ -110,7 +114,7 @@ useEffect(() => {
                 <FormMessage />
               </FormItem>
             )}
-          /> */}
+          />
           <div className="grid grid-cols-2 gap-3">
             <FormField
               control={form.control}

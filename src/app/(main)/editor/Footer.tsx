@@ -60,7 +60,7 @@ const Footer = ({
           {showSmResumePreview ? <PenLineIcon /> : <FileUserIcon />}
         </Button>
         <div className="flex items-center gap-3">
-          <Button variant="secondary" asChild>
+          <Button variant="secondary" asChild disabled={isSaving}>
             <Link href="/resumes">Close</Link>
           </Button>
           <p

@@ -3,8 +3,10 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Star } from "lucide-react";
 import HelpCenter from "./(main)/help-center/page";
-import { auth,} from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { cookies } from "next/headers";
+import Pricing from "@/components/Pricing";
+import WhyChooseUs from "@/components/WhyChooseUs";
 
 const testimonials = [
   {
@@ -67,64 +69,39 @@ const testimonials = [
 
 export default async function Home() {
   const cookieStore = await cookies();
-  const refCode = cookieStore.get('refCode')?.value;
+  const refCode = cookieStore.get("refCode")?.value;
   const { userId } = await auth();
-  console.log(userId)
-  
-  if(refCode && userId){
+  console.log(userId);
+
+  if (refCode && userId) {
     try {
-      await fetch('https://d283-197-185-165-12.ngrok-free.app/api/set-referral', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ refCode }),
-      });
-  
+      await fetch(
+        "https://d283-197-185-165-12.ngrok-free.app/api/set-referral",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ refCode }),
+        },
+      );
+
       // Optional: remove the cookie so you don’t send it again
-      } catch (err) {
-      console.error('Failed to send refCode:', err);
+    } catch (err) {
+      console.error("Failed to send refCode:", err);
     }
   }
-  
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-gray-100 py-12 text-gray-900 text-center md:text-start lg:gap-12">
+    <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-gray-100 text-gray-900 text-center md:text-start lg:gap-12">
       {/* Main Content */}
-      <div className="flex items-center max-md:flex-col gap-12">
-        <div className="max-w-prose space-y-3 flex flex-col justify-center items-center">
+      <div className="flex items-center max-md:flex-col">
+        <div className="max-w-prose flex flex-col justify-center items-center max-sm:pb-44 max-sm:pt-36">
           <Image alt="logo" src={"/assets/logo.png"} width={500} height={500} />
-          {/* <Image
-            src={logo}
-            alt="logo"
-            width={150}
-            height={150}
-            className="mx-auto md:ms-0 filter hue-rotate-90"
-          />
-          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl scroll-m-20">
-            Create a{" "}
-            <span className="inline-block bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
-              Perfect resume
-            </span>{" "}
-            in Minutes
-          </h1>
-          <p className="text-lg text-gray-500">
-            Our <span className="font-bold">AI resume builder</span> helps you
-            design the best resume for your next role.
-          </p> */}
           <div>
             <Button asChild size="lg" variant="premium">
               <Link href="/resumes">Get started</Link>
             </Button>
           </div>
         </div>
-
-        {/* Resume Preview Image */}
-        {/* <div>
-          <Image
-            src={resumePreview}
-            alt="Resume preview"
-            width={600}
-            className="shadow-md lg:rotate-[1.5deg]"
-          />
-        </div> */}
       </div>
 
       {/* Testimonials Section */}
@@ -160,121 +137,12 @@ export default async function Home() {
             </div>
           ))}
         </div>
+      </div>
 
-        {/*Pricing*/}
-        {/*Pricing*/}
-        <div className="max-w-4xl mx-auto mt-12 text-center">
-          <h2 className="text-3xl font-extrabold text-gray-900 mb-6">
-            Get Your Professional Resume Today!
-          </h2>
-          <div className="shadow-lg rounded-lg bg-white p-8 ">
-            <p className="text-lg text-gray-500 mb-6">
-              Pay only R5.75 for a professionally designed resume that is
-              ATS-friendly and ready for job applications.
-            </p>
-
-            <div className="p-6">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">
-                One-Time Payment for a Complete Resume
-              </h3>
-              <p className="text-3xl font-bold text-blue-600 mb-4">R5.75</p>
-              <p className="text-gray-600 mb-6">
-                Pay once for a fully optimized resume with ATS compatibility,
-                including these amazing AI-powered features:
-              </p>
-              <ul className="text-left text-gray-600 mb-6">
-                <li className="flex items-center mb-2">
-                  <span className="text-green-500 mr-2">✔️</span> ATS-Friendly
-                  Resume for better job application results
-                </li>
-                <li className="flex items-center mb-2">
-                  <span className="text-green-500 mr-2">✔️</span> Smart
-                  Experience Auto-Fill to save you time
-                </li>
-                <li className="flex items-center mb-2">
-                  <span className="text-green-500 mr-2">✔️</span> Auto-Generated
-                  Summary to highlight your strengths
-                </li>
-                <li className="flex items-center mb-2">
-                  <span className="text-green-500 mr-2">✔️</span> Optimized for
-                  Standardized Formatting (fonts, headings)
-                </li>
-                <li className="flex items-center mb-2">
-                  <span className="text-green-500 mr-2">✔️</span> Clear Listing
-                  to enhance readability for ATS
-                </li>
-                <li className="flex items-center mb-2">
-                  <span className="text-green-500 mr-2">✔️</span> Compatible
-                  File Format
-                </li>
-                <li className="flex items-center mb-2">
-                  <span className="text-green-500 mr-2">✔️</span> Proper
-                  Sections for Skills, Work Experience, and Education
-                </li>
-                <li className="flex items-center mb-2">
-                  <span className="text-green-500 mr-2">✔️</span> No Special
-                  Characters or Unnecessary Graphics
-                </li>
-                <li className="flex items-center mb-2">
-                  <span className="text-green-500 mr-2">✔️</span> Clear and
-                  Consistent Job History with Dates
-                </li>
-              </ul>
-              <Button asChild size="lg" variant="premium">
-                <Link href="/resumes">Purchase Resume</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
+      <div className="flex flex-col gap-8 max-sm:mx-6">
+        <Pricing />
+        <WhyChooseUs />
         <HelpCenter />
-        {/* <footer className="bg-gray-50 py-16   ` px-4 sm:px-6 lg:px-8 border-t border-gray-200">
-          <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8"> */}
-            {/* Branding/Mission */}
-            {/* <div className="space-y-2">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Get noticed.
-              </h3>
-              <p className="text-gray-600 text-sm">
-                Stand out with tools that get you hired.
-              </p>
-            </div> */}
-
-            {/* Social Links */}
-            {/* <div className="space-y-2">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Follow for interview tips
-              </h3>
-              <div className="flex space-x-4 justify-center">
-                <a href="#" className="text-blue-600 hover:text-blue-800">
-                  Facebook
-                </a>
-                <a href="#" className="text-blue-600 hover:text-blue-800">
-                  LinkedIn
-                </a>
-              </div>
-            </div> */}
-
-            {/* Support */}
-            {/* <div className="space-y-2">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Need help?
-              </h3>
-              <p className="text-gray-600 text-sm">
-                <a
-                  href="mailto:support@eonresume.com"
-                  className="underline hover:text-gray-900"
-                >
-                  Just ask—we&apos;ve got you.
-                </a>
-              </p>
-            </div>
-          </div> */}
-
-          {/* Copyright */}
-          {/* <div className="mt-8 pt-8 border-t border-gray-200 text-center text-sm text-gray-500">
-            © {new Date().getFullYear()} Eon Resume. All rights reserved.
-          </div>
-        </footer> */}
       </div>
     </main>
   );
