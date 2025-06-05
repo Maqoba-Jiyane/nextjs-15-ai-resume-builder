@@ -1,4 +1,4 @@
-import chromium from 'chrome-aws-lambda'
+import chromium from '@sparticuz/chromium'
 import puppeteer from 'puppeteer-core'
 import { cookies } from 'next/headers'
 import { NextRequest } from 'next/server'
@@ -6,7 +6,7 @@ import { NextRequest } from 'next/server'
 export async function POST(req: NextRequest) {
   const browser = await puppeteer.launch({
     args: chromium.args,
-    executablePath: await chromium.executablePath,
+    executablePath: await chromium.executablePath('https://github.com/Sparticuz/chromium/releases/download/v133.0.0/chromium-v133.0.0-pack.tar'),
     headless: chromium.headless,
   })
 
