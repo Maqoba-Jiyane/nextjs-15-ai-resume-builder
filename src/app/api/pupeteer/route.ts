@@ -91,9 +91,7 @@ export async function POST(req: NextRequest) {
     });
 
     // Click the button using Puppeteer
-    await page.screenshot({ path: "before-click.png" });
     await page.click('button[data-localization-key="formButtonPrimary"]');
-    await page.screenshot({ path: "after-click.png" });
 
     await page.waitForNavigation({ waitUntil: "networkidle0" });
 
