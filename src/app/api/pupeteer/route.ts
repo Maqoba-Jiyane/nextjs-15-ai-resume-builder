@@ -28,6 +28,7 @@ export async function POST(req: NextRequest) {
       domain: process.env.NODE_ENV === 'production' ? 'eonresume.co.za' : 'localhost',
       path: '/',
       httpOnly: true,
+      sameSite: 'Lax',
       secure: process.env.NODE_ENV === 'production',
     })
   }
