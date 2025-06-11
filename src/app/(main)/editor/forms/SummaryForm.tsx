@@ -1,34 +1,47 @@
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+"use client";
+
+import { 
+  Form, 
+  FormControl, 
+  FormField, 
+  FormItem, 
+  FormLabel, 
+  FormMessage 
+} from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { EditorFormProps } from "@/lib/types";
 import { summarySchema, SummaryValues } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import React, { useEffect, useMemo } from "react";
+import { useForm, useWatch } from "react-hook-form";
 import GenerateSummaryButton from "./GenerateSummaryButton";
 
 const SummaryForm = ({ resumeData, setResumeData, onAiUsed }: EditorFormProps) => {
+  // Memoize default value
+  const defaultValues = useMemo<SummaryValues>(() => ({
+    summary: resumeData.summary || "",
+  }), [resumeData.summary]);
+
   const form = useForm<SummaryValues>({
     resolver: zodResolver(summarySchema),
-    defaultValues: {
-      summary: resumeData.summary || "",
-    },
+    defaultValues,
   });
 
-  useEffect(() => {
-    const { unsubscribe } = form.watch(async (values) => {
-      const isValid = await form.trigger();
+  // Watch the summary field
+  const watchedSummary = useWatch({
+    control: form.control,
+    name: "summary",
+  });
 
-      if (!isValid) return;
+  // Auto-save whenever watched value changes
+  useEffect(() => {
+    if ((resumeData.summary ?? "") !== (watchedSummary ?? "")) {
       setResumeData({
         ...resumeData,
-        ...values,
+        summary: watchedSummary ?? "",
       });
-    });
-
-    return unsubscribe;
-  }, [form, resumeData, setResumeData]);
-  
+    }
+  }, [watchedSummary]);
 
   return (
     <div className="max-w-xl mx-auto space-y-6">
@@ -48,17 +61,22 @@ const SummaryForm = ({ resumeData, setResumeData, onAiUsed }: EditorFormProps) =
               <FormItem>
                 <FormLabel className="sr-only">Professional summary</FormLabel>
                 <FormControl>
-                    <Textarea {...field} placeholder="A brief, engaging text about yourself"/>
+                  <Textarea 
+                    {...field} 
+                    placeholder="A brief, engaging text about yourself"
+                    className="min-h-[150px]"
+                  />
                 </FormControl>
-                <FormMessage/>
-                <GenerateSummaryButton
-                resumeData={resumeData}
-                onSummaryGenerated={({ summary, aiUsed }) => {
-                  form.setValue('summary', summary);
-                  onAiUsed(aiUsed);
-                }}
-
-                />
+                <FormMessage />
+                <div className="mt-4 flex justify-center">
+                  <GenerateSummaryButton
+                    resumeData={resumeData}
+                    onSummaryGenerated={({ summary, aiUsed }) => {
+                      form.setValue('summary', summary);
+                      onAiUsed(aiUsed);
+                    }}
+                  />
+                </div>
               </FormItem>
             )}
           />

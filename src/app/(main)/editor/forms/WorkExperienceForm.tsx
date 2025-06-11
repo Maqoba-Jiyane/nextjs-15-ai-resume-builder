@@ -1,3 +1,6 @@
+"use client";
+
+import React, { useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -14,8 +17,7 @@ import { EditorFormProps } from "@/lib/types";
 import { workExperienceSchema, WorkExperienceValues } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GripHorizontal } from "lucide-react";
-import React, { useEffect } from "react";
-import { useFieldArray, useForm, UseFormReturn } from "react-hook-form";
+import { useForm, useFieldArray, useWatch, UseFormReturn } from "react-hook-form";
 import {
   closestCenter,
   DndContext,
@@ -36,33 +38,39 @@ import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/utils";
 import GenerateWorkExperinceButton from "./GenerateWorkExperinceButton";
+import { objectArraysEqual } from "@/lib/utils/compare";
 
-const WorkExperienceForm = ({ resumeData, setResumeData, onAiUsed }: EditorFormProps) => {
-  const form = useForm<WorkExperienceValues>({
-    resolver: zodResolver(workExperienceSchema),
-    defaultValues: {
-      workExperiences: resumeData.workExperiences?.map(exp => ({
+export default function WorkExperienceForm({ resumeData, setResumeData, onAiUsed }: EditorFormProps) {
+  // Memoize default values so identity only changes when resumeData.workExperiences changes
+  const defaultValues = useMemo<WorkExperienceValues>(() => ({
+    workExperiences:
+      resumeData.workExperiences?.map((exp) => ({
         ...exp,
         startDate: exp.startDate ? new Date(exp.startDate) : undefined,
-        endDate: exp.endDate ? new Date(exp.endDate) : undefined
+        endDate: exp.endDate ? new Date(exp.endDate) : undefined,
       })) || [],
-    },
+  }), [resumeData.workExperiences]);
+
+  const form = useForm<WorkExperienceValues>({
+    resolver: zodResolver(workExperienceSchema),
+    defaultValues,
   });
 
-  useEffect(() => {
-    const { unsubscribe } = form.watch(async (values) => {
-      const isValid = await form.trigger();
+  // Watch only the workExperiences array
+  const watchedExperiences = useWatch({
+    control: form.control,
+    name: "workExperiences",
+  });
 
-      if (!isValid) return;
+  // Auto-save whenever watchedExperiences changes
+  useEffect(() => {
+    if (!objectArraysEqual(resumeData.workExperiences, watchedExperiences ?? [])) {
       setResumeData({
         ...resumeData,
-        workExperiences:
-          values.workExperiences?.filter((exp) => exp !== undefined) || [],
+        workExperiences: watchedExperiences ?? [],
       });
-    });
-
-    return unsubscribe;
-  }, [form, resumeData, setResumeData]);
+    }
+  }, [watchedExperiences]);
 
   const { fields, append, remove, move } = useFieldArray({
     control: form.control,
@@ -73,18 +81,15 @@ const WorkExperienceForm = ({ resumeData, setResumeData, onAiUsed }: EditorFormP
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    }),
+    })
   );
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
-
     if (over && active.id !== over.id) {
       const oldIndex = fields.findIndex((field) => field.id === active.id);
       const newIndex = fields.findIndex((field) => field.id === over.id);
-
       move(oldIndex, newIndex);
-
       return arrayMove(fields, oldIndex, newIndex);
     }
   }
@@ -105,10 +110,7 @@ const WorkExperienceForm = ({ resumeData, setResumeData, onAiUsed }: EditorFormP
             onDragEnd={handleDragEnd}
             modifiers={[restrictToVerticalAxis]}
           >
-            <SortableContext
-              items={fields}
-              strategy={verticalListSortingStrategy}
-            >
+            <SortableContext items={fields} strategy={verticalListSortingStrategy}>
               {fields.map((field, index) => (
                 <WorkExperienceItem
                   id={field.id}
@@ -121,6 +123,7 @@ const WorkExperienceForm = ({ resumeData, setResumeData, onAiUsed }: EditorFormP
               ))}
             </SortableContext>
           </DndContext>
+
           <div className="flex justify-center">
             <Button
               type="button"
@@ -141,9 +144,7 @@ const WorkExperienceForm = ({ resumeData, setResumeData, onAiUsed }: EditorFormP
       </Form>
     </div>
   );
-};
-
-export default WorkExperienceForm;
+}
 
 interface WorkExperienceItemProps {
   form: UseFormReturn<WorkExperienceValues>;
@@ -153,29 +154,19 @@ interface WorkExperienceItemProps {
   onAiUsed: (aiUsed: boolean) => void;
 }
 
-function WorkExperienceItem({
-  id,
-  form,
-  index,
-  remove,onAiUsed
-}: WorkExperienceItemProps) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id });
+function WorkExperienceItem({ id, form, index, remove, onAiUsed }: WorkExperienceItemProps) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
 
   const formatDateForInput = (date: Date | undefined): string => {
     if (!date) return "";
-    // Handle both string and Date objects
     const dateObj = date instanceof Date ? date : new Date(date);
     return dateObj.toISOString().split("T")[0];
   };
 
-  const handleDateChange = (fieldName: `workExperiences.${number}.startDate` | `workExperiences.${number}.endDate`, value: string) => {
+  const handleDateChange = (
+    fieldName: `workExperiences.${number}.startDate` | `workExperiences.${number}.endDate`,
+    value: string
+  ) => {
     form.setValue(fieldName, value ? new Date(value) : undefined);
   };
 
@@ -183,7 +174,7 @@ function WorkExperienceItem({
     <div
       className={cn(
         "space-y-3 border rounded-md bg-background p-3",
-        isDragging && "shadow-xl z-50 cursor-grab relative",
+        isDragging && "shadow-xl z-50 cursor-grab relative"
       )}
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
@@ -202,11 +193,14 @@ function WorkExperienceItem({
             form.setValue(`workExperiences.${index}`, {
               ...exp,
               startDate: exp.startDate ? new Date(exp.startDate) : undefined,
-              endDate: exp.endDate ? new Date(exp.endDate) : undefined
+              endDate: exp.endDate ? new Date(exp.endDate) : undefined,
             })
-          }onAiUsed={onAiUsed}
+          }
+          onAiUsed={onAiUsed}
         />
       </div>
+
+      {/* Position */}
       <FormField
         control={form.control}
         name={`workExperiences.${index}.position`}
@@ -220,6 +214,8 @@ function WorkExperienceItem({
           </FormItem>
         )}
       />
+
+      {/* Company */}
       <FormField
         control={form.control}
         name={`workExperiences.${index}.company`}
@@ -233,6 +229,8 @@ function WorkExperienceItem({
           </FormItem>
         )}
       />
+
+      {/* Dates */}
       <div className="grid grid-cols-2 gap-3">
         <FormField
           control={form.control}
@@ -279,6 +277,8 @@ function WorkExperienceItem({
         Leave <span className="font-semibold">end date</span> empty if you
         currently work here.
       </FormDescription>
+
+      {/* Description */}
       <FormField
         control={form.control}
         name={`workExperiences.${index}.description`}
@@ -292,6 +292,7 @@ function WorkExperienceItem({
           </FormItem>
         )}
       />
+
       <Button variant="destructive" type="button" onClick={() => remove(index)}>
         Remove
       </Button>

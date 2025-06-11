@@ -11,36 +11,36 @@ import { Textarea } from "@/components/ui/textarea";
 import { EditorFormProps } from "@/lib/types";
 import { skillsSchema, SkillsValues } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import React, { useEffect, useMemo } from "react";
+import { useForm, useWatch } from "react-hook-form";
 import GenerateSkillsButton from "./GenerateSkillsButton";
+import { arraysAreEqual } from "@/lib/utils/compare";
 
 const SkillsForm = ({ resumeData, setResumeData, onAiUsed }: EditorFormProps) => {
+  const defaultValues = useMemo<SkillsValues>(() => ({
+    skills: resumeData.skills || [],
+  }), [resumeData.skills]);
+
   const form = useForm<SkillsValues>({
     resolver: zodResolver(skillsSchema),
-    defaultValues: {
-      skills: resumeData.skills || [],
-    },
+    defaultValues,
+  });
+
+  // Watch the skills field
+  const watchedSkills = useWatch({
+    control: form.control,
+    name: "skills",
   });
 
   useEffect(() => {
-    const { unsubscribe } = form.watch(async (values) => {
-      const isValid = await form.trigger();
-
-      if (!isValid) return;
+    if (!arraysAreEqual(resumeData.skills, watchedSkills || [])) {
       setResumeData({
         ...resumeData,
-        skills:
-          values.skills
-            ?.filter((skill) => skill !== undefined)
-            .map((skill) => skill.trim())
-            .filter((skill) => skill !== "") || [],
+        skills: watchedSkills || [],
       });
-    });
-
-    return unsubscribe;
-  }, [form, resumeData, setResumeData]);
-
+    }
+  }, [watchedSkills]);
+  
   return (
     <div className="max-w-xl mx-auto space-y-6">
       <div className="space-y-1.5 text-center">

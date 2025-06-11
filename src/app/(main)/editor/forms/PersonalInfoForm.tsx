@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-// import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -12,17 +11,19 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { EditorFormProps } from "@/lib/types";
+import { shallowCompareFields } from "@/lib/utils/compare";
 import { personalInfoSchema, PersonalInfoValues } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useRef } from "react";
-import { useForm } from "react-hook-form";
+import React, { useEffect, useMemo, useRef } from "react";
+import { useForm, useWatch } from "react-hook-form";
 
 const PersonalInfoForm = ({
   resumeData,
   setResumeData,
   personalDetails,
 }: EditorFormProps) => {
-  const defaults: PersonalInfoValues = {
+  // Memoize default values
+  const defaultValues = useMemo<PersonalInfoValues>(() => ({
     firstName: resumeData.firstName ?? personalDetails.firstName ?? "",
     lastName: resumeData.lastName ?? personalDetails.lastName ?? "",
     jobTitle: resumeData.jobTitle ?? personalDetails.jobTitle ?? "",
@@ -34,39 +35,47 @@ const PersonalInfoForm = ({
     linkedin: resumeData.linkedin ?? personalDetails.linkedin ?? "",
     github: resumeData.github ?? personalDetails.github ?? "",
     photo: undefined, // leave file uploads empty by default
-  };
+  }), [
+    resumeData, 
+    personalDetails,
+    // Include all dependencies used in the default values
+    resumeData.firstName, personalDetails.firstName,
+    resumeData.lastName, personalDetails.lastName,
+    resumeData.jobTitle, personalDetails.jobTitle,
+    resumeData.country, personalDetails.country,
+    resumeData.city, personalDetails.city,
+    resumeData.phone, personalDetails.phone,
+    resumeData.email, personalDetails.email,
+    resumeData.website, personalDetails.website,
+    resumeData.linkedin, personalDetails.linkedin,
+    resumeData.github, personalDetails.github,
+  ]);
 
   const form = useForm<PersonalInfoValues>({
     resolver: zodResolver(personalInfoSchema),
-    defaultValues: defaults,
+    defaultValues,
   });
 
+  // Watch all form values
+  const watchedValues = useWatch({
+    control: form.control,
+  });
+  
+  // Auto-save whenever watched values change
   useEffect(() => {
-    const updatedFields: Partial<PersonalInfoValues> = {};
-
-    (Object.keys(defaults) as (keyof PersonalInfoValues)[]).forEach((key) => {
-      if (key === "photo") return;
-
-      if (!resumeData[key] && personalDetails[key]) {
-        updatedFields[key] = personalDetails[key];
-      }
-    });
-
-    if (Object.keys(updatedFields).length > 0) {
-      setResumeData({ ...resumeData, ...updatedFields });
+    const fields: (keyof PersonalInfoValues)[] = [
+      "firstName", "lastName", "jobTitle", "country", "city",
+      "phone", "email", "website", "linkedin", "github"
+    ];
+  
+    if (shallowCompareFields(resumeData, watchedValues, fields)) {
+      setResumeData({
+        ...resumeData,
+        ...watchedValues,
+      });
     }
-  }, []); // Runs only once on mount
-
-  useEffect(() => {
-    const { unsubscribe } = form.watch(async (values) => {
-      const isValid = await form.trigger();
-
-      if (!isValid) return;
-      setResumeData({ ...resumeData, ...values });
-    });
-
-    return unsubscribe;
-  }, [form, resumeData, setResumeData]);
+  }, [watchedValues]);
+  
 
   const photoInputRef = useRef<HTMLInputElement>(null);
 
@@ -205,6 +214,45 @@ const PersonalInfoForm = ({
                 <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input {...field} type="email" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="website"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Website</FormLabel>
+                <FormControl>
+                  <Input {...field} type="url" placeholder="https://example.com" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="linkedin"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>LinkedIn</FormLabel>
+                <FormControl>
+                  <Input {...field} type="url" placeholder="https://linkedin.com/in/username" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="github"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>GitHub</FormLabel>
+                <FormControl>
+                  <Input {...field} type="url" placeholder="https://github.com/username" />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Form,
   FormControl,
@@ -10,37 +12,48 @@ import { Textarea } from "@/components/ui/textarea";
 import { EditorFormProps } from "@/lib/types";
 import { jobDescriptionSchema, JobDescriptionValues } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import React, { useEffect, useMemo } from "react";
+import { useForm, useWatch } from "react-hook-form";
 import AutoFillButton from "./AutoFillButton";
 import { useRouter } from "next/navigation";
 
-const JobDescriptionForm = ({ resumeData, setResumeData, onAiUsed }: EditorFormProps) => {
+const JobDescriptionForm = ({ 
+  resumeData, 
+  setResumeData, 
+  onAiUsed 
+}: EditorFormProps) => {
   const router = useRouter();
+  
+  // Memoize default value
+  const defaultValues = useMemo<JobDescriptionValues>(() => ({
+    jobDescription: resumeData.jobDescription || "",
+  }), [resumeData.jobDescription]);
+
   const form = useForm<JobDescriptionValues>({
     resolver: zodResolver(jobDescriptionSchema),
-    defaultValues: {
-      jobDescription: resumeData.jobDescription || "",
-    },
+    defaultValues,
   });
 
-  useEffect(() => {
-    form.reset({ jobDescription: resumeData.jobDescription || "" });
-  }, [resumeData.jobDescription, form, router]);
+  // Watch the jobDescription field
+  const watchedJobDescription = useWatch({
+    control: form.control,
+    name: "jobDescription",
+  });
 
-  useEffect(() => {
-    const { unsubscribe } = form.watch(async (values) => {
-      const isValid = await form.trigger();
-
-      if (!isValid) return;
-      setResumeData({
-        ...resumeData,
-        ...values,
-      });
+  // Auto-save whenever watched value changes
+useEffect(() => {
+  if ((resumeData.jobDescription ?? "") !== (watchedJobDescription ?? "")) {
+    setResumeData({
+      ...resumeData,
+      jobDescription: watchedJobDescription ?? "",
     });
+  }
+}, [watchedJobDescription]);
 
-    return unsubscribe;
-  }, [form, resumeData, setResumeData]);
+  // Reset form when external data changes
+  useEffect(() => {
+    form.reset(defaultValues);
+  }, [resumeData.jobDescription, form, router]);
 
   return (
     <div className="max-w-xl mx-auto space-y-6">
@@ -63,6 +76,7 @@ const JobDescriptionForm = ({ resumeData, setResumeData, onAiUsed }: EditorFormP
                   <Textarea
                     {...field}
                     placeholder="The job you are applying for..."
+                    className="min-h-[200px]"
                   />
                 </FormControl>
                 <FormMessage />
