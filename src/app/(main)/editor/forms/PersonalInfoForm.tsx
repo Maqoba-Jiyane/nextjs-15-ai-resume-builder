@@ -65,7 +65,7 @@ const PersonalInfoForm = ({
   useEffect(() => {
     const fields: (keyof PersonalInfoValues)[] = [
       "firstName", "lastName", "jobTitle", "country", "city",
-      "phone", "email", "website", "linkedin", "github"
+      "phone", "email", "website", "linkedin", "github", "photo"
     ];
   
     if (shallowCompareFields(resumeData, watchedValues, fields)) {
