@@ -252,7 +252,7 @@ const ClassicResumeRich = ({
                 </span>
               }
             </h1>
-            <div className="mb-2 pl-[95px]">
+            <div className="mb-2 pl-[90px]">
               <p
                 className="underline underline-offset-4"
                 style={{

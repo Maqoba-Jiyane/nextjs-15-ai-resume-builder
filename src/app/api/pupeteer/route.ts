@@ -84,15 +84,15 @@ export async function POST(req: NextRequest) {
     await page.emulateMediaType("screen");
 
     // Remove padding on the PDF container
-    // await page.evaluate(() => {
-    //   const el = document.getElementById("resumePreviewContent");
-    //   if (el) el.style.padding = "0px";
-    // });
+    await page.evaluate(() => {
+      const el = document.getElementById("resumePreviewContent");
+      if (el) el.style.padding = "0px";
+    });
 
     const pdfBuffer = await page.pdf({
       format: "a4",
       printBackground: true,
-      // margin: { top: "5mm", bottom: "5mm", left: "5mm", right: "5mm" },
+      margin: { top: "5mm", bottom: "5mm", left: "5mm", right: "5mm" },
     });
 
     return new Response(pdfBuffer, {
