@@ -19,12 +19,8 @@ const ClassicResumeRich = ({
   className,
   contentRef,
 }: ClassicResumeRichProps) => {
+  const { photo, website } = resumeData;
 
-  const {
-    photo,
-    website,
-  } = resumeData;
-  
   const containerRef = useRef<HTMLDivElement>(null);
   const { width } = useDimensions(containerRef);
   const [photoSrc, setPhotoSrc] = useState(photo instanceof File ? "" : photo);
@@ -272,8 +268,8 @@ const ClassicResumeRich = ({
             <h2
               className="font-bold border-b-2 mb-2"
               style={{
+                fontFamily: "Now-Bold",
                 fontSize: `${ptToPx(14)}px`,
-                color: resumeData.colorHex,
               }}
             >
               PROFILE
@@ -293,10 +289,9 @@ const ClassicResumeRich = ({
             {/* Content with padding to avoid overlap */}{" "}
             {/* Adjust padding as needed */}
             <h2
-              className="text-sm font-bold border-b-2 mb-2"
+              className="font-bold border-b-2 mb-2"
               style={{
                 fontFamily: "Now-Bold",
-                color: resumeData.colorHex,
                 fontSize: `${ptToPx(14)}px`,
               }}
             >
