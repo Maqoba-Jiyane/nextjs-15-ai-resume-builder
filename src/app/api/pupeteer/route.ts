@@ -2,6 +2,7 @@ import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer-core";
 import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
+import prisma from "@/lib/prisma";
 
 export async function POST(req: NextRequest) {
   let browser = null;
@@ -12,6 +13,11 @@ export async function POST(req: NextRequest) {
     if (!resumeId) {
       return new Response("Missing resumeId", { status: 400 });
     }
+
+    const template = await prisma.resume.findUnique({
+      where: {id: resumeId},
+      select: {template: true}
+    })
 
     browser = await puppeteer.launch({
       args: chromium.args,
@@ -83,16 +89,24 @@ export async function POST(req: NextRequest) {
 
     await page.emulateMediaType("screen");
 
+    if(!template){
+      return null;
+    }
+
     // Remove padding on the PDF container
-    await page.evaluate(() => {
-      const el = document.getElementById("resumePreviewContent");
-      if (el) el.style.padding = "0px";
-    });
+    if (template.template !== 'classic-resume-rich') {
+      await page.evaluate(() => {
+        const el = document.getElementById("resumePreviewContent");
+        if (el) el.style.padding = "0px";
+      });
+    }
+
+    const margin = template.template !== 'classic-resume-rich' ? { top: "5mm", bottom: "5mm", left: "5mm", right: "5mm" } : {}
 
     const pdfBuffer = await page.pdf({
       format: "a4",
       printBackground: true,
-      margin: { top: "5mm", bottom: "5mm", left: "5mm", right: "5mm" },
+      margin,
     });
 
     return new Response(pdfBuffer, {
