@@ -305,7 +305,6 @@ const ClassicResumeRich = ({
                   {/* Starting dot */}
                   <div
                     className="w-2 h-2 rounded-full absolute top-2 -left-[4px] pt-2"
-                    style={{ backgroundColor: resumeData.colorHex }}
                   ></div>
                   {/* Dotted line */}
                   <div className="absolute h-full border-l-2 left-0 top-2"></div>
