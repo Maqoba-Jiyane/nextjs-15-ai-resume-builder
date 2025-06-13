@@ -89,8 +89,8 @@ export async function POST(req: NextRequest) {
 
     await page.emulateMediaType("screen");
 
-    if(!template){
-      return null;
+    if (!template) {
+      return new Response("Resume template not found", { status: 404 });
     }
 
     // Remove padding on the PDF container
