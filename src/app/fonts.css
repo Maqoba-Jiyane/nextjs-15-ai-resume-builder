@@ -1,0 +1,55 @@
+/* fonts.css */
+@font-face {
+  font-family: "Now-Black";
+  src: url("/fonts/Now-Black.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* Optional: prevents invisible text while loading */
+}
+@font-face {
+  font-family: "Now-Regular";
+  src: url("/fonts/Now-Regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* Optional: prevents invisible text while loading */
+}
+
+@font-face {
+  font-family: "Now-Bold";
+  src: url("/fonts/Now-Bold.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* Optional: prevents invisible text while loading */
+}
+
+@font-face {
+  font-family: "Lato-Regular";
+  src: url("/fonts/Lato-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* Optional: prevents invisible text while loading */
+}
+
+@font-face {
+  font-family: "Lato-Bold";
+  src: url("/fonts/Lato-Bold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* Optional: prevents invisible text while loading */
+}
+
+@font-face {
+  font-family: "Aileron-Regular";
+  src: url("/fonts/Aileron-Regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* Optional: prevents invisible text while loading */
+}
+
+@font-face {
+  font-family: "Aileron-Bold";
+  src: url("/fonts/Aileron-Bold.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* Optional: prevents invisible text while loading */
+}

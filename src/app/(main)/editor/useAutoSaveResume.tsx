@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { fileReplacer } from "@/lib/utils";
 
 export default function useAutoSaveResume(resumeData: ResumeValues, aiUsed = false) {
-  console.log("aiUsed: ", aiUsed)
+  
   const searchParams = useSearchParams();
 
   const { toast } = useToast();

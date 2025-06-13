@@ -1,33 +1,58 @@
-"use client"
+"use client";
 
 import { ResumeValues } from "@/lib/validation";
 import ClassicResume from "./ClassicResume";
 import ATS1 from "./ATS1";
+import { JSX } from "react";
 // import ATS1 from "./ATS1";
-// import ModernResume from "./ModernResume"; // Future template support
+import ModernResume from "./ModernResume"; // Future template support
+import ClassicResumeRich from "./ClassicResumeRich";
 
 interface ResumePreviewProps {
   resumeData: ResumeValues;
   contentRef?: React.Ref<HTMLDivElement>;
   className?: string;
-  template?: "classic" | "ats-1" | 'CREATIVE';
+  template?: "classic" | "ats-1" | "modern" | "classic-resume-rich";
 }
 
-const ResumePreview = ({ resumeData, contentRef, className }: ResumePreviewProps) => {
-  
+const ResumePreview = ({
+  resumeData,
+  contentRef,
+  className,
+}: ResumePreviewProps) => {
+  const templates: Record<string, JSX.Element> = {
+    classic: (
+      <ClassicResume
+        resumeData={resumeData}
+        className={className}
+        contentRef={contentRef}
+      />
+    ),
+    "ats-1": (
+      <ATS1
+        resumeData={resumeData}
+        className={className}
+        contentRef={contentRef}
+      />
+    ),
+    modern: (
+      <ModernResume
+        resumeData={resumeData}
+        className={className}
+        contentRef={contentRef}
+      />
+    ),
+    "classic-resume-rich": (
+      <ClassicResumeRich
+        resumeData={resumeData}
+        className={className}
+        contentRef={contentRef}
+      />
+    ),
+  };
+
   return (
-    <div className="w-full">
-      {resumeData.template === "classic" ? (
-        <ClassicResume resumeData={resumeData} className={className} contentRef={contentRef} />
-      ) :  (
-        <ATS1 resumeData={resumeData} className={className} contentRef={contentRef}/>
-        // <ModernResume resumeData={resumeData} className={className} contentRef={contentRef} />
-      )
-      //  : (
-      //   <p className="text-white text-center">Coming soon...</p>
-      // )
-      }
-    </div>
+    <div className="w-full">{templates[resumeData.template || "classic"]}</div>
   );
 };
 

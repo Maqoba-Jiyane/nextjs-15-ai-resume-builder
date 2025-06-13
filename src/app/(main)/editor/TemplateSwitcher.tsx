@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { FileText, Layers } from "lucide-react";
+import { SwitchCamera } from "lucide-react";
 
 export const ResumeTemplates = {
   CLASSIC: "classic",
   ATS1: "ats-1",
+  MODERN: "modern",
+  CLASSICRESUMERICH: 'classic-resume-rich'
 };
 
 const templateStyles = Object.values(ResumeTemplates);
@@ -20,12 +22,6 @@ const TemplateSwitcher = ({ template, onChange }: TemplateSwitcherProps) => {
     onChange(templateStyles[nextIndex]);
   }
 
-  const Icon =
-    template === "CLASSIC"
-      ? FileText
-      : // template === "MODERN" ? LayoutGrid :
-        Layers; // Default icon for CREATIVE
-
   return (
     <Button
       variant="outline"
@@ -33,7 +29,7 @@ const TemplateSwitcher = ({ template, onChange }: TemplateSwitcherProps) => {
       title="Change resume template"
       onClick={handleClick}
     >
-      <Icon className="size-5" />
+      <SwitchCamera className="size-5" />
     </Button>
   );
 };

@@ -1,8 +1,11 @@
-import { ResumeValues } from "@/lib/validation";
-import React, { useRef } from "react";
-import { formatDate } from "date-fns";
+import React, { useRef, useEffect, useState } from "react";
+import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { ResumeValues } from "@/lib/validation";
 import useDimensions from "@/hooks/useDimensions";
+import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
+import { BorderStyles } from "@/app/(main)/editor/BorderStyleButton";
 
 interface ModernResumeProps {
   resumeData: ResumeValues;
@@ -17,25 +20,26 @@ const ModernResume = ({ resumeData, className, contentRef }: ModernResumeProps) 
   return (
     <div
       className={cn(
-        "bg-white text-black h-fit w-full aspect-[210/297]",
+        "bg-white text-gray-900 w-full aspect-[210/297] shadow-xl",
         className
       )}
       ref={containerRef}
     >
       <div
-        className={cn("space-y-4 p-8", !width && "invisible")}
-        style={{
-          zoom: (1 / 794) * width,
-        }}
+        className={cn("p-8 space-y-8", !width && "invisible")}
+        style={{ zoom: (1 / 794) * width }}
         ref={contentRef}
         id="resumePreviewContent"
       >
         <HeaderSection resumeData={resumeData} />
-        <ContactSection resumeData={resumeData} />
-        <WorkExperienceSection resumeData={resumeData} />
+        <Section title="Profile" resumeData={resumeData}>
+          <p className="whitespace-pre-line text-sm leading-relaxed">
+            {resumeData.summary}
+          </p>
+        </Section>
+        <ExperienceSection resumeData={resumeData} />
         <EducationSection resumeData={resumeData} />
         <SkillsSection resumeData={resumeData} />
-        <CertificationsSection resumeData={resumeData} />
       </div>
     </div>
   );
@@ -43,194 +47,119 @@ const ModernResume = ({ resumeData, className, contentRef }: ModernResumeProps) 
 
 export default ModernResume;
 
-interface ResumeSectionProps {
-  resumeData: ResumeValues;
-}
+const Section = ({ title, children, resumeData }: { title: string; children: React.ReactNode; resumeData: ResumeValues }) => (
+  <div className="space-y-4 break-inside-avoid">
+    <h2 className="text-lg font-semibold uppercase tracking-wider" style={{ color: resumeData.colorHex }}>{title}</h2>
+    {children}
+  </div>
+);
 
-function HeaderSection({ resumeData }: ResumeSectionProps) {
-  const { firstName, lastName, jobTitle } = resumeData;
+const HeaderSection = ({ resumeData }: { resumeData: ResumeValues }) => {
+  const { photo, firstName, lastName, jobTitle, email, phone, city, country, borderStyle } = resumeData;
+  const [photoSrc, setPhotoSrc] = useState(photo instanceof File ? "" : photo);
+
+  useEffect(() => {
+    const objectUrl = photo instanceof File ? URL.createObjectURL(photo) : "";
+    if (objectUrl) setPhotoSrc(objectUrl);
+    if (photo === null) setPhotoSrc("");
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [photo]);
 
   return (
-    <div className="space-y-2">
-      <h1 className="text-3xl font-bold uppercase tracking-wider">
-        {firstName} {lastName}
-      </h1>
-      <div className="h-1 w-full bg-gray-300" />
-      <p className="text-lg font-medium text-gray-700">{jobTitle}</p>
+    <div className="flex items-center gap-6 border-b pb-4 border-gray-300">
+      {photoSrc && (
+        <Image
+          src={photoSrc}
+          width={90}
+          height={90}
+          alt="Profile"
+          className="object-cover"
+          style={{
+            borderRadius:
+              borderStyle === BorderStyles.SQUARE
+                ? "0px"
+                : borderStyle === BorderStyles.CIRCLE
+                ? "9999px"
+                : "10%",
+          }}
+        />
+      )}
+      <div>
+        <h1 className="text-2xl font-bold">
+          {firstName} {lastName}
+        </h1>
+        <p className="text-sm text-gray-600">{jobTitle}</p>
+        <p className="text-xs text-gray-500 mt-1">
+          {[city, country].filter(Boolean).join(", ")} • {[email, phone].filter(Boolean).join(" • ")}
+        </p>
+      </div>
     </div>
   );
-}
+};
 
-function ContactSection({ resumeData }: ResumeSectionProps) {
-  const { email, phone, city, country, website, linkedin } = resumeData;
-
-  return (
-    <div className="grid grid-cols-2 gap-1 text-sm">
-      {email && (
-        <div className="flex items-center">
-          <span className="font-semibold">Email:</span>
-          <span className="ml-1">{email}</span>
-        </div>
-      )}
-      {phone && (
-        <div className="flex items-center">
-          <span className="font-semibold">Phone:</span>
-          <span className="ml-1">{phone}</span>
-        </div>
-      )}
-      {(city || country) && (
-        <div className="flex items-center">
-          <span className="font-semibold">Location:</span>
-          <span className="ml-1">
-            {city}
-            {city && country ? ", " : ""}
-            {country}
-          </span>
-        </div>
-      )}
-      {website && (
-        <div className="flex items-center">
-          <span className="font-semibold">Website:</span>
-          <span className="ml-1">{website}</span>
-        </div>
-      )}
-      {linkedin && (
-        <div className="flex items-center">
-          <span className="font-semibold">LinkedIn:</span>
-          <span className="ml-1">{linkedin}</span>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function WorkExperienceSection({ resumeData }: ResumeSectionProps) {
-  const { workExperiences } = resumeData;
-
-  const workExperiencesNotEmpty = workExperiences?.filter(
-    (exp) => Object.values(exp).filter(Boolean).length > 0
-  );
-
-  if (!workExperiencesNotEmpty?.length) return null;
+const ExperienceSection = ({ resumeData }: { resumeData: ResumeValues }) => {
+  const experiences = resumeData.workExperiences?.filter(exp => Object.values(exp).some(Boolean));
+  if (!experiences?.length) return null;
 
   return (
-    <div className="space-y-4">
-      <h2 className="border-b-2 border-gray-300 pb-1 text-xl font-bold uppercase">
-        Professional Experience
-      </h2>
-      {workExperiencesNotEmpty.map((exp, index) => (
-        <div className="break-inside-avoid space-y-1" key={index}>
+    <Section title="Experience" resumeData={resumeData}>
+      {experiences.map((exp, idx) => (
+        <div key={idx} className="space-y-1">
           <div className="flex justify-between">
-            <h3 className="text-lg font-semibold">{exp.position}</h3>
-            {exp.startDate && (
-              <span className="text-sm font-medium">
-                {formatDate(exp.startDate, "MMM yyyy")} -{" "}
-                {exp.endDate ? formatDate(exp.endDate, "MMM yyyy") : "Present"}
-              </span>
-            )}
+            <p className="text-sm font-semibold">
+              {exp.company}{exp.position && `, ${exp.position}`}
+            </p>
+            <p className="text-xs text-gray-500">
+              {exp.startDate && `${format(new Date(exp.startDate), "MMM yyyy")} - ${exp.endDate ? format(new Date(exp.endDate), "MMM yyyy") : "Present"}`}
+            </p>
           </div>
-          <div className="flex justify-between text-sm">
-            <span className="font-medium italic">{exp.company}</span>
-            <span>{exp.location}</span>
-          </div>
-          {exp.description && (
-            <ul className="ml-5 list-disc text-sm">
-              {exp.description
-                .split("\n")
-                .filter((line) => line.trim())
-                .map((line, i) => (
-                  <li key={i}>{line}</li>
-                ))}
-            </ul>
-          )}
+          {exp.description?.split("•").filter(Boolean).map((line, idx2) => (
+            <p key={idx2} className="text-sm pl-4 -indent-3 leading-relaxed">• {line.trim()}</p>
+          ))}
         </div>
       ))}
-    </div>
+    </Section>
   );
-}
+};
 
-function EducationSection({ resumeData }: ResumeSectionProps) {
-  const { educations } = resumeData;
-
-  const educationsNotEmpty = educations?.filter(
-    (edu) => Object.values(edu).filter(Boolean).length > 0
-  );
-
-  if (!educationsNotEmpty?.length) return null;
+const EducationSection = ({ resumeData }: { resumeData: ResumeValues }) => {
+  const educations = resumeData.educations?.filter(edu => Object.values(edu).some(Boolean));
+  if (!educations?.length) return null;
 
   return (
-    <div className="space-y-4">
-      <h2 className="border-b-2 border-gray-300 pb-1 text-xl font-bold uppercase">
-        Education
-      </h2>
-      {educationsNotEmpty.map((edu, index) => (
-        <div className="break-inside-avoid space-y-1" key={index}>
+    <Section title="Education" resumeData={resumeData}>
+      {educations.map((edu, idx) => (
+        <div key={idx} className="space-y-1">
           <div className="flex justify-between">
-            <h3 className="text-lg font-semibold">{edu.degree}</h3>
-            {edu.startDate && (
-              <span className="text-sm font-medium">
-                {formatDate(edu.startDate, "MMM yyyy")} -{" "}
-                {edu.endDate ? formatDate(edu.endDate, "MMM yyyy") : "Present"}
-              </span>
-            )}
+            <p className="text-sm font-semibold">{edu.degree}</p>
+            <p className="text-xs text-gray-500">
+              {edu.startDate && `${format(new Date(edu.startDate), "MMM yyyy")} - ${edu.endDate ? format(new Date(edu.endDate), "MMM yyyy") : "Present"}`}
+            </p>
           </div>
-          <div className="flex justify-between text-sm">
-            <span className="font-medium italic">{edu.school}</span>
-            <span>{edu.location}</span>
-          </div>
-          {edu.description && (
-            <p className="whitespace-pre-line text-sm">{edu.description}</p>
-          )}
+          <p className="text-xs text-gray-600">{edu.school}</p>
         </div>
       ))}
-    </div>
+    </Section>
   );
-}
+};
 
-function SkillsSection({ resumeData }: ResumeSectionProps) {
+const SkillsSection = ({ resumeData }: { resumeData: ResumeValues }) => {
   const { skills } = resumeData;
-
   if (!skills?.length) return null;
 
   return (
-    <div className="space-y-4">
-      <h2 className="border-b-2 border-gray-300 pb-1 text-xl font-bold uppercase">
-        Skills
-      </h2>
-      <div className="grid grid-cols-3 gap-2">
-        {skills.map((skill, index) => (
-          <div key={index} className="text-sm">
-            • {skill}
-          </div>
+    <Section title="Skills" resumeData={resumeData}>
+      <div className="flex flex-wrap gap-2">
+        {skills.map((skill, idx) => (
+          <Badge
+            key={idx}
+            className="rounded-md px-3 py-1 text-sm text-white"
+            style={{ backgroundColor: resumeData.colorHex }}
+          >
+            {skill}
+          </Badge>
         ))}
       </div>
-    </div>
+    </Section>
   );
-}
-
-function CertificationsSection({ resumeData }: ResumeSectionProps) {
-  const { certifications } = resumeData;
-
-  if (!certifications?.length) return null;
-
-  return (
-    <div className="space-y-4">
-      <h2 className="border-b-2 border-gray-300 pb-1 text-xl font-bold uppercase">
-        Certifications
-      </h2>
-      <div className="space-y-2">
-        {certifications.map((cert, index) => (
-          <div key={index} className="text-sm">
-            <div className="font-semibold">{cert.name}</div>
-            {cert.issuer && (
-              <div className="italic">{cert.issuer}</div>
-            )}
-            {cert.date && (
-              <div>{formatDate(cert.date, "MMM yyyy")}</div>
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+};

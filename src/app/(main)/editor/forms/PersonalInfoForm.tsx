@@ -31,9 +31,9 @@ const PersonalInfoForm = ({
     city: resumeData.city ?? personalDetails.city ?? "",
     phone: resumeData.phone ?? personalDetails.phone ?? "",
     email: resumeData.email ?? personalDetails.email ?? "",
-    website: resumeData.website ?? personalDetails.website ?? "",
-    linkedin: resumeData.linkedin ?? personalDetails.linkedin ?? "",
-    github: resumeData.github ?? personalDetails.github ?? "",
+    // website: resumeData.website ?? personalDetails.website ?? "",
+    // linkedin: resumeData.linkedin ?? personalDetails.linkedin ?? "",
+    // github: resumeData.github ?? personalDetails.github ?? "",
     photo: undefined, // leave file uploads empty by default
   }), [
     resumeData, 
@@ -46,9 +46,9 @@ const PersonalInfoForm = ({
     resumeData.city, personalDetails.city,
     resumeData.phone, personalDetails.phone,
     resumeData.email, personalDetails.email,
-    resumeData.website, personalDetails.website,
-    resumeData.linkedin, personalDetails.linkedin,
-    resumeData.github, personalDetails.github,
+    // resumeData.website, personalDetails.website,
+    // resumeData.linkedin, personalDetails.linkedin,
+    // resumeData.github, personalDetails.github,
   ]);
 
   const form = useForm<PersonalInfoValues>({
@@ -219,7 +219,7 @@ const PersonalInfoForm = ({
               </FormItem>
             )}
           />
-          <FormField
+          {/* <FormField
             control={form.control}
             name="website"
             render={({ field }) => (
@@ -257,7 +257,7 @@ const PersonalInfoForm = ({
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
         </form>
       </Form>
     </div>
