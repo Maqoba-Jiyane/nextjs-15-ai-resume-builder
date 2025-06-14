@@ -42,7 +42,7 @@ const ClassicResumeRich = ({
     >
       <div
         className={cn(
-          "flex h-fit text-white space-y-8",
+          "flex h-full text-white space-y-8",
           !width && "invisible",
         )}
         style={{
