@@ -99,6 +99,11 @@ export async function POST(req: NextRequest) {
         const el = document.getElementById("resumePreviewContent");
         if (el) el.style.padding = "0px";
       });
+    }else{
+      await page.evaluate(() => {
+        const el = document.getElementById("resumePreviewContent");
+        if (el) el.style.paddingBottom = "0px";
+      });
     }
 
     const margin = template.template !== 'classic-resume-rich' ? { top: "5mm", bottom: "5mm", left: "5mm", right: "5mm" } : {}
