@@ -53,7 +53,7 @@ const ClassicResumeRich = ({
         ref={contentRef}
         id="resumePreviewContent"
       >
-        <aside className="w-1/3 bg-[#1A2A42] text-white p-6 space-y-8">
+        <aside className="w-1/3 bg-[#1A2A42] text-white p-6 space-y-8" id="aside">
           <div className="flex flex-col items-center">
             {photoSrc && (
               <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white mb-4">
