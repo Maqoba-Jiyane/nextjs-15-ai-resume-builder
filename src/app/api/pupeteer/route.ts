@@ -102,7 +102,7 @@ export async function POST(req: NextRequest) {
     }else{
       const styleUpdates = {
           "aside": { paddingBottom: "0px" },
-          "main": { padding: "0px" }
+          "main": { paddingBottom: "0px" }
       };
   
       await page.evaluate((updates) => {
