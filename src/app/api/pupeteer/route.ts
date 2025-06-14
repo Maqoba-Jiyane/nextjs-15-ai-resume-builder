@@ -15,14 +15,14 @@ export async function POST(req: NextRequest) {
     }
 
     const template = await prisma.resume.findUnique({
-      where: {id: resumeId},
-      select: {template: true}
-    })
+      where: { id: resumeId },
+      select: { template: true },
+    });
 
     browser = await puppeteer.launch({
       args: chromium.args,
       executablePath: await chromium.executablePath(
-        "https://github.com/Sparticuz/chromium/releases/download/v133.0.0/chromium-v133.0.0-pack.tar"
+        "https://github.com/Sparticuz/chromium/releases/download/v133.0.0/chromium-v133.0.0-pack.tar",
       ),
       headless: chromium.headless,
     });
@@ -34,16 +34,19 @@ export async function POST(req: NextRequest) {
     const clerkCookies = cookieStore
       .getAll()
       .filter(({ name }) =>
-        ["__session", "__client_uat", "__clerk_db_jwt", "__client"].some((prefix) =>
-          name.startsWith(prefix)
-        )
+        ["__session", "__client_uat", "__clerk_db_jwt", "__client"].some(
+          (prefix) => name.startsWith(prefix),
+        ),
       );
 
     for (const { name, value } of clerkCookies) {
       await page.setCookie({
         name,
         value,
-        domain: process.env.NODE_ENV === "production" ? "eonresume.co.za" : "localhost",
+        domain:
+          process.env.NODE_ENV === "production"
+            ? "eonresume.co.za"
+            : "localhost",
         path: "/",
         httpOnly: true,
         sameSite: "Lax",
@@ -61,30 +64,45 @@ export async function POST(req: NextRequest) {
       console.warn("⚠️ Not authenticated — attempting login via Clerk UI");
 
       await page.waitForSelector("#identifier-field", { visible: true });
-      await page.type("#identifier-field", process.env.CLERK_EMAIL!, { delay: 50 });
+      await page.type("#identifier-field", process.env.CLERK_EMAIL!, {
+        delay: 50,
+      });
 
-      await page.click('button.cl-formButtonPrimary');
+      await page.click("button.cl-formButtonPrimary");
 
       await page.waitForSelector('input[type="password"]', { visible: true });
-      await page.type('input[type="password"]', process.env.CLERK_PASSWORD!, { delay: 50 });
-
-      await page.waitForSelector('button[data-localization-key="formButtonPrimary"]', {
-        visible: true,
+      await page.type('input[type="password"]', process.env.CLERK_PASSWORD!, {
+        delay: 50,
       });
+
+      await page.waitForSelector(
+        'button[data-localization-key="formButtonPrimary"]',
+        {
+          visible: true,
+        },
+      );
 
       // Scroll and click the "Continue" button
       await page.evaluate(() => {
-        const btn = document.querySelector('button[data-localization-key="formButtonPrimary"]');
+        const btn = document.querySelector(
+          'button[data-localization-key="formButtonPrimary"]',
+        );
         if (btn) btn.scrollIntoView({ behavior: "auto", block: "center" });
       });
 
       await page.click('button[data-localization-key="formButtonPrimary"]');
 
       // Wait for navigation to complete after login
-      await page.waitForNavigation({ waitUntil: "networkidle0", timeout: 10000 });
+      await page.waitForNavigation({
+        waitUntil: "networkidle0",
+        timeout: 10000,
+      });
 
       // Navigate again to resume preview
-      await page.goto(previewUrl, { waitUntil: "networkidle0", timeout: 10000 });
+      await page.goto(previewUrl, {
+        waitUntil: "networkidle0",
+        timeout: 10000,
+      });
     }
 
     await page.emulateMediaType("screen");
@@ -94,26 +112,42 @@ export async function POST(req: NextRequest) {
     }
 
     // Remove padding on the PDF container
-    if (template.template !== 'classic-resume-rich') {
+    if (template.template !== "classic-resume-rich") {
       await page.evaluate(() => {
         const el = document.getElementById("resumePreviewContent");
         if (el) el.style.padding = "0px";
       });
-    }else{
+    } else {
       const styleUpdates = {
-          "aside": { paddingBottom: "0px" },
-          "main": { paddingBottom: "0px" }
+        aside: { paddingBottom: "0px" },
+        main: { paddingBottom: "0px" },
       };
-  
-      await page.evaluate((updates) => {
-          for (const [id, styles] of Object.entries(updates)) {
-              const el = document.getElementById(id);
-              if (el) Object.assign(el.style, styles);
-          }
-      }, styleUpdates);
-  }
 
-    const margin = template.template !== 'classic-resume-rich' ? { top: "5mm", bottom: "5mm", left: "5mm", right: "5mm" } : {}
+      await page.evaluate((updates) => {
+        for (const [id, styles] of Object.entries(updates)) {
+          const el = document.getElementById(id);
+          if (el) Object.assign(el.style, styles);
+        }
+      }, styleUpdates);
+    }
+
+    const shouldRender = await page.evaluate(() => {
+      // Define your data detection logic (examples):
+      return (
+        document.querySelector('.data-container')?.textContent?.trim() || // Check for a specific element with content
+        !document.querySelector('.empty-state') // Ensure no "empty" indicator exists
+      );
+    });
+    
+    if (!shouldRender) {
+      console.log('Skipping empty page');
+      return; // or close the page
+    }
+
+    const margin =
+      template.template !== "classic-resume-rich"
+        ? { top: "5mm", bottom: "5mm", left: "5mm", right: "5mm" }
+        : {};
 
     const pdfBuffer = await page.pdf({
       format: "a4",
