@@ -100,11 +100,18 @@ export async function POST(req: NextRequest) {
         if (el) el.style.padding = "0px";
       });
     }else{
-      await page.evaluate(() => {
-        const el = document.getElementById("aside");
-        if (el) el.style.paddingBottom = "0px";
-      });
-    }
+      const styleUpdates = {
+          "aside": { paddingBottom: "0px" },
+          "main": { padding: "0px" }
+      };
+  
+      await page.evaluate((updates) => {
+          for (const [id, styles] of Object.entries(updates)) {
+              const el = document.getElementById(id);
+              if (el) Object.assign(el.style, styles);
+          }
+      }, styleUpdates);
+  }
 
     const margin = template.template !== 'classic-resume-rich' ? { top: "5mm", bottom: "5mm", left: "5mm", right: "5mm" } : {}
 

@@ -236,7 +236,7 @@ const ClassicResumeRich = ({
           </section> */}
         </aside>
 
-        <main className="w-2/3 p-6 space-y-6 bg-white text-[#545454]">
+        <main className="w-2/3 p-6 space-y-6 bg-white text-[#545454]" id="main">
           <div className="flex flex-col py-3 mx-auto justify-center">
             <h1
               className="font-bold text-center uppercase"
