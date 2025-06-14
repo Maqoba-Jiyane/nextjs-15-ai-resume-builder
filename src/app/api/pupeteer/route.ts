@@ -101,7 +101,7 @@ export async function POST(req: NextRequest) {
       });
     }else{
       await page.evaluate(() => {
-        const el = document.getElementById("resumePreviewContent");
+        const el = document.getElementById("aside");
         if (el) el.style.paddingBottom = "0px";
       });
     }
