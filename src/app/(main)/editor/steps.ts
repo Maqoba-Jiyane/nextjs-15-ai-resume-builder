@@ -7,6 +7,7 @@ import SkillsForm from "./forms/SkillsForm";
 import SummaryForm from "./forms/SummaryForm";
 import JobDescriptionForm from "./forms/JobDescriptionForm";
 import TemplateSelectorForm from "./forms/TemplateSelectorForm";
+import CertificationForm from "./forms/CertificationForm";
 
 export const steps: {
   title: string;
@@ -38,6 +39,11 @@ export const steps: {
     title: "Education",
     component: EducationForm,
     key: "education",
+  },
+  {
+    title: "Certification",
+    component: CertificationForm,
+    key: "certification",
   },
   {
     title: "Skills",

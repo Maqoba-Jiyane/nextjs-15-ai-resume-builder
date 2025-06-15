@@ -7,12 +7,13 @@ import { JSX } from "react";
 // import ATS1 from "./ATS1";
 import ModernResume from "./ModernResume"; // Future template support
 import ClassicResumeRich from "./ClassicResumeRich";
+import ScienceEngineeringResume from "./ScienceEngineeringResume";
 
 interface ResumePreviewProps {
   resumeData: ResumeValues;
   contentRef?: React.Ref<HTMLDivElement>;
   className?: string;
-  template?: "classic" | "ats-1" | "modern" | "classic-resume-rich";
+  template?: "classic" | "ats-1" | "modern" | "classic-resume-rich" | "science-engineering-resume";
 }
 
 const ResumePreview = ({
@@ -20,6 +21,8 @@ const ResumePreview = ({
   contentRef,
   className,
 }: ResumePreviewProps) => {
+
+  console.log(resumeData.template)
   const templates: Record<string, JSX.Element> = {
     classic: (
       <ClassicResume
@@ -44,6 +47,13 @@ const ResumePreview = ({
     ),
     "classic-resume-rich": (
       <ClassicResumeRich
+        resumeData={resumeData}
+        className={className}
+        contentRef={contentRef}
+      />
+    ),
+    "science-engineering-resume": (
+      <ScienceEngineeringResume
         resumeData={resumeData}
         className={className}
         contentRef={contentRef}

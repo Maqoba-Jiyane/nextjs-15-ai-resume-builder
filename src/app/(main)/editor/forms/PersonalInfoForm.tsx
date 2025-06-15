@@ -219,7 +219,7 @@ const PersonalInfoForm = ({
               </FormItem>
             )}
           />
-          {/* <FormField
+          <FormField
             control={form.control}
             name="website"
             render={({ field }) => (
@@ -257,7 +257,7 @@ const PersonalInfoForm = ({
                 <FormMessage />
               </FormItem>
             )}
-          /> */}
+          />
         </form>
       </Form>
     </div>

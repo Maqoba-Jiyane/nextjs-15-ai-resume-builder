@@ -5,7 +5,8 @@ export const ResumeTemplates = {
   CLASSIC: "classic",
   ATS1: "ats-1",
   MODERN: "modern",
-  CLASSICRESUMERICH: 'classic-resume-rich'
+  CLASSICRESUMERICH: "classic-resume-rich",
+  SCIENCEENGINEERINGRESUME: 'science-engineering-resume',
 };
 
 const templateStyles = Object.values(ResumeTemplates);

@@ -53,3 +53,51 @@
   font-style: normal;
   font-display: swap; /* Optional: prevents invisible text while loading */
 }
+
+@font-face {
+  font-family: "NeueMachina-Regular";
+  src: url("/fonts/NeueMachina-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* Optional: prevents invisible text while loading */
+}
+
+@font-face {
+  font-family: "NeueMachina-Bold";
+  src: url("/fonts/NeueMachina-Bold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* Optional: prevents invisible text while loading */
+}
+
+@font-face {
+  font-family: "DMSans-Bold";
+  src: url("/fonts/DMSans-Bold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* Optional: prevents invisible text while loading */
+}
+
+@font-face {
+  font-family: "DMSans-Regular";
+  src: url("/fonts/DMSans-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* Optional: prevents invisible text while loading */
+}
+
+@font-face {
+  font-family: "Arimo-Bold";
+  src: url("/fonts/Arimo-Bold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* Optional: prevents invisible text while loading */
+}
+
+@font-face {
+  font-family: "Arimo-Regular";
+  src: url("/fonts/Arimo-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* Optional: prevents invisible text while loading */
+}
