@@ -95,13 +95,11 @@ export async function POST(req: NextRequest) {
       // Wait for navigation to complete after login
       await page.waitForNavigation({
         waitUntil: "networkidle0",
-        timeout: 10000,
       });
 
       // Navigate again to resume preview
       await page.goto(previewUrl, {
         waitUntil: "networkidle0",
-        timeout: 10000,
       });
     }
 
