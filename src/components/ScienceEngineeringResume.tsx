@@ -196,7 +196,7 @@ const Section = ({
             {item.description?.split("•").map(
               (line, idx) =>
                 line.trim() && (
-                  <li key={idx} className="text-sm ml-4 list-disc">
+                  <li key={idx} className="text-sm ml-4 list-disc pl-4 -indent-5">
                     {line.trim()}
                   </li>
                 ),
