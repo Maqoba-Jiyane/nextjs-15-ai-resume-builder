@@ -1,19 +1,21 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
-import { ResumeServerData, UserServerData } from "./types"
-import { ResumeValues, UserDetailsValues } from "./validation"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+import { ResumeServerData, UserServerData } from "./types";
+import { ResumeValues, UserDetailsValues } from "./validation";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
-export function fileReplacer(key:unknown, value: unknown) {
-  return value instanceof File ? {
-    name: value.name,
-    size: value.size,
-    type: value.type,
-    lastModified: value.lastModified
-  } : value
+export function fileReplacer(key: unknown, value: unknown) {
+  return value instanceof File
+    ? {
+        name: value.name,
+        size: value.size,
+        type: value.type,
+        lastModified: value.lastModified,
+      }
+    : value;
 }
 
 export function mapToResumeValues(data: ResumeServerData): ResumeValues {
@@ -29,6 +31,9 @@ export function mapToResumeValues(data: ResumeServerData): ResumeValues {
     country: data.country || undefined,
     phone: data.phone || undefined,
     email: data.email || undefined,
+    website: data.website || undefined,
+    github: data.github || undefined,
+    linkedin: data.linkedin || undefined,
     jobDescription: data.jobDescription || undefined,
     workExperiences: data.workExperiences.map((exp) => ({
       position: exp.position || undefined,
@@ -45,15 +50,23 @@ export function mapToResumeValues(data: ResumeServerData): ResumeValues {
       startDate: edu.startDate ? new Date(edu.startDate) : undefined,
       endDate: edu.endDate ? new Date(edu.endDate) : undefined,
     })),
+    certifications: data.certifications.map((cert) => ({
+      name: cert.name || undefined,
+      issuer: cert.issuer || undefined,
+      credentialUrl: cert.credentialUrl || undefined,
+      date: cert.date || undefined,
+    })),
     skills: data.skills,
     borderStyle: data.borderStyle,
     colorHex: data.colorHex,
     summary: data.summary || undefined,
-    template: data.template
+    template: data.template,
   };
 }
 
-export function mapToUserDetailsValues(data: UserServerData): UserDetailsValues {
+export function mapToUserDetailsValues(
+  data: UserServerData,
+): UserDetailsValues {
   return {
     firstName: data.firstName || undefined,
     lastName: data.lastName || undefined,
@@ -65,12 +78,10 @@ export function mapToUserDetailsValues(data: UserServerData): UserDetailsValues 
     linkedin: data.linkedin || undefined,
     github: data.github || undefined,
     email: data.email || undefined, // guaranteed by schema
-    prompts: data.workExperiencePrompts.map((prop) => (
-      {
-        prompt: prop.prompt || undefined,
-        title: prop.title || undefined,
-      }
-    )),
+    prompts: data.workExperiencePrompts.map((prop) => ({
+      prompt: prop.prompt || undefined,
+      title: prop.title || undefined,
+    })),
     educations: data.educations.map((edu) => ({
       degree: edu.degree || undefined,
       school: edu.school || undefined,
