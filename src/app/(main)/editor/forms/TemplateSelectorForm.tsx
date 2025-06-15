@@ -13,16 +13,24 @@ import { useForm } from "react-hook-form";
 
 const TEMPLATES = [
   {
-    id: "ats-1",
-    name: "ATS 1",
-    previewImage: "/templates/ats-1.png",
-    description: "Optimized for applicant tracking systems",
-  },
-  {
     id: "classic",
     name: "CLASSIC",
-    previewImage: "/templates/classic.png",
+    previewImage: "/assets/templates/Classic.jpg",
     description: "Traditional professional layout",
+  },
+  {
+    id: "ats-1",
+    name: "ATS Friendly",
+    previewImage:
+      "/assets/templates/ScienceEngineeringResume.png",
+      description: "Graduate format",
+  },
+  {
+    id: "classic-resume-rich",
+    name: "Classic Rich",
+    previewImage:
+      "/assets/templates/ClassicResumeRich.png",
+      description: "High graphics format",
   },
 ] as const;
 
