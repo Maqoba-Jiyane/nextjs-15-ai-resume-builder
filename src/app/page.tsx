@@ -10,13 +10,13 @@ const templates = [
     image: "/assets/templates/Classic.jpg",
   },
   {
-    name: "Modern",
-    image: "/assets/templates/ClassicResumeRich.png",
-  },
-  {
     name: "ATS Friendly",
     image:
       "/assets/templates/ScienceEngineeringResume.png",
+  },
+  {
+    name: "Modern",
+    image: "/assets/templates/ClassicResumeRich.png",
   },
 ];
 
