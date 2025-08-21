@@ -6,7 +6,6 @@ import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/toaster";
 import Script from "next/script";
 import Navbar from "./Navbar";
-import Script from 'next/script';
 
 const inter = Inter({ subsets: ["latin"] });
 
