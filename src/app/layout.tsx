@@ -6,6 +6,7 @@ import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/toaster";
 import Script from "next/script";
 import Navbar from "./Navbar";
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -45,8 +46,13 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <head>
-          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8358630090142471"
-     crossorigin="anonymous"></script>
+                    <Script
+            id="adsbygoogle"
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8358630090142471"
+            async
+            crossOrigin="anonymous"
+            strategy="beforeInteractive"
+          />
           <Script
             async
             src="https://www.googletagmanager.com/gtag/js?id=G-9FFS7J8YWB"
