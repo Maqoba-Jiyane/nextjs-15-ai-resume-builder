@@ -45,6 +45,8 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <head>
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8358630090142471"
+     crossorigin="anonymous"></script>
           <Script
             async
             src="https://www.googletagmanager.com/gtag/js?id=G-9FFS7J8YWB"
