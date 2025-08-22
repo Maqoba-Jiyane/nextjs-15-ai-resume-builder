@@ -12,7 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ResumeServerData } from "@/lib/types";
 import { mapToResumeValues } from "@/lib/utils";
 import { formatDate } from "date-fns";
-import { CreditCard, MoreVertical, ShipWheel, Trash2 } from "lucide-react";
+import { MoreVertical, ShipWheel, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState, useTransition } from "react";
 import deleteResume, { updateResumeForPayment } from "./actions";
@@ -111,14 +111,13 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
           size="lg"
           variant="premium"
           onClick={
-            resume.paid
-              ? () => handlePrint()
-              : () => myClientComponent(resume.id, discountPercentage)
+              () => handlePrint()
+              
           }
           className="flex w-full items-center justify-center gap-2"
           disabled={downloading}
         >
-          {resume.paid ? (
+          {
             downloading ? (
               <>
                 <ShipWheel className="h-4 w-4 animate-spin" />
@@ -126,10 +125,7 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
               </>
             ) : (
               "Download"
-            )
-          ) : (
-            "Pay"
-          )}
+            )}
         </Button>
         <DownloadConfirmationDialog
           open={showDeleteConfirmation}
@@ -156,7 +152,7 @@ interface MoreMenuProps {
   onPrintClick: () => void;
 }
 
-function MoreMenu({ resumeId, onPrintClick }: MoreMenuProps) {
+function MoreMenu({ resumeId }: MoreMenuProps) {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   return (
@@ -172,13 +168,13 @@ function MoreMenu({ resumeId, onPrintClick }: MoreMenuProps) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem
+          {/* <DropdownMenuItem
             className="flex items-center gap-2"
             onClick={onPrintClick}
           >
             <CreditCard className="size-4" />
             Pay
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
           <DropdownMenuItem
             className="flex items-center gap-2"
             onClick={() => setShowDeleteConfirmation(true)}

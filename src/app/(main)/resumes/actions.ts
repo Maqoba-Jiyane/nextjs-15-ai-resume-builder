@@ -27,6 +27,8 @@ const deleteResume = async (id: string) => {
     await del(resume.photoUrl);
   }
 
+  console.log('Delete: ', id)
+
   await prisma.resume.delete({
     where: {
       id,

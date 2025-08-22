@@ -34,7 +34,7 @@ model Resume {
   photoUrl String?
   colorHex String @default("#000000")
   borderStyle String @default("squircle")
-  template String @default("CLASSIC")
+  template String @default("classic")
   
   // Content
   summary String?
@@ -59,7 +59,7 @@ model Resume {
 
   user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
-  Payment Payment[]
+  // Payment Payment[]
   
 
   @@map("resumes")
@@ -226,18 +226,18 @@ model UserEducation {
   @@map("user_educations")
 }
 
-model Payment {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  checkoutId  String   @unique
-  userId      String
-  resumeId    String
-  referralCode  String?
-  resume      Resume   @relation(fields: [resumeId], references: [id])
-  amountPaid  Float
-  paidAt      DateTime
+// model Payment {
+//   id          String   @id @default(auto()) @map("_id") @db.ObjectId
+//   checkoutId  String   @unique
+//   userId      String
+//   resumeId    String
+//   referralCode  String?
+//   resume      Resume   @relation(fields: [resumeId], references: [id])
+//   amountPaid  Float
+//   paidAt      DateTime
 
-  @@map("resume_payments")
-}
+//   @@map("resume_payments")
+// }
 
 model Referral {
   id           String   @id @default(uuid()) @map("_id")

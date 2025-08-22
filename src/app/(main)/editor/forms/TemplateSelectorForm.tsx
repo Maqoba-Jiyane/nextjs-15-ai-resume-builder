@@ -14,7 +14,7 @@ import { useForm } from "react-hook-form";
 const TEMPLATES = [
   {
     id: "classic",
-    name: "CLASSIC",
+    name: "classic",
     previewImage: "/assets/templates/Classic.jpg",
     description: "Traditional professional layout",
   },
