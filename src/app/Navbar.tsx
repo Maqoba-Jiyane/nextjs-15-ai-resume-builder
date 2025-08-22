@@ -60,7 +60,7 @@ function Navbar() {
             >
               <Link href="/" className="hover:text-blue-600">Home</Link>
               <Link href="/resumes" className="hover:text-blue-600">Resumes</Link>
-              <Link href="https://www.employmentecho.co.za" className="hover:text-blue-600">Jobs</Link>
+              <Link href="https://www.employmentecho.co.za" target="_blank" className="hover:text-blue-600">Jobs</Link>
               <Link href="/blog" className="hover:text-blue-600">Blog</Link>
               <Link href="/contact-us" className="hover:text-blue-600">Contact</Link>
               
