@@ -1,56 +1,93 @@
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { CheckCircle } from "lucide-react";
-import TestimonialsSection from "@/components/Testimonials";
+
+// ⬇️ Lazy-load heavy testimonials (client-only)
+const TestimonialsSection = dynamic(() => import("@/components/Testimonials"), {
+  loading: () => <div className="py-20 text-center text-sm text-muted-foreground">Loading…</div>,
+});
+
+// ⬇️ Move benefits up (fix TDZ) + update copy to reflect FREE
+const benefits = [
+  {
+    title: "💸 100% Free — Unlimited Downloads",
+    description: "Build and download your resume at no cost. No credit card. No subscription.",
+  },
+  {
+    title: "📄 ATS-Friendly Designs",
+    description: "Professional templates built to pass Applicant Tracking Systems.",
+  },
+  {
+    title: "🧠 Tailored to Job Descriptions",
+    description: "Paste a job post and we’ll align your resume with the right keywords.",
+  },
+  {
+    title: "🎯 SMART Skills & Summaries",
+    description: "AI suggests action-oriented bullets based on your actual experience.",
+  },
+  {
+    title: "⚡ Instant, On-Demand",
+    description: "Start building immediately. Export in minutes.",
+  },
+  {
+    title: "🌍 Built for South Africans",
+    description: "Localised styles and content structure that recruiters expect.",
+  },
+] as const;
 
 const templates = [
-  {
-    name: "Classic",
-    image: "/assets/templates/Classic.jpg",
-  },
-  {
-    name: "ATS Friendly",
-    image:
-      "/assets/templates/ScienceEngineeringResume.png",
-  },
-  {
-    name: "Modern",
-    image: "/assets/templates/ClassicResumeRich.png",
-  },
-];
+  { name: "Classic", image: "/assets/templates/Classic.jpg" },
+  { name: "ATS Friendly", image: "/assets/templates/ScienceEngineeringResume.png" },
+  { name: "Modern", image: "/assets/templates/ClassicResumeRich.png" },
+] as const;
 
 export default function LandingPage() {
   return (
     <main className="bg-gray-50 text-gray-900 w-full">
-      {/* Hero Section */}
-      <section className="bg-white py-20 px-6 sm:px-12 text-center flex flex-col items-center">
+      {/* Hero */}
+      <section className="bg-white py-16 sm:py-20 px-6 sm:px-12 text-center flex flex-col items-center">
         <Image
           src="/assets/logo.png"
-          alt="Eon Resume Logo"
+          alt="Eon Resume"
           width={200}
           height={100}
+          priority
         />
-        <h1 className="text-4xl sm:text-5xl font-extrabold mt-8 max-w-2xl">
-          Get Interview-Winning Resumes—AI-Crafted & ATS‑Optimized in Minutes
+        {/* FREE badge */}
+        <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-1.5 text-emerald-700 ring-1 ring-emerald-200">
+          <span className="inline-block size-2 rounded-full bg-emerald-500" />
+          <span className="text-sm font-medium">Resumes are FREE — unlimited downloads</span>
+        </div>
+
+        <h1 className="text-4xl sm:text-5xl font-extrabold mt-6 max-w-3xl leading-tight">
+          AI-Crafted, ATS-Optimized Resumes in Minutes — Free Forever
         </h1>
-        <p className="text-lg mt-4 max-w-xl text-gray-600">
-          One-time payment. Professional templates. South African pricing.
-          Customize colors & upload your photo.
+        <p className="text-lg mt-4 max-w-2xl text-gray-600">
+          Professional templates, localised for South Africa. Start now — no sign-up required.
         </p>
-        <Button asChild className="mt-6 text-lg px-10 py-4" variant="premium">
-          <Link href="/resumes">Create My Resume Now</Link>
+
+        <Button asChild className="mt-6 text-lg px-8 py-4" aria-label="Create my resume now">
+          <Link href="/resumes" prefetch>
+            Create My Resume — It’s Free
+          </Link>
         </Button>
+
+        {/* Social proof mini */}
+        <p className="mt-3 text-xs text-gray-500">
+          No ads. No paywalls. Export as PDF or DOCX.
+        </p>
       </section>
 
-      {/* Feature Highlights */}
-      <section className="py-20 px-6 sm:px-12 bg-white">
+      {/* Benefits */}
+      <section className="py-16 sm:py-20 px-6 sm:px-12 bg-white">
         <div className="max-w-5xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-10">Why Choose Eon Resume?</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-left">
-            {benefits.map((item, index) => (
-              <div key={index} className="flex gap-4">
-                <CheckCircle className="text-blue-600 mt-1" />
+            {benefits.map((item, i) => (
+              <div key={i} className="flex gap-4">
+                <CheckCircle className="mt-1 size-5 text-emerald-600" aria-hidden="true" />
                 <div>
                   <h3 className="font-semibold text-lg">{item.title}</h3>
                   <p className="text-gray-600">{item.description}</p>
@@ -61,47 +98,59 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Templates Preview */}
+      {/* Templates */}
       <section className="bg-gray-100 py-16 px-6 sm:px-12 text-center">
         <h2 className="text-3xl font-bold mb-10">Choose a Template</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          {templates.map((template, i) => (
-            <div
-              key={i}
-              className="bg-white p-4 rounded shadow hover:shadow-lg"
-            >
-              <div className="w-full flex">
+          {templates.map((t, i) => (
+            <div key={i} className="bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow">
+              <div className="w-full aspect-[4/3] relative rounded-md overflow-hidden ring-1 ring-gray-200">
                 <Image
-                  src={template.image}
-                  alt={template.name}
-                  height={48}
-                  width={240} className="w-full"
+                  src={t.image}
+                  alt={`${t.name} resume template`}
+                  fill
+                  sizes="(max-width: 640px) 100vw, 33vw"
+                  className="object-contain"
                 />
               </div>
-              <p className="capitalize font-semibold">{template.name}</p>
+              <p className="mt-3 font-semibold">{t.name}</p>
             </div>
           ))}
         </div>
+        <Button asChild className="mt-8">
+          <Link href="/resumes" prefetch>
+            Start for Free
+          </Link>
+        </Button>
       </section>
 
       {/* Testimonials */}
       <TestimonialsSection />
 
-      {/* Pricing Section */}
-      <section className="py-20 px-6 sm:px-12 bg-white text-center">
+      {/* “Pricing” → Free Forever */}
+      <section className="py-16 sm:py-20 px-6 sm:px-12 bg-white text-center">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold mb-6">Choose Your Plan</h2>
-          <p className="text-gray-600 mb-12">Pay once. No subscriptions.</p>
+          <h2 className="text-3xl font-bold mb-4">Simple Pricing</h2>
+          <p className="text-gray-600 mb-10">Everything you need to get hired — at no cost.</p>
+
           <div className="grid md:grid-cols-1 gap-8">
-            <div className="bg-gray-50 p-8 rounded shadow-lg">
-              <h3 className="text-xl font-bold text-blue-600">Single Resume</h3>
-              <p className="text-4xl font-extrabold mt-2 mb-4">R60</p>
-              <p className="text-sm text-gray-500 mb-6">
-                Instant download after customization.
-              </p>
-              <Button asChild variant="premium">
-                <Link href="/resumes">Build Now</Link>
+            <div className="bg-gray-50 p-8 rounded-xl shadow-lg ring-1 ring-gray-200">
+              <h3 className="text-xl font-bold text-emerald-700">Free Forever</h3>
+              <p className="text-4xl font-extrabold mt-2 mb-4">R0</p>
+              <ul className="text-left max-w-md mx-auto space-y-2 text-gray-700">
+                <li>• Unlimited resume builds & downloads (PDF)</li>
+                <li>• ATS-ready templates</li>
+                <li>• AI summaries & bullet suggestions</li>
+                <li>• Match keywords to job descriptions</li>
+              </ul>
+              <Button asChild className="mt-6" aria-label="Build your free resume">
+                <Link href="/resumes" prefetch>
+                  Build Your Free Resume
+                </Link>
               </Button>
+              <p className="mt-3 text-xs text-gray-500">
+                Optional add-ons coming soon (cover letters, advanced ATS checks).
+              </p>
             </div>
           </div>
         </div>
@@ -109,107 +158,14 @@ export default function LandingPage() {
 
       {/* CTA Footer */}
       <section className="py-12 px-6 sm:px-12 bg-gray-900 text-white text-center">
-        <h2 className="text-2xl sm:text-3xl font-bold mb-4">
-          Ready to Get Started?
-        </h2>
-        <p className="mb-6">
-          Craft your professional, ATS-ready resume in minutes.
-        </p>
-        <Button asChild className="text-lg px-10 py-4" variant="premium">
-          <Link href="/resumes">Create My Resume Now</Link>
+        <h2 className="text-2xl sm:text-3xl font-bold mb-3">Ready to Get Started?</h2>
+        <p className="mb-6 opacity-90">Craft your professional, ATS-ready resume in minutes — free.</p>
+        <Button asChild className="text-lg px-8 py-4" aria-label="Create my free resume">
+          <Link href="/resumes" prefetch>
+            Create My Free Resume
+          </Link>
         </Button>
       </section>
     </main>
   );
 }
-
-const benefits = [
-  {
-    title: "🎯 SMART Skills & Summaries",
-    description:
-      "We don’t guess your skills—our AI uses SMART logic based on your real experience.",
-  },
-  {
-    title: "⚡ Instant, On-Demand Resumes",
-    description:
-      "Pay only for what you need. Get one resume for R60 with no subscriptions.",
-  },
-  {
-    title: "🧠 Tailored to Job Descriptions",
-    description:
-      "Paste any job post and we’ll match your resume with relevant keywords.",
-  },
-  {
-    title: "📄 ATS-Friendly Designs",
-    description:
-      "Professional templates built to pass Applicant Tracking Systems.",
-  },
-  {
-    title: "🚀 Start Without an Account",
-    description: "Begin building immediately. Only pay when ready to download.",
-  },
-  {
-    title: "🌍 Built for South Africans",
-    description:
-      "Affordable pricing with resume styles suited for the SA job market.",
-  },
-];
-
-// const testimonials = [
-//   {
-//     name: "Olivia Jacobs",
-//     title: "Software Engineer",
-//     testimonial:
-//       "Eon Resume made my job search a lot easier! The resume builder is intuitive, and it helped me land interviews quickly.",
-//     image:
-//       "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//   },
-//   {
-//     name: "Thato Mokoena",
-//     title: "Software Developer",
-//     testimonial:
-//       "The resume builder on Eon Resume helped me to perfectly highlight my skills and experience, which led to multiple interview invitations.",
-//     image:
-//       "https://images.unsplash.com/photo-1565884280295-98eb83e41c65?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//   },
-//   {
-//     name: "Mahlatsi Masemula",
-//     title: "Marketing Intern",
-//     testimonial:
-//       "Eon Resume made my job search a lot easier! The resume builder is intuitive, and it helped me land interviews quickly.",
-//     image:
-//       "https://images.unsplash.com/photo-1531727991582-cfd25ce79613?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//   },
-//   {
-//     name: "Zanele Ndlovu",
-//     title: "HR Specialist",
-//     testimonial:
-//       "I used Eon Resume to build my resume and was blown away by how easy and effective it was. It streamlined my job application process.",
-//     image:
-//       "https://images.unsplash.com/photo-1611432579402-7037e3e2c1e4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmxhY2slMjB3b21hbnxlbnwwfHwwfHx8MA%3D%3D",
-//   },
-//   {
-//     name: "Aarav Patel",
-//     title: "Marketing Manager",
-//     testimonial:
-//       "The AI-powered resume builder is a game-changer. It saved me so much time and helped me craft the perfect resume.",
-//     image:
-//       "https://images.unsplash.com/photo-1664575602554-2087b04935a5?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//   },
-//   {
-//     name: "Mpho Khumalo",
-//     title: "UX Designer",
-//     testimonial:
-//       "Eon Resume made it so much easier for me to structure my portfolio and resume. I received great feedback from employers, thanks to its professional layout.",
-//     image:
-//       "https://images.unsplash.com/photo-1532136672867-8eff8c949b63?q=80&w=1372&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//   },
-//   {
-//     name: "Robert Brown",
-//     title: "Graphic Designer",
-//     testimonial:
-//       "Eon Resume helped me present my skills and experience in a more professional way, leading to several job offers.",
-//     image:
-//       "https://images.unsplash.com/flagged/photo-1552054814-8c580ce130d1?q=80&w=1398&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//   },
-// ];
