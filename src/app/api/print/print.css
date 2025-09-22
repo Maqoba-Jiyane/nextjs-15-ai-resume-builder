@@ -1,0 +1,5 @@
+/* print.css */
+@page { size: A4; margin: 10mm; }
+* { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.resume-a4 { break-inside: avoid; page-break-inside: avoid; }
+h1, h2, h3 { break-after: avoid; }

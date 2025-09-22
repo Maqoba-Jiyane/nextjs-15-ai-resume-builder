@@ -42,9 +42,9 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
     const template = resume.template;
     console.log(template);
     if (template === "classic") {
-      apiRoute = "api/pupeteer";
+      apiRoute = "api/print";
     } else {
-      apiRoute = "api/pupeteer";
+      apiRoute = "api/print";
     }
 
     try {
