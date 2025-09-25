@@ -1,10 +1,11 @@
-
+import chromium from "@sparticuz/chromium";
+import puppeteer from "puppeteer-core";
 import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
 import prisma from "@/lib/prisma";
-import { getBrowser } from "@/lib/browser";
 
 export async function POST(req: NextRequest) {
+  let browser = null;
 
   try {
     const { resumeId } = await req.json();
@@ -18,7 +19,13 @@ export async function POST(req: NextRequest) {
       select: { template: true },
     });
 
-    const browser = await getBrowser();
+    browser = await puppeteer.launch({
+      args: chromium.args,
+      executablePath: await chromium.executablePath(
+        "https://github.com/Sparticuz/chromium/releases/download/v133.0.0/chromium-v133.0.0-pack.tar",
+      ),
+      headless: chromium.headless,
+    });
 
     const page = await browser.newPage();
 
@@ -146,9 +153,6 @@ export async function POST(req: NextRequest) {
       margin,
     });
 
-    
-    await page.close();         // close pages
-
     return new Response(pdfBuffer, {
       status: 200,
       headers: {
@@ -160,12 +164,12 @@ export async function POST(req: NextRequest) {
     console.error("❌ Error generating resume PDF:", error);
     return new Response("Failed to generate PDF", { status: 500 });
   } finally {
-    // if (browser) {
-    //   try {
-    //     await browser.close();
-    //   } catch (err) {
-    //     console.warn("⚠️ Failed to close browser:", err);
-    //   }
-    // }
+    if (browser) {
+      try {
+        await browser.close();
+      } catch (err) {
+        console.warn("⚠️ Failed to close browser:", err);
+      }
+    }
   }
 }
