@@ -1,175 +1,147 @@
-import chromium from "@sparticuz/chromium";
-import puppeteer from "puppeteer-core";
-import { cookies } from "next/headers";
-import { NextRequest } from "next/server";
+// app/api/puppeteer/route.ts
+import type { NextRequest } from "next/server";
 import prisma from "@/lib/prisma";
+import { verifyResumeToken } from "@/lib/server/jwt";
+import { getBrowser } from "@/lib/launcher";
+import type { Page } from "puppeteer-core";
 
-export async function POST(req: NextRequest) {
-  let browser = null;
+export const runtime = "nodejs";
+export const maxDuration = 60;
+
+// A4 @ ~96dpi
+const A4_VIEWPORT = { width: 794, height: 1123, deviceScaleFactor: 2 } as const;
+const NAV_TIMEOUT_MS = 30_000;
+const PDF_TIMEOUT_MS = 30_000;
+
+/** Navigate & wait for CSS + webfonts to be ready (stable snapshot). */
+async function gotoStable(page: Page, url: string): Promise<void> {
+  await page.goto(url, { waitUntil: "networkidle0", timeout: NAV_TIMEOUT_MS });
+
+  // Wait for webfonts if present
+  try {
+    await page.evaluate(async () => {
+      const fonts = (document as unknown as { fonts?: { ready?: Promise<void> } }).fonts;
+      if (fonts?.ready) await fonts.ready;
+    });
+  } catch {
+    /* non-fatal */
+  }
+}
+
+/** Build the preview URL once (keeps encoding consistent). */
+function buildPreviewUrl(origin: string, token: string): string {
+  return `${origin}/preview-for-download?token=${encodeURIComponent(token)}`;
+}
+
+/** Minimal 3p/asset filtering: keep fonts & styles, block heavy/analytics. */
+function attachRequestInterception(page: Page): void {
+  page.on("request", (req) => {
+    const type = req.resourceType();
+    const url = req.url();
+
+    if (type === "image" || type === "media") return req.abort();
+    if (/\b(googletagmanager|google-analytics|gtag|segment|mixpanel|clarity)\b/i.test(url)) {
+      return req.abort();
+    }
+    return req.continue();
+  });
+}
+
+/** Injects print CSS & disables dark mode early. */
+async function injectPrintStyles(page: Page, isClassicRich: boolean): Promise<void> {
+  await page.evaluateOnNewDocument((classic: boolean) => {
+    // Force light theme
+    document.documentElement.classList.remove("dark");
+    document.documentElement.setAttribute("data-theme", "light");
+
+    const css = `
+      @page { size: A4; margin: 0; }
+      :root { color-scheme: light; }
+      html, body { margin: 0; padding: 0; background: #fff !important; }
+      ${!classic ? "#resumePreviewContent{padding:0!important;}" : ""}
+      ${classic ? "#aside{padding-bottom:0!important;} #main{padding-bottom:0!important;}" : ""}
+    `;
+    const style = document.createElement("style");
+    style.textContent = css;
+    document.head.appendChild(style);
+  }, isClassicRich);
+
+  // Prefer screen CSS rules; keep print backgrounds
+  await page.emulateMediaType("screen");
+  await page.emulateMediaFeatures([{ name: "prefers-color-scheme", value: "light" }]);
+}
+
+/** Basic, consistent 4xx/5xx responses */
+function httpError(message: string, status: number): Response {
+  return new Response(message, { status, headers: { "Content-Type": "text/plain" } });
+}
+
+export async function POST(req: NextRequest): Promise<Response> {
+  let page: Page | null = null;
 
   try {
-    const { resumeId } = await req.json();
+    const token = req.nextUrl.searchParams.get("token");
+    if (!token) return httpError("Missing token", 400);
 
-    if (!resumeId) {
-      return new Response("Missing resumeId", { status: 400 });
-    }
+    const resumeId = await verifyResumeToken(token); // throws if invalid/expired
+    if (!resumeId) return httpError("Invalid token", 401);
 
-    const template = await prisma.resume.findUnique({
+    const resumeMeta = await prisma.resume.findUnique({
       where: { id: resumeId },
       select: { template: true },
     });
+    if (!resumeMeta) return httpError("Resume template not found", 404);
 
-    browser = await puppeteer.launch({
-      args: chromium.args,
-      executablePath: await chromium.executablePath(
-        "https://github.com/Sparticuz/chromium/releases/download/v133.0.0/chromium-v133.0.0-pack.tar",
-      ),
-      headless: chromium.headless,
-    });
+    const browser = await getBrowser();
+    page = await browser.newPage();
 
-    const page = await browser.newPage();
+    // Allow styles & fonts, block only heavy/analytics
+    await page.setRequestInterception(true);
+    attachRequestInterception(page);
 
-    // Add Clerk cookies for session
-    const cookieStore = await cookies();
-    const clerkCookies = cookieStore
-      .getAll()
-      .filter(({ name }) =>
-        ["__session", "__client_uat", "__clerk_db_jwt", "__client"].some(
-          (prefix) => name.startsWith(prefix),
-        ),
-      );
+    await page.setViewport(A4_VIEWPORT);
+    await injectPrintStyles(page, resumeMeta.template === "classic-resume-rich");
 
-    for (const { name, value } of clerkCookies) {
-      await page.setCookie({
-        name,
-        value,
-        domain:
-          process.env.NODE_ENV === "production"
-            ? "eonresume.co.za"
-            : "localhost",
-        path: "/",
-        httpOnly: true,
-        sameSite: "Lax",
-        secure: process.env.NODE_ENV === "production",
-      });
-    }
+    const previewUrl = buildPreviewUrl(req.nextUrl.origin, token);
+    await gotoStable(page, previewUrl);
 
-    const origin = req.nextUrl.origin;
-    const previewUrl = `${origin}/preview-for-download?resumeId=${resumeId}`;
+    // If your preview enforces auth by redirecting, fail fast.
+    if (page.url().includes("/sign-in")) return httpError("Unauthorized", 401);
 
-    await page.goto(previewUrl, { waitUntil: "networkidle0" });
-
-    // 🔐 If redirected to Clerk sign-in page, simulate login
-    if (page.url().includes("/sign-in")) {
-      console.warn("⚠️ Not authenticated — attempting login via Clerk UI");
-
-      await page.waitForSelector("#identifier-field", { visible: true });
-      await page.type("#identifier-field", process.env.CLERK_EMAIL!, {
-        delay: 50,
-      });
-
-      await page.click("button.cl-formButtonPrimary");
-
-      await page.waitForSelector('input[type="password"]', { visible: true });
-      await page.type('input[type="password"]', process.env.CLERK_PASSWORD!, {
-        delay: 50,
-      });
-
-      await page.waitForSelector(
-        'button[data-localization-key="formButtonPrimary"]',
-        {
-          visible: true,
-        },
-      );
-
-      // Scroll and click the "Continue" button
-      await page.evaluate(() => {
-        const btn = document.querySelector(
-          'button[data-localization-key="formButtonPrimary"]',
-        );
-        if (btn) btn.scrollIntoView({ behavior: "auto", block: "center" });
-      });
-
-      await page.click('button[data-localization-key="formButtonPrimary"]');
-
-      // Wait for navigation to complete after login
-      await page.waitForNavigation({
-        waitUntil: "networkidle0",
-      });
-
-      // Navigate again to resume preview
-      await page.goto(previewUrl, {
-        waitUntil: "networkidle0",
-      });
-    }
-
-    await page.emulateMediaType("screen");
-
-    if (!template) {
-      return new Response("Resume template not found", { status: 404 });
-    }
-
-    // Remove padding on the PDF container
-    if (template.template !== "classic-resume-rich") {
-      await page.evaluate(() => {
-        const el = document.getElementById("resumePreviewContent");
-        if (el) el.style.padding = "0px";
-      });
-    } else {
-      const styleUpdates = {
-        aside: { paddingBottom: "0px" },
-        main: { paddingBottom: "0px" },
-      };
-
-      await page.evaluate((updates) => {
-        for (const [id, styles] of Object.entries(updates)) {
-          const el = document.getElementById(id);
-          if (el) Object.assign(el.style, styles);
-        }
-      }, styleUpdates);
-    }
-
+    // Quick guard: avoid blank PDFs
     const shouldRender = await page.evaluate(() => {
-      // Define your data detection logic (examples):
-      return (
-        document.querySelector('.data-container')?.textContent?.trim() || // Check for a specific element with content
-        !document.querySelector('.empty-state') // Ensure no "empty" indicator exists
-      );
+      const hasData = !!document.querySelector(".data-container")?.textContent?.trim();
+      const isEmpty = !!document.querySelector(".empty-state");
+      return hasData || !isEmpty;
     });
-    
-    if (!shouldRender) {
-      console.log('Skipping empty page');
-      return; // or close the page
-    }
+    if (!shouldRender) return new Response(null, { status: 204 });
 
-    const margin =
-      template.template !== "classic-resume-rich"
-        ? { top: "5mm", bottom: "5mm", left: "5mm", right: "5mm" }
-        : {};
-
-    const pdfBuffer = await page.pdf({
-      format: "a4",
+    const pdf = await page.pdf({
+      format: "A4",
       printBackground: true,
-      margin,
+      preferCSSPageSize: true,
+      timeout: PDF_TIMEOUT_MS,
     });
 
-    return new Response(pdfBuffer, {
+    return new Response(pdf, {
       status: 200,
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `inline; filename=resume_${resumeId}.pdf`,
+        // Set caching to taste; "no-store" is safe, hash-by-content is better
+        "Cache-Control": "no-store",
       },
     });
-  } catch (error) {
-    console.error("❌ Error generating resume PDF:", error);
-    return new Response("Failed to generate PDF", { status: 500 });
+  } catch (err) {
+    // If your launcher keeps a singleton and Chrome crashes,
+    // consider resetting it there so the next request relaunches cleanly.
+    console.error("❌ Error generating resume PDF:", err);
+    return httpError("Failed to generate PDF", 500);
   } finally {
-    if (browser) {
-      try {
-        await browser.close();
-      } catch (err) {
-        console.warn("⚠️ Failed to close browser:", err);
-      }
+    try {
+      if (page) await page.close();
+    } catch {
+      /* ignore */
     }
   }
 }

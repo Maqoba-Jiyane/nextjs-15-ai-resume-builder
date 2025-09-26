@@ -32,46 +32,59 @@ interface ResumeItemProps {
 }
 
 const ResumeItem = ({ resume }: ResumeItemProps) => {
+  function sanitize(s: string) {
+    return s
+      .replace(/[^\w\-]+/g, "_")
+      .replace(/_+/g, "_")
+      .slice(0, 80);
+  }
+
   const contentRef = useRef<HTMLDivElement>(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const discountPercentage = Number(useRetrieveRef());
   const [downloading, setDownloading] = useState(false);
 
   const handlePrint = async () => {
-    let apiRoute = "";
-    const template = resume.template;
-    console.log(template);
-    if (template === "classic") {
-      apiRoute = "api/puppeteer";
-    } else {
-      apiRoute = "api/puppeteer";
+    // Ask the server to mint a short-lived signed URL for this resume
+    const r = await fetch(
+      `/api/print-url?resumeId=${encodeURIComponent(resume.id)}`,
+    );
+    if (!r.ok) {
+      console.error("Failed to get signed print URL");
+      return;
     }
+    const { url } = await r.json(); // e.g. /api/print?token=...
 
     try {
       setDownloading(true);
-      const response = await fetch(apiRoute, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          resumeId: resume.id,
-        }),
-      });
+      // Option A (fastest UX): let the browser stream it in a new tab
+      // window.open(url, "_blank");
+      // setDownloading(false);
 
-      if (response.ok) {
-        setDownloading(false);
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `${resume.firstName}_${resume.lastName}${resume.title && "_" + resume.title.replaceAll(" ", "_")}${resume.description && "_" + resume.description.substring(0, 40).replaceAll(" ", "_")}.pdf`;
-        a.click();
-        window.URL.revokeObjectURL(url);
-      }
+      // Option B (keep "Save as" behavior + custom filename)
+      console.log("url: ", url)
+      const resPdf = await fetch(url, { method: "POST" });
+
+      if (!resPdf.ok) throw new Error("PDF download failed");
+      console.log("blob: ", resPdf)
+      const blob = await resPdf.blob();
+      const objUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const nameParts = [
+        sanitize(resume.firstName || ""),
+        sanitize(resume.lastName || ""),
+        resume.title ? sanitize(resume.title) : "",
+        resume.description ? sanitize(resume.description.substring(0, 40)) : "",
+      ].filter(Boolean);
+      a.href = objUrl;
+      a.download = `${nameParts.join("_") || "resume"}.pdf`;
+      a.click();
+      URL.revokeObjectURL(objUrl);
     } catch (error) {
       setDownloading(false);
       console.error(error);
+    } finally {
+      setDownloading(false);
     }
   };
 
@@ -110,22 +123,18 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
         <Button
           size="lg"
           variant="premium"
-          onClick={
-              () => handlePrint()
-              
-          }
+          onClick={() => handlePrint()}
           className="flex w-full items-center justify-center gap-2"
           disabled={downloading}
         >
-          {
-            downloading ? (
-              <>
-                <ShipWheel className="h-4 w-4 animate-spin" />
-                Downloading...
-              </>
-            ) : (
-              "Download"
-            )}
+          {downloading ? (
+            <>
+              <ShipWheel className="h-4 w-4 animate-spin" />
+              Downloading...
+            </>
+          ) : (
+            "Download"
+          )}
         </Button>
         <DownloadConfirmationDialog
           open={showDeleteConfirmation}
