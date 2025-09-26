@@ -39,7 +39,7 @@ function attachRequestInterception(page: Page): void {
     const type = req.resourceType();
     const url = req.url();
 
-    if (type === "image" || type === "media") return req.abort();
+    if (type === "media") return req.abort();
     if (/\b(googletagmanager|google-analytics|gtag|segment|mixpanel|clarity)\b/i.test(url)) {
       return req.abort();
     }
