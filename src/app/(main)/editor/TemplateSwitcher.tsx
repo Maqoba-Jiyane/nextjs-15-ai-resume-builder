@@ -4,9 +4,9 @@ import { SwitchCamera } from "lucide-react";
 export const ResumeTemplates = {
   CLASSIC: "classic",
   ATS1: "ats-1",
-  MODERN: "modern",
+  // MODERN: "modern",
   CLASSICRESUMERICH: "classic-resume-rich",
-  SCIENCEENGINEERINGRESUME: 'science-engineering-resume',
+  // SCIENCEENGINEERINGRESUME: 'science-engineering-resume',
 };
 
 const templateStyles = Object.values(ResumeTemplates);

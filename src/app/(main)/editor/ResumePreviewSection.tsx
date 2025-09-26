@@ -1,7 +1,6 @@
 import ResumePreview from "@/components/ResumePreview";
 import { ResumeValues } from "@/lib/validation";
 import { cn } from "@/lib/utils";
-import TemplateSwitcher from "./TemplateSwitcher";
 import ATSAnalysis from "@/components/ATSAnalysis";
 import AnalyzeResumeButton from "./forms/AnalyzeResumeButton";
 import { ATSAnalysisProps } from "@/components/Interfaces";
@@ -74,10 +73,10 @@ const ResumePreviewSection = ({
               setResumeData({ ...resumeData, borderStyle })
             }
           />
-          <TemplateSwitcher
+          {/* <TemplateSwitcher
             template={resumeData.template}
             onChange={(template) => setResumeData({ ...resumeData, template })}
-          />
+          /> */}
         </div>
         <div className={` ${!showAts && "hidden"}`}>
           <AnalyzeResumeButton
