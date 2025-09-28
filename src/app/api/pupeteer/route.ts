@@ -17,8 +17,8 @@ async function enforceZeroBodyMargins(page: Page): Promise<void> {
     const set = (el: HTMLElement | null) => {
       if (!el) return;
       el.style.setProperty("margin", "0", "important");
-      el.style.setProperty("padding", "0", "important");
-      el.style.setProperty("background", "#fff", "important");
+      // el.style.setProperty("padding", "0", "important");
+      // el.style.setProperty("background", "#fff", "important");
     };
     set(document.documentElement);
     set(document.body);
@@ -28,10 +28,7 @@ async function enforceZeroBodyMargins(page: Page): Promise<void> {
   await page.addStyleTag({
     content: `
       @page { size: 210mm 297mm; margin: 0; }
-      html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
-      #resumePreviewContent, #aside, #main { margin:0 !important; padding:0 !important; }
-      *, *::before, *::after { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      svg { display:block; }
+
     `,
   });
 
@@ -42,8 +39,8 @@ async function enforceZeroBodyMargins(page: Page): Promise<void> {
         const set = (el: HTMLElement | null) => {
           if (!el) return;
           el.style.setProperty("margin", "0", "important");
-          el.style.setProperty("padding", "0", "important");
-          el.style.setProperty("background", "#fff", "important");
+          // el.style.setProperty("padding", "0", "important");
+          // el.style.setProperty("background", "#fff", "important");
         };
         set(document.documentElement);
         set(document.body);
@@ -52,10 +49,7 @@ async function enforceZeroBodyMargins(page: Page): Promise<void> {
         const style = document.createElement("style");
         style.textContent = `
           @page { margin: 0; }
-          html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
-          #resumePreviewContent, #aside, #main { margin:0 !important; padding:0 !important; }
-          *, *::before, *::after { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-          svg { display:block; }
+
         `;
         document.head.appendChild(style);
       });

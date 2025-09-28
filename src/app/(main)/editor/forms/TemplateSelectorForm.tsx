@@ -55,7 +55,7 @@ const TEMPLATES = [
     name: "Classic Rich",
     previewImage: "/assets/templates/ClassicResumeRich.png",
     description: "High graphics format",
-    tier: "premium",
+    tier: "free",
     type: "Graphic",
   },
   // {
@@ -70,7 +70,7 @@ const TEMPLATES = [
     name: "Blue Creative Resume",
     previewImage: "/assets/templates/BlueCreativeResume.png",
     description: "High graphics format",
-    tier: "premium",
+    tier: "free",
     type: "Graphic",
   },
 ] as const satisfies readonly Template[];
