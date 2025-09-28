@@ -18,7 +18,9 @@ import { Lock } from "lucide-react";
 export type TemplateId =
   | "classic"
   | "science-engineering-resume"
-  | "classic-resume-rich";
+  | "classic-resume-rich"
+  | "black-modern-professional"
+  | "blue-creative-resume";
 
 type TemplateTier = "free" | "premium";
 
@@ -28,6 +30,7 @@ type Template = {
   previewImage: string;
   description: string;
   tier: TemplateTier;
+  type: string
 };
 
 const TEMPLATES = [
@@ -37,6 +40,7 @@ const TEMPLATES = [
     previewImage: "/assets/templates/Classic.jpg",
     description: "Traditional professional layout",
     tier: "free",
+    type: "Text",
   },
   {
     id: "science-engineering-resume",
@@ -44,13 +48,30 @@ const TEMPLATES = [
     previewImage: "/assets/templates/ScienceEngineeringResume.png",
     description: "Graduate format",
     tier: "free",
+    type: "Text",
   },
   {
     id: "classic-resume-rich",
     name: "Classic Rich",
     previewImage: "/assets/templates/ClassicResumeRich.png",
     description: "High graphics format",
-    tier: "free",
+    tier: "premium",
+    type: "Graphic",
+  },
+  // {
+  //   id: "black-modern-professional",
+  //   name: "Black Modern Professional",
+  //   previewImage: "/assets/templates/BlackModernProfessionalResume.jpg",
+  //   description: "High graphics format",
+  //   tier: "free",
+  // },
+  {
+    id: "blue-creative-resume",
+    name: "Blue Creative Resume",
+    previewImage: "/assets/templates/BlueCreativeResume.png",
+    description: "High graphics format",
+    tier: "premium",
+    type: "Graphic",
   },
 ] as const satisfies readonly Template[];
 

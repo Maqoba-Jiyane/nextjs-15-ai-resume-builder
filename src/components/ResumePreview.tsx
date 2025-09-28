@@ -5,6 +5,8 @@ import ClassicResume from "./ClassicResume";
 import { JSX } from "react";
 import ClassicResumeRich from "./ClassicResumeRich";
 import ScienceEngineeringResume from "./ScienceEngineeringResume";
+import BlackModernProfessional from "./BlackModernProfessional";
+import BlueCreativeResume from "./BlueCreativeResume";
 
 interface ResumePreviewProps {
   resumeData: ResumeValues;
@@ -37,6 +39,20 @@ const ResumePreview = ({
     ),
     "science-engineering-resume": (
       <ScienceEngineeringResume
+        resumeData={resumeData}
+        className={className}
+        contentRef={contentRef}
+      />
+    ),
+    "black-modern-professional": (
+      <BlackModernProfessional
+        resumeData={resumeData}
+        className={className}
+        contentRef={contentRef}
+      />
+    ),
+    "blue-creative-resume": (
+      <BlueCreativeResume
         resumeData={resumeData}
         className={className}
         contentRef={contentRef}

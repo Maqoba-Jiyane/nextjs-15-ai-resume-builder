@@ -47,7 +47,7 @@ const ResumePreviewSection = ({
         className,
       )}
     >
-      <div className="opacity-50 2xl:opacity-100 group-hover:opacity-100 transition-opacity absolute left-1 top-1 flex flex-col gap-3 flex-none lg:left-3 lg:top-3">
+      <div className="opacity-50 z-50 2xl:opacity-100 group-hover:opacity-100 transition-opacity absolute left-1 top-1 flex flex-col gap-3 flex-none lg:left-3 lg:top-3">
         <div className={`${showAts && "hidden"}`}>
           <Button
             variant="outline"
