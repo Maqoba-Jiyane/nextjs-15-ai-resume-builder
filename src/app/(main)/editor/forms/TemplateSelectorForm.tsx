@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { EditorFormProps } from "@/lib/types";
@@ -10,16 +11,23 @@ import {
   templateSelectorSchema,
   type TemplateSelectorValues,
 } from "@/lib/validation";
+import { Lock } from "lucide-react";
 
 // ---- Types -----------------------------------------------------------------
 
-export type TemplateId = "classic" | "science-engineering-resume" | "classic-resume-rich";
+export type TemplateId =
+  | "classic"
+  | "science-engineering-resume"
+  | "classic-resume-rich";
+
+type TemplateTier = "free" | "premium";
 
 type Template = {
   id: TemplateId;
   name: string;
   previewImage: string;
   description: string;
+  tier: TemplateTier;
 };
 
 const TEMPLATES = [
@@ -28,66 +36,93 @@ const TEMPLATES = [
     name: "Classic",
     previewImage: "/assets/templates/Classic.jpg",
     description: "Traditional professional layout",
+    tier: "free",
   },
   {
     id: "science-engineering-resume",
     name: "ATS Friendly",
     previewImage: "/assets/templates/ScienceEngineeringResume.png",
     description: "Graduate format",
+    tier: "free",
   },
   {
     id: "classic-resume-rich",
     name: "Classic Rich",
     previewImage: "/assets/templates/ClassicResumeRich.png",
     description: "High graphics format",
+    tier: "premium",
   },
 ] as const satisfies readonly Template[];
 
 const isTemplateId = (id: string): id is TemplateId =>
   (TEMPLATES as readonly Template[]).some((t) => t.id === id);
 
+const isLocked = (tpl: Template, plan: EditorFormProps["plan"]) =>
+  tpl.tier === "premium" && plan !== "PREMIUM";
+
 // ---- Component --------------------------------------------------------------
 
-export default function TemplateSelector({ resumeData, setResumeData }: EditorFormProps) {
+export default function TemplateSelector({
+  resumeData,
+  setResumeData,
+  plan,
+}: EditorFormProps) {
+  const router = useRouter();
+
   const form = useForm<TemplateSelectorValues>({
     resolver: zodResolver(templateSelectorSchema),
     defaultValues: { template: resumeData.template ?? "" },
     mode: "onChange",
   });
 
-  // local modal state
+  // Watch a single field to avoid repeated `getValues()` calls
+  const selectedTemplate = useWatch({ control: form.control, name: "template" });
+
+  // Keep parent state in sync when selection changes
+  React.useEffect(() => {
+    if (!selectedTemplate || !isTemplateId(selectedTemplate)) return;
+    if (resumeData.template !== selectedTemplate) {
+      setResumeData({ ...resumeData, template: selectedTemplate });
+    }
+  }, [selectedTemplate, resumeData, setResumeData]);
+
   const [modalTemplate, setModalTemplate] = React.useState<Template | null>(null);
+  const titleId = React.useId();
+
+  const openPreview = React.useCallback((tpl: Template) => setModalTemplate(tpl), []);
+  const closeModal = React.useCallback(() => setModalTemplate(null), []);
+
+  const goToPricing = React.useCallback(() => {
+    const sp = new URLSearchParams();
+    if (resumeData.id) sp.set("resumeId", resumeData.id);
+    router.push(`/pricing?${sp.toString()}`);
+  }, [router, resumeData.id]);
 
   const handleTemplateSelect = React.useCallback(
     (templateId: TemplateId) => {
-      // 1) update form (for validation/UI)
+      const tpl = TEMPLATES.find((t) => t.id === templateId)!;
+
+      if (isLocked(tpl, plan)) {
+        // Upsell: send to pricing; keep client logic minimal
+        goToPricing();
+        return;
+      }
+
       form.setValue("template", templateId, {
         shouldValidate: true,
         shouldDirty: true,
       });
-
-      // 2) update parent only if actually changed
-      if (resumeData.template !== templateId) {
-        setResumeData({ ...resumeData, template: templateId });
-      }
     },
-    [form, resumeData, setResumeData],
+    [form, plan, goToPricing],
   );
 
-  // Modal a11y: ESC to close
+  // Modal ESC
   React.useEffect(() => {
     if (!modalTemplate) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setModalTemplate(null);
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [modalTemplate]);
-
-  const titleId = React.useId();
-  const closeModal = React.useCallback(() => setModalTemplate(null), []);
-  const openPreview = React.useCallback((tpl: Template) => setModalTemplate(tpl), []);
-
-  const selectedId = (form.getValues().template || "") as string;
-  const selected = isTemplateId(selectedId) ? selectedId : undefined;
 
   return (
     <>
@@ -100,15 +135,21 @@ export default function TemplateSelector({ resumeData, setResumeData }: EditorFo
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {TEMPLATES.map((tpl) => (
-            <TemplateCard
-              key={tpl.id}
-              template={tpl}
-              selected={selected === tpl.id}
-              onSelect={() => handleTemplateSelect(tpl.id)}
-              onPreview={() => openPreview(tpl)}
-            />
-          ))}
+          {TEMPLATES.map((tpl) => {
+            const locked = isLocked(tpl, plan);
+            const selected = selectedTemplate === tpl.id;
+            return (
+              <TemplateCard
+                key={tpl.id}
+                template={tpl}
+                selected={!!selected}
+                locked={locked}
+                onSelect={() => handleTemplateSelect(tpl.id)}
+                onPreview={() => openPreview(tpl)}
+                onUnlock={goToPricing}
+              />
+            );
+          })}
         </div>
       </div>
 
@@ -136,6 +177,7 @@ export default function TemplateSelector({ resumeData, setResumeData }: EditorFo
               height={1100}
               className="mx-auto max-h-[90vh] w-auto rounded-lg border object-contain"
               sizes="(max-width: 1024px) 90vw, 800px"
+              // image shown after explicit user action → no need for priority
               loading="eager"
               decoding="async"
               fetchPriority="high"
@@ -145,15 +187,26 @@ export default function TemplateSelector({ resumeData, setResumeData }: EditorFo
 
             <div className="mt-3 flex items-center justify-between">
               <Button onClick={closeModal}>Close</Button>
-              <Button
-                disabled={selected === modalTemplate.id}
-                onClick={() => {
-                  handleTemplateSelect(modalTemplate.id);
-                  closeModal();
-                }}
-              >
-                {selected === modalTemplate.id ? "Selected" : "Select"}
-              </Button>
+              {isLocked(modalTemplate, plan) ? (
+                <Button
+                  onClick={() => {
+                    closeModal();
+                    goToPricing();
+                  }}
+                >
+                  Unlock Premium
+                </Button>
+              ) : (
+                <Button
+                  disabled={selectedTemplate === modalTemplate.id}
+                  onClick={() => {
+                    handleTemplateSelect(modalTemplate.id);
+                    closeModal();
+                  }}
+                >
+                  {selectedTemplate === modalTemplate.id ? "Selected" : "Select"}
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -167,46 +220,60 @@ export default function TemplateSelector({ resumeData, setResumeData }: EditorFo
 type TemplateCardProps = {
   template: Template;
   selected: boolean;
+  locked: boolean;
   onSelect: () => void;
   onPreview: () => void;
+  onUnlock: () => void;
 };
 
 const TemplateCard = React.memo(function TemplateCard({
   template,
   selected,
+  locked,
   onSelect,
   onPreview,
+  onUnlock,
 }: TemplateCardProps) {
+  const handleActivate = locked ? onUnlock : onSelect;
+
   return (
     <div
       role="button"
       tabIndex={0}
       aria-pressed={selected}
-      onClick={onSelect}
+      onClick={handleActivate}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          onSelect();
+          handleActivate();
         }
       }}
       className={[
-        "cursor-pointer rounded-lg border p-4 transition-all",
+        "relative cursor-pointer rounded-lg border p-4 transition-all",
         selected ? "ring-2 ring-primary shadow-md" : "hover:shadow-sm",
+        locked ? "opacity-75" : "",
       ].join(" ")}
     >
       <div className="mb-2 flex items-center justify-between">
         <h3 className="text-lg font-medium">{template.name}</h3>
-        <Button
-          type="button"
-          size="sm"
-          variant="outline"
-          onClick={(e) => {
-            e.stopPropagation();
-            onPreview();
-          }}
-        >
-          Preview
-        </Button>
+        <div className="flex items-center gap-2">
+          {template.tier === "premium" && (
+            <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
+              Premium
+            </span>
+          )}
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            onClick={(e) => {
+              e.stopPropagation();
+              onPreview();
+            }}
+          >
+            Preview
+          </Button>
+        </div>
       </div>
 
       <div
@@ -225,16 +292,33 @@ const TemplateCard = React.memo(function TemplateCard({
           sizes="(max-width: 768px) 100vw, 400px"
           priority={selected}
         />
-        {selected && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+
+        {/* Selected overlay */}
+        {selected && !locked && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/40">
             <span className="rounded bg-white/90 px-3 py-1 text-sm font-medium text-black">
               Selected
+            </span>
+          </div>
+        )}
+
+        {/* Lock overlay */}
+        {locked && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+            <span className="flex items-center gap-1 rounded bg-white/95 px-2 py-1 text-xs font-medium text-black">
+              <Lock className="h-3.5 w-3.5" /> Unlock to use
             </span>
           </div>
         )}
       </div>
 
       <p className="mt-2 text-sm text-muted-foreground">{template.description}</p>
+
+      {locked && (
+        <Button className="mt-2 w-full" onClick={onUnlock}>
+          Unlock Premium
+        </Button>
+      )}
     </div>
   );
 });

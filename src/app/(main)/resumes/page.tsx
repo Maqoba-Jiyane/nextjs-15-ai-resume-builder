@@ -37,10 +37,11 @@ export default async function Page() {
   // 2. Fetch data from prisma
   const [resumes, totalCount] = await Promise.all([
     prisma.resume.findMany({
-      where: { userId },
+      where: { userId: userId },
       orderBy: { updatedAt: "desc" },
       include: resumeDataInclude,
     }),
+
     prisma.resume.count({ where: { userId } }),
   ]);
 

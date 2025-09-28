@@ -40,8 +40,11 @@ const deleteResume = async (id: string) => {
 
 export default deleteResume;
 
-export async function updateResumeForPayment(resumeId:string, checkoutId: string) {
+export async function updateResumeForPayment(resumeId:string | undefined, checkoutId: string) {
 
+  console.log("resumeId: ", resumeId)
+
+  if(!resumeId || !checkoutId) return
   await prisma.resume.update({
     where: { id : resumeId},
     data: {

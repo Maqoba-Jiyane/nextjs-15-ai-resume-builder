@@ -12,7 +12,10 @@ datasource db {
 
 model Resume {
   id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  // FK to *internal* User id
   userId String
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Basic Information
   title String?
@@ -56,8 +59,6 @@ model Resume {
   // Metadata
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
   Payment Payment[]
   
@@ -147,11 +148,32 @@ model Template {
   @@map("template")
 }
 
+enum Plan {
+  FREE
+  PREMIUM
+}
+
+enum BillingCycle {
+  WEEKLY
+  MONTHLY
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  CANCELED
+}
+
 model User {
   id               String   @id @default(auto()) @map("_id") @db.ObjectId
   userId           String   @unique                     // Clerk user ID
   email            String?  @unique
   image            String?                              // Clerk profile picture
+  
+  plan          Plan     @default(FREE)
+  premiumUntil  DateTime?   // if now < premiumUntil => Premium
+  
 
   // 🔹 Personal Details (editable by user)
   firstName        String?
@@ -174,9 +196,10 @@ model User {
   referredByCode   String?                                // FK to another user’s referralCode
   referredBy       User?    @relation("Referrer", fields: [referredByCode], references: [referralCode], onDelete: NoAction, onUpdate: NoAction)
   referrals        User[]   @relation("Referrer")
-
-  // 🔹 Relations
-  resumes              Resume[]
+  
+  // relations
+  resumes       Resume[]
+  payments      Payment[]
   workExperiencePrompts WorkExperiencePrompt[]
   educations           UserEducation[]
 
@@ -226,17 +249,43 @@ model UserEducation {
   @@map("user_educations")
 }
 
+// One-off payment records for audit/reconciliation
 model Payment {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  checkoutId  String   @unique
-  userId      String
-  resumeId    String
-  referralCode  String?
-  resume      Resume   @relation(fields: [resumeId], references: [id])
-  amountPaid  Float
-  paidAt      DateTime
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  provider        String        @default("YOCO")     // fixed for now
+  checkoutId      String?        @unique              // Yoco checkout id
+  reference       String?                             // "plan=premium&cycle=MONTHLY&resumeId=..."
 
-  @@map("resume_payments")
+  // FK to *internal* User id
+  userId          String        
+  user            User          @relation(fields: [userId], references: [userId])
+
+  resumeId        String?       @db.ObjectId
+  resume          Resume?       @relation(fields: [resumeId], references: [id])
+
+  cycle           BillingCycle
+  plan            Plan
+  currency        String        @default("ZAR")
+  subtotalCents   Int
+  discountCents   Int           @default(0)
+  taxCents        Int           @default(0)
+  totalCents      Int
+
+  status          PaymentStatus @default(PENDING)
+  paidAt          DateTime?
+  
+  referralCode  String?
+  amountPaid  Float?
+
+  requestPayload  Json?
+  responsePayload Json?
+  webhookPayload  Json?
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([userId, status])
+  @@index([paidAt])
 }
 
 model Referral {
@@ -248,3 +297,10 @@ model Referral {
   
   @@map("referrals")
 }
+
+model WebhookEvent {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  eventId   String   @unique // "webhook-id" from Yoco
+  createdAt DateTime @default(now())
+}
+
