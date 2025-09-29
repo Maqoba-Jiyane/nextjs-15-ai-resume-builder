@@ -31,6 +31,14 @@ async function buildAliasFontCSS(): Promise<string> {
     { family: "Roboto-Bold",    file: "Roboto-Bold.ttf" },
     { family: "Roboto-Regular",    file: "Roboto-Regular.ttf" },
 
+    { family: "Arimo-Bold",    file: "Arimo-Bold.ttf" },
+
+    { family: "NeueMachina-Bold",    file: "NeueMachina-Bold.ttf" },
+    { family: "NeueMachina-Regular",    file: "NeueMachina-Regular.ttf" },
+
+    { family: "DMSans-Bold",    file: "DMSans-Bold.ttf" },
+    { family: "DMSans-Regular",    file: "DMSans-Regular.ttf" },
+
     // Aileron
     { family: "Aileron-Regular", file: "Aileron-Regular.otf" },
     { family: "Aileron-Bold",    file: "Aileron-Bold.otf" },
