@@ -12,73 +12,87 @@ import {
   type TemplateSelectorValues,
 } from "@/lib/validation";
 import { Lock } from "lucide-react";
+import {
+  deriveFacets,
+  filterTemplates,
+  TemplateFilter,
+  TemplateId,
+  TemplateMeta,
+} from "@/types/template.types";
+import {
+  BLUE_CREATIVE_RESUME,
+  CLASSIC_RESUME,
+  CLASSIC_RESUME_RICH,
+  SCIENCE_AND_ENGINEERING,
+} from "@/types/templates";
 
 // ---- Types -----------------------------------------------------------------
 
-export type TemplateId =
-  | "classic"
-  | "science-engineering-resume"
-  | "classic-resume-rich"
-  | "black-modern-professional"
-  | "blue-creative-resume";
+// type TemplateTier = "free" | "premium";
 
-type TemplateTier = "free" | "premium";
+// type Template = {
+//   id: TemplateId;
+//   name: string;
+//   previewImage: string;
+//   description: string;
+//   tier: TemplateTier;
+//   type: string
+// };
 
-type Template = {
-  id: TemplateId;
-  name: string;
-  previewImage: string;
-  description: string;
-  tier: TemplateTier;
-  type: string
-};
+// const TEMPLATES = [
+//   {
+//     id: "classic",
+//     name: "Classic",
+//     previewImage: "/assets/templates/Classic.jpg",
+//     description: "Traditional professional layout",
+//     tier: "free",
+//     type: "Text",
+//   },
+//   {
+//     id: "science-engineering-resume",
+//     name: "ATS Friendly",
+//     previewImage: "/assets/templates/ScienceEngineeringResume.png",
+//     description: "Graduate format",
+//     tier: "free",
+//     type: "Text",
+//   },
+//   {
+//     id: "classic-resume-rich",
+//     name: "Classic Rich",
+//     previewImage: "/assets/templates/ClassicResumeRich.png",
+//     description: "High graphics format",
+//     tier: "free",
+//     type: "Graphic",
+//   },
+//   // {
+//   //   id: "black-modern-professional",
+//   //   name: "Black Modern Professional",
+//   //   previewImage: "/assets/templates/BlackModernProfessionalResume.jpg",
+//   //   description: "High graphics format",
+//   //   tier: "free",
+//   // },
+//   {
+//     id: "blue-creative-resume",
+//     name: "Blue Creative Resume",
+//     previewImage: "/assets/templates/BlueCreativeResume.png",
+//     description: "High graphics format",
+//     tier: "premium",
+//     type: "Graphic",
+//   },
+// ] as const satisfies readonly Template[];
 
-const TEMPLATES = [
-  {
-    id: "classic",
-    name: "Classic",
-    previewImage: "/assets/templates/Classic.jpg",
-    description: "Traditional professional layout",
-    tier: "free",
-    type: "Text",
-  },
-  {
-    id: "science-engineering-resume",
-    name: "ATS Friendly",
-    previewImage: "/assets/templates/ScienceEngineeringResume.png",
-    description: "Graduate format",
-    tier: "free",
-    type: "Text",
-  },
-  {
-    id: "classic-resume-rich",
-    name: "Classic Rich",
-    previewImage: "/assets/templates/ClassicResumeRich.png",
-    description: "High graphics format",
-    tier: "premium",
-    type: "Graphic",
-  },
-  // {
-  //   id: "black-modern-professional",
-  //   name: "Black Modern Professional",
-  //   previewImage: "/assets/templates/BlackModernProfessionalResume.jpg",
-  //   description: "High graphics format",
-  //   tier: "free",
-  // },
-  {
-    id: "blue-creative-resume",
-    name: "Blue Creative Resume",
-    previewImage: "/assets/templates/BlueCreativeResume.png",
-    description: "High graphics format",
-    tier: "premium",
-    type: "Graphic",
-  },
-] as const satisfies readonly Template[];
+const TEMPLATES: TemplateMeta[] = [
+  BLUE_CREATIVE_RESUME,
+  CLASSIC_RESUME,
+  SCIENCE_AND_ENGINEERING,
+  CLASSIC_RESUME_RICH,
+  // BLACK_MODERN_PROFESSIONAL,
+];
 
 const isTemplateId = (id: string): id is TemplateId =>
-  (TEMPLATES as readonly Template[]).some((t) => t.id === id);
+  (TEMPLATES as readonly TemplateMeta[]).some((t) => t.id === id);
 
-const isLocked = (tpl: Template, plan: EditorFormProps["plan"]) =>
+const isLocked = (tpl: TemplateMeta, plan: EditorFormProps["plan"]) =>
   tpl.tier === "premium" && plan !== "PREMIUM";
 
 // ---- Component --------------------------------------------------------------
@@ -97,7 +111,10 @@ export default function TemplateSelector({
   });
 
   // Watch a single field to avoid repeated `getValues()` calls
-  const selectedTemplate = useWatch({ control: form.control, name: "template" });
+  const selectedTemplate = useWatch({
+    control: form.control,
+    name: "template",
+  });
 
   // Keep parent state in sync when selection changes
   React.useEffect(() => {
@@ -107,10 +124,15 @@ export default function TemplateSelector({
     }
   }, [selectedTemplate, resumeData, setResumeData]);
 
-  const [modalTemplate, setModalTemplate] = React.useState<Template | null>(null);
+  const [modalTemplate, setModalTemplate] = React.useState<TemplateMeta | null>(
+    null,
+  );
   const titleId = React.useId();
 
-  const openPreview = React.useCallback((tpl: Template) => setModalTemplate(tpl), []);
+  const openPreview = React.useCallback(
+    (tpl: TemplateMeta) => setModalTemplate(tpl),
+    [],
+  );
   const closeModal = React.useCallback(() => setModalTemplate(null), []);
 
   const goToPricing = React.useCallback(() => {
@@ -140,10 +162,34 @@ export default function TemplateSelector({
   // Modal ESC
   React.useEffect(() => {
     if (!modalTemplate) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setModalTemplate(null);
+    const onKey = (e: KeyboardEvent) =>
+      e.key === "Escape" && setModalTemplate(null);
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [modalTemplate]);
+  const facets = React.useMemo(() => deriveFacets(TEMPLATES), []);
+  const [filters, setFilters] = React.useState<TemplateFilter>({
+    // sensible defaults; change to taste
+    tiers: undefined,
+    types: undefined,
+    layouts: undefined,
+    columns: undefined,
+    colors: undefined,
+    features: undefined,
+    atsSafe: undefined,
+    photoSupport: undefined,
+    search: "",
+  });
+
+  const filtered = React.useMemo(
+    () => filterTemplates(TEMPLATES, filters),
+    [filters],
+  );
+
+  // function toggle<T>(arr: T[] | undefined, v: T): T[] {
+  //   const a = arr ?? [];
+  //   return a.includes(v) ? a.filter((x) => x !== v) : [...a, v];
+  // }
 
   return (
     <>
@@ -151,12 +197,139 @@ export default function TemplateSelector({
         <div className="space-y-1.5 text-center">
           <h2 className="text-2xl font-semibold">Choose a Template</h2>
           <p className="text-sm text-muted-foreground">
-            Select a design that matches your style and industry
+            Filter by layout, style, and features to find your match
           </p>
         </div>
 
+        {/* ---------- Filter Bar ---------- */}
+        <div className="rounded-lg border p-4">
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+            {/* Search */}
+            {/* <div>
+              <label className="mb-1 block text-xs font-medium text-muted-foreground">
+                Search
+              </label>
+              <Input
+                placeholder="e.g., blue creative two-column"
+                value={filters.search ?? ""}
+                onChange={(e) => setFilters((f) => ({ ...f, search: e.target.value }))}
+              />
+            </div> */}
+
+            {/* Tier */}
+            <FacetRow
+              label="Tier"
+              options={facets.tiers}
+              selected={filters.tiers ?? []}
+              onToggle={(opt) =>
+                setFilters((f) => ({
+                  ...f,
+                  tiers: f.tiers?.[0] === opt ? undefined : [opt], // <-- one or none
+                }))
+              }
+            />
+
+            {/* Type */}
+            <FacetRow
+              label="Type"
+              options={facets.types}
+              selected={filters.types ?? []}
+              onToggle={(t) =>
+                setFilters((f) => ({ ...f, types: f.types?.[0] === t? undefined : [t]}))
+              }
+            />
+          </div>
+
+          {/* <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-3"> */}
+          {/* Layout */}
+          {/* <FacetRow
+              label="Layout"
+              options={facets.layouts}
+              selected={filters.layouts ?? []}
+              onToggle={(v) => setFilters((f) => ({ ...f, layouts: toggle(f.layouts, v) }))}
+            /> */}
+
+          {/* Columns */}
+          {/* <FacetRow
+              label="Columns"
+              options={facets.columns.map(String)}
+              selected={(filters.columns ?? []).map(String)}
+              onToggle={(v) =>
+                setFilters((f) => ({
+                  ...f,
+                  columns: toggle((f.columns ?? []) as (1 | 2 | 3)[], Number(v) as 1 | 2 | 3),
+                }))
+              }
+            /> */}
+
+          {/* Color tokens */}
+          {/* <FacetRow
+              label="Colors"
+              options={facets.columns}
+              selected={filters.colors ?? []}
+              onToggle={(v) => setFilters((f) => ({ ...f, colors: toggle(f.colors, v) }))}
+            /> */}
+          {/* </div> */}
+
+          {/* <div className="mt-3 grid grid-cols-1 gap-3">
+            {/* Features */}
+          {/*<FacetRow
+              label="Features"
+              options={facets.features}
+              selected={filters.features ?? []}
+              onToggle={(v) => setFilters((f) => ({ ...f, features: toggle(f.features, v) }))}
+            />
+          </div> */}
+
+          <div className="mt-3 flex flex-wrap items-center gap-3">
+            {/* Flags */}
+            {/* <FlagToggle
+              label="ATS-friendly"
+              active={filters.atsSafe === true}
+              onToggle={() =>
+                setFilters((f) => ({ ...f, atsSafe: f.atsSafe === true ? undefined : true }))
+              }
+            /> */}
+            {/* <FlagToggle
+              label="Photo support"
+              active={filters.photoSupport === true}
+              onToggle={() =>
+                setFilters((f) => ({
+                  ...f,
+                  photoSupport: f.photoSupport === true ? undefined : true,
+                }))
+              }
+            /> */}
+
+            {/* Reset */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() =>
+                setFilters({
+                  tiers: undefined,
+                  types: undefined,
+                  // layouts: undefined,
+                  // columns: undefined,
+                  // colors: undefined,
+                  // features: undefined,
+                  // atsSafe: undefined,
+                  // photoSupport: undefined,
+                  search: "",
+                })
+              }
+            >
+              Reset filters
+            </Button>
+
+            <div className="ml-auto text-sm text-muted-foreground">
+              Showing <strong>{filtered.length}</strong> of {TEMPLATES.length}
+            </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {TEMPLATES.map((tpl) => {
+          {filtered.map((tpl) => {
             const locked = isLocked(tpl, plan);
             const selected = selectedTemplate === tpl.id;
             return (
@@ -225,7 +398,9 @@ export default function TemplateSelector({
                     closeModal();
                   }}
                 >
-                  {selectedTemplate === modalTemplate.id ? "Selected" : "Select"}
+                  {selectedTemplate === modalTemplate.id
+                    ? "Selected"
+                    : "Select"}
                 </Button>
               )}
             </div>
@@ -239,7 +414,7 @@ export default function TemplateSelector({
 // ---- Presentational card ----------------------------------------------------
 
 type TemplateCardProps = {
-  template: Template;
+  template: TemplateMeta;
   selected: boolean;
   locked: boolean;
   onSelect: () => void;
@@ -307,7 +482,7 @@ const TemplateCard = React.memo(function TemplateCard({
         <Image
           src={template.previewImage}
           alt={`${template.name} template thumbnail`}
-          className="h-full w-full object-contain"
+          className="h-full w-full object-contain z-50"
           width={400}
           height={565}
           sizes="(max-width: 768px) 100vw, 400px"
@@ -333,7 +508,9 @@ const TemplateCard = React.memo(function TemplateCard({
         )}
       </div>
 
-      <p className="mt-2 text-sm text-muted-foreground">{template.description}</p>
+      <p className="mt-2 text-sm text-muted-foreground">
+        {template.description}
+      </p>
 
       {locked && (
         <Button className="mt-2 w-full" onClick={onUnlock}>
@@ -343,3 +520,62 @@ const TemplateCard = React.memo(function TemplateCard({
     </div>
   );
 });
+
+function FacetRow<T extends string>({
+  label,
+  options,
+  selected,
+  onToggle,
+}: {
+  label: string;
+  options: T[];
+  selected: string[];
+  onToggle: (value: T) => void;
+}) {
+  return (
+    <div>
+      <label className="mb-1 block text-xs font-medium text-muted-foreground">
+        {label}
+      </label>
+      <div className="flex flex-wrap gap-2">
+        {options.map((opt) => {
+          const active = selected.includes(String(opt));
+          return (
+            <Button
+              key={String(opt)}
+              type="button"
+              size="sm"
+              variant={active ? "default" : "outline"}
+              className="h-7 rounded-full px-3 text-xs"
+              onClick={() => onToggle(opt)}
+            >
+              {String(opt)}
+            </Button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// function FlagToggle({
+//   label,
+//   active,
+//   onToggle,
+// }: {
+//   label: string;
+//   active: boolean;
+//   onToggle: () => void;
+// }) {
+//   return (
+//     <Button
+//       type="button"
+//       size="sm"
+//       variant={active ? "default" : "outline"}
+//       className="rounded-full"
+//       onClick={onToggle}
+//     >
+//       {label}
+//     </Button>
+//   );
+// }
