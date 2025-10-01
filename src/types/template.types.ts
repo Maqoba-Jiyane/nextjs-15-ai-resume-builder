@@ -10,7 +10,8 @@ export type TemplateId =
   | "science-engineering-resume"
   | "classic-resume-rich"
   | "black-modern-professional"
-  | "blue-creative-resume";
+  | "blue-creative-resume"
+  | "mordern-sidebar-resume";
 
 export interface TemplateMeta {
   id: TemplateId;

@@ -110,9 +110,9 @@ async function injectPrintStyles(page: Page, templateId: string): Promise<void> 
 
     const perTemplate: Record<string, string[]> = {
       "classic-resume-rich": ["#aside", "#main"],
-      // FIXED key: your id is "blue-creative-resume"
       "blue-creative-resume": ["#resumePreviewContent .grid"],
       "black-modern-professional": [],
+      "mordern-sidebar-resume": ["#resumePreviewContent"],
     };
 
     const extra = perTemplate[tpl] ?? [];
@@ -268,7 +268,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     if (!shouldRender) return new Response(null, { status: 204 });
 
     // Zero margins for graphics-heavy templates
-    if (["classic-resume-rich", "blue-creative-resume"].includes(resumeMeta.template)) {
+    if (["classic-resume-rich", "blue-creative-resume", "mordern-sidebar-resume"].includes(resumeMeta.template)) {
       await enforceZeroBodyMargins(page);
     }
 

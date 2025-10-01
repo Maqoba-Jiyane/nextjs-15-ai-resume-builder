@@ -3,7 +3,7 @@ import { TemplateMeta } from "./template.types";
 // templates.ts
 export const BLUE_CREATIVE_RESUME: TemplateMeta = {
   id: "blue-creative-resume",
-  name: "Blue Creative Resume",
+  name: "Blue Creative",
   previewImage: "/assets/templates/BlueCreativeResume.png",
   description: "High graphics format",
   tier: "premium",
@@ -66,5 +66,22 @@ export const SCIENCE_AND_ENGINEERING: TemplateMeta = {
   tags: ["modern", "two-column"],
   photoSupport: false,
   multiPage: true,
+  version: "1.0.0",
+};
+
+export const MORDERN_SIDEBAR_RESUME: TemplateMeta = {
+  id: "mordern-sidebar-resume",
+  name: "Mordern Sidebar",
+  previewImage: "/assets/templates/MordernSidebarResume.png",
+  description: "Multicolored graphical resume",
+  tier: "premium",
+  type: "Graphic",
+
+  layout: "two-column",
+  columns: 2,
+  industries: ["Science", "Engineering", "Healthcare", "Energy", "Information Technology"],
+  tags: ["modern", "two-column"],
+  photoSupport: true,
+  multiPage: false,
   version: "1.0.0",
 };

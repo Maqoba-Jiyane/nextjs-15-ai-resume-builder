@@ -7,6 +7,7 @@ import ClassicResumeRich from "./ClassicResumeRich";
 import ScienceEngineeringResume from "./ScienceEngineeringResume";
 import BlackModernProfessional from "./BlackModernProfessional";
 import BlueCreativeResume from "./BlueCreativeResume";
+import ModernSidebarResume from "./ModernSidebarResume";
 
 interface ResumePreviewProps {
   resumeData: ResumeValues;
@@ -21,7 +22,6 @@ const ResumePreview = ({
   className,
 }: ResumePreviewProps) => {
 
-  console.log(resumeData.template)
   const templates: Record<string, JSX.Element> = {
     classic: (
       <ClassicResume
@@ -53,6 +53,13 @@ const ResumePreview = ({
     ),
     "blue-creative-resume": (
       <BlueCreativeResume
+        resumeData={resumeData}
+        className={className}
+        contentRef={contentRef}
+      />
+    ),
+    "mordern-sidebar-resume": (
+      <ModernSidebarResume
         resumeData={resumeData}
         className={className}
         contentRef={contentRef}
