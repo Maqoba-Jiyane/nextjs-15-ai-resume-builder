@@ -44,7 +44,6 @@ model Resume {
   jobDescription String?
   skills String[]
   certifications Certification[]
-  languages String[]
   
   // Work & Education
   workExperiences WorkExperience[]
@@ -61,6 +60,10 @@ model Resume {
   updatedAt DateTime @updatedAt
 
   Payment Payment[]
+
+  
+  languages   Language[]
+  references  Reference[]
   
 
   @@map("resumes")
@@ -304,3 +307,32 @@ model WebhookEvent {
   createdAt DateTime @default(now())
 }
 
+enum LanguageLevel {
+  NATIVE
+  FLUENT
+  ADVANCED
+  INTERMEDIATE
+  BASIC
+}
+
+model Language {
+  id        String        @id @default(auto()) @map("_id") @db.ObjectId
+  resumeId  String        @db.ObjectId
+  name      String?
+  level     String?
+
+  resume    Resume        @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+}
+
+model Reference {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  resumeId   String   @db.ObjectId
+  name       String?
+  role       String?  // e.g., "CTO"
+  company    String?
+  phone      String?
+  email      String?
+  note       String?  // optional blurb
+
+  resume     Resume   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+}

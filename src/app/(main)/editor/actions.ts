@@ -13,11 +13,13 @@ export async function saveResume(values: ResumeValues, aiUsed = false) {
     workExperiences,
     educations,
     certifications,
+    languages,
+    references,
     ...resumeValues
   } = resumeSchema.parse(values);
 
   const { userId } = await auth();
-  console.log(userId)
+  console.log(userId);
   if (!userId) {
     throw new Error("User not authenticated");
   }
@@ -59,7 +61,9 @@ export async function saveResume(values: ResumeValues, aiUsed = false) {
         ...resumeValues,
         photoUrl: newPhotoUrl,
         checkoutId: null,
-        paid: aiUsed ? (userId === "user_2t2ctUODvvFhRvqZU9GCbFZHyY8") : undefined,
+        paid: aiUsed
+          ? userId === "user_2t2ctUODvvFhRvqZU9GCbFZHyY8"
+          : undefined,
         downloaded: false,
         downloadRequest: false,
         workExperiences: {
@@ -83,6 +87,18 @@ export async function saveResume(values: ResumeValues, aiUsed = false) {
           create: certifications?.map((cert) => ({
             ...cert,
             date: cert.date ? new Date(cert.date) : undefined,
+          })),
+        },
+        languages: {
+          deleteMany: {},
+          create: languages?.map((lan) => ({
+            ...lan,
+          })),
+        },
+        references: {
+          deleteMany: {},
+          create: references?.map((ref) => ({
+            ...ref,
           })),
         },
       },
@@ -115,6 +131,16 @@ export async function saveResume(values: ResumeValues, aiUsed = false) {
           create: certifications?.map((cert) => ({
             ...cert,
             date: cert.date ? new Date(cert.date) : undefined,
+          })),
+        },
+        languages: {
+          create: languages?.map((lan) => ({
+            ...lan,
+          })),
+        },
+        references: {
+          create: references?.map((ref) => ({
+            ...ref,
           })),
         },
       },

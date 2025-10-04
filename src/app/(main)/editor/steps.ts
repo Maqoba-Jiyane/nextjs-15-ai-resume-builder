@@ -8,6 +8,9 @@ import SummaryForm from "./forms/SummaryForm";
 import JobDescriptionForm from "./forms/JobDescriptionForm";
 import TemplateSelectorForm from "./forms/TemplateSelectorForm";
 import CertificationForm from "./forms/CertificationForm";
+import LanguagesForm from "./forms/LanguagesForm";
+import ReferencesForm from "./forms/ReferencesForm";
+
 
 export const steps: {
   title: string;
@@ -50,9 +53,10 @@ export const steps: {
     component: SkillsForm,
     key: "skills",
   },
-  {
-    title: "Summary",
-    component: SummaryForm,
-    key: "summary",
-  },
+
+  // ⬇️ New additions
+  { title: "Languages",         component: LanguagesForm,        key: "languages" },
+  { title: "References",        component: ReferencesForm,       key: "references" },
+
+  { title: "Summary",           component: SummaryForm,          key: "summary" },
 ];

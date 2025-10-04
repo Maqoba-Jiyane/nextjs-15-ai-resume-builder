@@ -30,6 +30,7 @@ function ResumeEditor({
   const [resumeData, setResumeData] = useState<ResumeValues>(
     resumeToEdit ? mapToResumeValues(resumeToEdit) : {},
   );
+  
   const [personalInfoDetails] = useState<UserDetailsValues>(
     personalInfoDetailsToAssign
       ? mapToUserDetailsValues(personalInfoDetailsToAssign)

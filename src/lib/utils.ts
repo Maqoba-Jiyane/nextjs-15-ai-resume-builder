@@ -61,6 +61,18 @@ export function mapToResumeValues(data: ResumeServerData): ResumeValues {
     colorHex: data.colorHex,
     summary: data.summary || undefined,
     template: data.template,
+    languages: data.languages.map((lan) => ({
+      name: lan.name || undefined,
+      level: lan.level || undefined
+    })),
+    references: data.references.map((ref) => ({
+      name: ref.name || undefined,
+      role: ref.role || undefined,
+      company: ref.company || undefined,
+      email: ref.email || undefined,
+      phone: ref.phone || undefined,
+      note: ref.note || undefined,
+    })),
   };
 }
 

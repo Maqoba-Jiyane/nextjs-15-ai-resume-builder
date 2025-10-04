@@ -4,7 +4,7 @@ import { ResumeValues } from "@/lib/validation";
 import { cn } from "@/lib/utils";
 import useDimensions from "@/hooks/useDimensions";
 import { ptToPx } from "@/lib/utils/common-functions";
-import {  FaGraduationCap, FaLocationDot } from "react-icons/fa6";
+import { FaGlobe, FaGraduationCap, FaLocationDot } from "react-icons/fa6";
 import { IoIosMail } from "react-icons/io";
 import { FaPhone } from "react-icons/fa6";
 import { FaUserCircle } from "react-icons/fa";
@@ -66,7 +66,6 @@ const SectionTitle = ({
   iconLabel: string;
   title: string;
 }) => {
-
   return (
     <div className="flex items-center gap-2">
       <span
@@ -91,7 +90,7 @@ const SectionTitle = ({
             }}
           />
         ) : title === "WORK EXPERIENCE" ? (
-          <ImBriefcase 
+          <ImBriefcase
             style={{
               width: 24,
               height: 24,
@@ -191,13 +190,10 @@ function SidebarRow({
 }) {
   if (!value) return null;
   return (
-    <div className="flex items-start gap-2" style={{ fontSize: ptToPx(9.8) }}>
+    <div className="flex items-start gap-2" style={{ fontSize: ptToPx(10) }}>
       <span
         className="inline-flex items-center justify-center rounded-full shrink-0"
         style={{
-          //   width: ptToPx(10),
-          //   height: ptToPx(10),
-          //   border: `1px solid ${COLORS.navy}`,
           fontSize: ptToPx(10),
           fontFamily: FONT.latReg,
           lineHeight: 1,
@@ -206,16 +202,26 @@ function SidebarRow({
         }}
       >
         {label === "phone" ? (
-          <FaPhone />
+          <FaPhone size={16} />
         ) : label === "email" ? (
-          <IoIosMail />
+          <IoIosMail size={20} />
         ) : label === "address" ? (
-          <FaLocationDot />
+          <FaLocationDot size={20} />
+        ) : label === "website" ? (
+          <FaGlobe size={16} />
         ) : null}
       </span>
       <span
-        className="leading-snug"
-        style={{ fontSize: ptToPx(10), fontFamily: "Lato-Regular" }}
+        className="
+    block
+    min-w-0
+    max-w-full
+    whitespace-normal
+    break-words
+    [hyphens:auto]
+    leading-snug
+  "
+        style={{ fontSize: ptToPx(10), fontFamily: "Lato, sans-serif" }}
       >
         {value}
       </span>
@@ -254,10 +260,21 @@ const ModernSidebarResume = ({
   const education = (resumeData.educations ?? []) as Education[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const skills: string[] = ((resumeData as any).skills ?? []) as string[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const languages: { name?: string; level?: string }[] =
+
+  const languages: { name: string | undefined; level: string | undefined }[] =
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ((resumeData as any).languages ?? []) as any[];
+
+  const references: {
+    name?: string;
+    role?: string;
+    company?: string;
+    email?: string;
+    phone?: string;
+    note?: string;
+  }[] =
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ((resumeData as any).references ?? []) as any[];
 
   // Sidebar geometry used to place avatar exactly like the mock
   const sidebarLeft = 0; // grid starts at 0 within the logical page
@@ -397,16 +414,97 @@ const ModernSidebarResume = ({
               {/* LANGUAGES */}
               {!!languages.length && (
                 <SidebarBlock title="LANGUAGES">
-                  <ul className="space-y-[6px]">
+                  <ul className="space-y-[4px]">
                     {languages.map((l, i) => (
-                      <li key={i} className="flex items-center justify-between">
-                        <span style={{ fontSize: ptToPx(9.5) }}>{l?.name}</span>
+                      <li key={i} className="flex gap-2 text-[#323b4c]">
+                        <span className="mt-[6px] inline-block w-[3px] h-[3px] rounded-full bg-[#323b4c]" />
                         <span
-                          className="opacity-80"
-                          style={{ fontSize: ptToPx(9) }}
+                          style={{
+                            fontSize: ptToPx(10),
+                            fontFamily: "Lato-Regular",
+                          }}
                         >
-                          {l?.level}
+                          {l?.name}
                         </span>
+                        <span
+                          style={{
+                            fontSize: ptToPx(10),
+                            fontFamily: "Lato-Regular",
+                          }}
+                        >
+                          ({l?.level?.charAt(0)}
+                          {l?.level?.toLocaleLowerCase().substring(1)})
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </SidebarBlock>
+              )}
+              {/* Reference */}
+              {!!references.length && (
+                <SidebarBlock title="references">
+                  <ul className="space-y-[6px]">
+                    {references.map((s, i) => (
+                      <li key={i} className="flex flex-col space-y-2">
+                        <span
+                          style={{
+                            fontSize: ptToPx(11),
+                            fontFamily: "Lato-Bold",
+                          }}
+                        >
+                          {s?.name}
+                        </span>
+                        <span
+                          style={{
+                            fontSize: ptToPx(10),
+                            fontFamily: "Lato-Regular",
+                          }}
+                        >
+                          {s.company}/{s?.role}
+                        </span>
+                        {s.phone ? (
+                          <span
+                            style={{
+                              fontSize: ptToPx(9),
+                              fontFamily: "Lato-Regular",
+                            }}
+                          >
+                            <span
+                              style={{
+                                fontSize: ptToPx(10),
+                                fontFamily: "Lato-Bold",
+                              }}
+                            >
+                              Phone:
+                            </span>{" "}
+                            {s.phone}
+                          </span>
+                        ) : null}
+                        {s.email ? (
+                          <span
+                            style={{
+                              fontSize: ptToPx(9),
+                              fontFamily: "Lato-Regular",
+                            }}
+                            className="block
+                            min-w-0
+                            max-w-full
+                            whitespace-normal
+                            break-words
+                            [hyphens:auto]
+                            leading-snug"
+                          >
+                            <span
+                              style={{
+                                fontSize: ptToPx(10),
+                                fontFamily: "Lato-Bold",
+                              }}
+                            >
+                              Email:{" "}
+                            </span>
+                            {s.email}
+                          </span>
+                        ) : null}
                       </li>
                     ))}
                   </ul>

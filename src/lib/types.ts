@@ -18,6 +18,8 @@ export const resumeDataInclude = {
   educations: true,
   workExperiences: true,
   certifications: true,
+  references: true,
+  languages: true,
 } satisfies Prisma.ResumeInclude;
 
 export type ResumeServerData = Prisma.ResumeGetPayload<{
