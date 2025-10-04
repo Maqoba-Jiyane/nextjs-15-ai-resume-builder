@@ -8,12 +8,13 @@ import ScienceEngineeringResume from "./ScienceEngineeringResume";
 import BlackModernProfessional from "./BlackModernProfessional";
 import BlueCreativeResume from "./BlueCreativeResume";
 import ModernSidebarResume from "./ModernSidebarResume";
+import DarkBlueFrame from "./DarkBlueFrame";
 
 interface ResumePreviewProps {
   resumeData: ResumeValues;
   contentRef?: React.Ref<HTMLDivElement>;
   className?: string;
-  template?: "classic" | "classic-resume-rich" | "science-engineering-resume";
+  template?: "classic" | "classic-resume-rich" | "science-engineering-resume" | "dark-blue-frame";
 }
 
 const ResumePreview = ({
@@ -63,6 +64,13 @@ const ResumePreview = ({
         resumeData={resumeData}
         className={className}
         contentRef={contentRef}
+      />
+    ),
+    "dark-blue-frame": (
+      <DarkBlueFrame
+       resumeData={resumeData}
+       className={className}
+       contentRef={contentRef}
       />
     ),
   };

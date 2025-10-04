@@ -23,6 +23,7 @@ import {
   BLUE_CREATIVE_RESUME,
   CLASSIC_RESUME,
   CLASSIC_RESUME_RICH,
+  DARK_BLUE_FRAME,
   MORDERN_SIDEBAR_RESUME,
   SCIENCE_AND_ENGINEERING,
 } from "@/types/templates";
@@ -86,7 +87,9 @@ const TEMPLATES: TemplateMeta[] = [
   BLUE_CREATIVE_RESUME,
   CLASSIC_RESUME,
   SCIENCE_AND_ENGINEERING,
-  CLASSIC_RESUME_RICH, MORDERN_SIDEBAR_RESUME
+  CLASSIC_RESUME_RICH,
+  MORDERN_SIDEBAR_RESUME,
+  DARK_BLUE_FRAME,
   // BLACK_MODERN_PROFESSIONAL,
 ];
 
@@ -236,7 +239,10 @@ export default function TemplateSelector({
               options={facets.types}
               selected={filters.types ?? []}
               onToggle={(t) =>
-                setFilters((f) => ({ ...f, types: f.types?.[0] === t? undefined : [t]}))
+                setFilters((f) => ({
+                  ...f,
+                  types: f.types?.[0] === t ? undefined : [t],
+                }))
               }
             />
           </div>

@@ -50,6 +50,12 @@ async function buildAliasFontCSS(): Promise<string> {
     // Lato
     { family: "Lato-Regular", file: "Lato-Regular.ttf" },
     { family: "Lato-Bold",    file: "Lato-Bold.ttf" },
+    
+    { family: "Poppins-Regular", file: "Poppins-Regular.ttf" },
+    { family: "Poppins-Bold",    file: "Poppins-Bold.ttf" },
+    
+    { family: "Lora-Regular", file: "Lora-Regular.ttf" },
+    { family: "Lora-Bold",    file: "Lora-Bold.ttf" },
 
     // NOW* — if you don't have these, map them to something you do ship
     // If you DO have the actual Now fonts, just point to those files instead.

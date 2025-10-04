@@ -11,7 +11,8 @@ export type TemplateId =
   | "classic-resume-rich"
   | "black-modern-professional"
   | "blue-creative-resume"
-  | "mordern-sidebar-resume";
+  | "mordern-sidebar-resume"
+  | "dark-blue-frame";
 
 export interface TemplateMeta {
   id: TemplateId;

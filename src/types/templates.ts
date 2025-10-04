@@ -85,3 +85,27 @@ export const MORDERN_SIDEBAR_RESUME: TemplateMeta = {
   multiPage: false,
   version: "1.0.0",
 };
+
+export const DARK_BLUE_FRAME: TemplateMeta = {
+  id: "dark-blue-frame",
+  name: "Dark Blue Frame (Minimalist)",
+  previewImage: "/assets/templates/DarkBlueFrameMinimalistResume.png",
+  description:
+    "A4, dark-blue framed, two-column resume with a left navy sidebar, serif name header, thin dividers, and clean sans body text.",
+  tier: "premium",
+  type: "Minimal",
+
+  layout: "two-column",
+  columns: 2,
+  industries: [
+    "Marketing",
+    "Business Administration",
+    "Sales",
+    "Communications",
+    "General",
+  ],
+  tags: ["minimalist", "two-column", "left-sidebar", "navy-frame", "print-friendly"],
+  photoSupport: false,
+  multiPage: false,
+  version: "1.0.0",
+};
