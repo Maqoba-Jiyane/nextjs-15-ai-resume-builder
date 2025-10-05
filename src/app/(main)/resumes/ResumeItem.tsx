@@ -43,8 +43,10 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const discountPercentage = Number(useRetrieveRef());
   const [downloading, setDownloading] = useState(false);
+  const { toast } = useToast();
 
   const handlePrint = async () => {
+    setDownloading(true);
     // Ask the server to mint a short-lived signed URL for this resume
     const r = await fetch(
       `/api/print-url?resumeId=${encodeURIComponent(resume.id)}`,
@@ -56,17 +58,17 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
     const { url } = await r.json(); // e.g. /api/print?token=...
 
     try {
-      setDownloading(true);
+      // setDownloading(true);
       // Option A (fastest UX): let the browser stream it in a new tab
       // window.open(url, "_blank");
       // setDownloading(false);
 
       // Option B (keep "Save as" behavior + custom filename)
-      console.log("url: ", url)
+      // console.log("url: ", url)
       const resPdf = await fetch(url, { method: "POST" });
 
       if (!resPdf.ok) throw new Error("PDF download failed");
-      console.log("blob: ", resPdf)
+      // console.log("blob: ", resPdf)
       const blob = await resPdf.blob();
       const objUrl = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -81,6 +83,10 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
       a.click();
       URL.revokeObjectURL(objUrl);
     } catch (error) {
+      toast({
+        variant: "destructive",
+        description: "Ooops. That shouldn't have happened, please try again.",
+      });
       setDownloading(false);
       console.error(error);
     } finally {
