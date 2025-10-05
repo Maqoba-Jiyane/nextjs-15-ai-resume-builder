@@ -166,7 +166,7 @@ const DarkBlueFrame: React.FC<Props> = ({
       >
         {/* Outer frame */}
         <div
-          className="m-5 md:m-6 w-full h-[210/297] box-border"
+          className="m-4 w-full h-[210/297] box-border"
           style={{ border: `8px solid ${C.navy}` }}
         >
           {/* Header */}
