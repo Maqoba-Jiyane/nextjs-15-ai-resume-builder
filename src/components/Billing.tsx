@@ -39,7 +39,7 @@ function formatZAR(amount: number) {
 
 export function PricingTableClient({ resumeId }: { resumeId?: string }) {
   const [cycle, setCycle] = React.useState<BillingCycle>("monthly");
-  const [coupon, setCoupon] = React.useState("");
+  const [coupon] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
   const onCheckout = async () => {
@@ -119,9 +119,9 @@ export function PricingTableClient({ resumeId }: { resumeId?: string }) {
           </Button>
         }
         features={PREMIUM_FEATURES}
-        footnote="7-day money-back guarantee"
+        // footnote="7-day money-back guarantee"
       >
-        <div className="mt-3 flex items-center gap-2">
+        {/* <div className="mt-3 flex items-center gap-2">
           <input
             inputMode="text"
             placeholder="Coupon code (optional)"
@@ -133,7 +133,7 @@ export function PricingTableClient({ resumeId }: { resumeId?: string }) {
           <Button variant="outline" onClick={onCheckout} disabled={loading}>
             Apply & Buy
           </Button>
-        </div>
+        </div> */}
       </PlanCard>
     </section>
   );
@@ -209,10 +209,10 @@ export function FAQ() {
           q="What’s included in Premium?"
           a="All free features plus premium templates, unlimited resumes, faster PDF generation, and priority support."
         />
-        <QA
+        {/* <QA
           q="Do you offer refunds?"
           a="Yes, there’s a 7-day money-back guarantee. If it’s not for you, contact support and we’ll help."
-        />
+        /> */}
         <QA
           q="Can I cancel anytime?"
           a="Yep. You can cancel from your account settings—your plan will remain active until the end of the billing period."
