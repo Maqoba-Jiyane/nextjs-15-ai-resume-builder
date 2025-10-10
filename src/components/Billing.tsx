@@ -37,8 +37,13 @@ function formatZAR(amount: number) {
   }).format(amount);
 }
 
+const WEEKS_PER_MONTH = 4;
+const monthlySavePct = Math.round(
+  (1 - PRICE.monthly / (PRICE.weekly * WEEKS_PER_MONTH)) * 100
+);
+
 export function PricingTableClient({ resumeId }: { resumeId?: string }) {
-  const [cycle, setCycle] = React.useState<BillingCycle>("monthly");
+  const [cycle, setCycle] = React.useState<BillingCycle>("weekly");
   const [coupon] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
@@ -85,7 +90,7 @@ export function PricingTableClient({ resumeId }: { resumeId?: string }) {
           />
         </button>
         <span className={cycle === "monthly" ? "font-semibold" : "text-muted-foreground"}>
-          Monthly <span className="ml-1 rounded bg-emerald-100 px-1.5 py-0.5 text-xs text-emerald-700">Save</span>
+          Monthly <span className="ml-1 rounded bg-emerald-100 px-1.5 py-0.5 text-xs text-emerald-700">Save {monthlySavePct}%</span>
         </span>
       </div>
 
@@ -112,7 +117,7 @@ export function PricingTableClient({ resumeId }: { resumeId?: string }) {
         }
         price={formatZAR(PRICE[cycle])}
         period={cycle === "weekly" ? "/week" : "/month"}
-        highlight
+        highlight={cycle === "weekly"}
         cta={
           <Button className="w-full" onClick={onCheckout} disabled={loading}>
             {loading ? "Redirecting…" : "Upgrade now"}

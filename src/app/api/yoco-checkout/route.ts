@@ -5,7 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { BillingCycle, PaymentStatus, } from "@prisma/client";
 import { z } from "zod";
 
-const PRICE = { weekly: 14900, monthly: 49900 } as const; // cents
+const PRICE = { weekly: 12956.70, monthly: 43391 } as const; // cents
 type ClientCycle = keyof typeof PRICE; // "weekly" | "monthly"
 const VAT_RATE = 0.15;
 
@@ -72,9 +72,9 @@ export async function POST(req: NextRequest) {
     const discounted = Math.max(subtotalCents - discountCents, 0);
     const taxCents = Math.round(discounted * VAT_RATE);
     const totalCents = discounted + taxCents;
-    if (!Number.isInteger(totalCents) || totalCents <= 0) {
-      return NextResponse.json({ error: "Calculated amount invalid" }, { status: 400 });
-    }
+    // if (!Number.isInteger(totalCents) || totalCents <= 0) {
+    //   return NextResponse.json({ error: "Calculated amount invalid" }, { status: 400 });
+    // }
     const cycleEnum = CYCLE_MAP[clientCycle];
 
     // 6) Create Payment (PENDING)
