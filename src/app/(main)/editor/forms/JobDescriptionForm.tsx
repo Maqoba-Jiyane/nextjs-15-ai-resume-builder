@@ -14,13 +14,11 @@ import { jobDescriptionSchema, JobDescriptionValues } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
-import AutoFillButton from "./AutoFillButton";
 import { useRouter } from "next/navigation";
 
 const JobDescriptionForm = ({ 
   resumeData, 
   setResumeData, 
-  onAiUsed 
 }: EditorFormProps) => {
   const router = useRouter();
   
@@ -80,7 +78,7 @@ useEffect(() => {
                   />
                 </FormControl>
                 <FormMessage />
-                <div className="flex items-center justify-center">
+                {/* <div className="flex items-center justify-center">
                   <AutoFillButton
                     resumeId={resumeData.id || ""}
                     resumeData={resumeData}
@@ -88,7 +86,7 @@ useEffect(() => {
                     validJobSecription={!resumeData.jobDescription?.trim()}
                     onAiUsed={onAiUsed}
                   />
-                </div>
+                </div> */}
               </FormItem>
             )}
           />

@@ -16,7 +16,7 @@ import React, { useEffect, useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import GenerateSummaryButton from "./GenerateSummaryButton";
 
-const SummaryForm = ({ resumeData, setResumeData, onAiUsed }: EditorFormProps) => {
+const SummaryForm = ({ resumeData, setResumeData, onAiUsed, plan }: EditorFormProps) => {
   // Memoize default value
   const defaultValues = useMemo<SummaryValues>(() => ({
     summary: resumeData.summary || "",
@@ -75,6 +75,7 @@ const SummaryForm = ({ resumeData, setResumeData, onAiUsed }: EditorFormProps) =
                       form.setValue('summary', summary);
                       onAiUsed(aiUsed);
                     }}
+                    userPlan={plan}
                   />
                 </div>
               </FormItem>

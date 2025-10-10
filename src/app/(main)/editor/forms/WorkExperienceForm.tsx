@@ -40,7 +40,7 @@ import { cn } from "@/lib/utils";
 import GenerateWorkExperinceButton from "./GenerateWorkExperinceButton";
 import { objectArraysEqual } from "@/lib/utils/compare";
 
-export default function WorkExperienceForm({ resumeData, setResumeData, onAiUsed }: EditorFormProps) {
+export default function WorkExperienceForm({ resumeData, setResumeData, onAiUsed, plan }: EditorFormProps) {
   // Memoize default values so identity only changes when resumeData.workExperiences changes
   const defaultValues = useMemo<WorkExperienceValues>(() => ({
     workExperiences:
@@ -120,6 +120,7 @@ export default function WorkExperienceForm({ resumeData, setResumeData, onAiUsed
                   index={index}
                   remove={remove}
                   onAiUsed={onAiUsed}
+                  plan={plan}
                 />
               ))}
             </SortableContext>
@@ -153,9 +154,10 @@ interface WorkExperienceItemProps {
   remove: (index: number) => void;
   id: string;
   onAiUsed: (aiUsed: boolean) => void;
+  plan: EditorFormProps["plan"]
 }
 
-function WorkExperienceItem({ id, form, index, remove, onAiUsed }: WorkExperienceItemProps) {
+function WorkExperienceItem({ id, form, index, remove, onAiUsed, plan }: WorkExperienceItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
 
   const formatDateForInput = (date: Date | undefined): string => {
@@ -198,6 +200,7 @@ function WorkExperienceItem({ id, form, index, remove, onAiUsed }: WorkExperienc
             })
           }
           onAiUsed={onAiUsed}
+          userPlan={plan}
         />
       </div>
 

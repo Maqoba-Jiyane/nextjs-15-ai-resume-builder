@@ -27,28 +27,47 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import LoadingButton from "@/components/LoadingButton";
+import Link from "next/link";
+import { EditorFormProps } from "@/lib/types";
 
 interface GenerateWorkExperinceButtonProps {
   onWorkExperienceGenerated: (workExperience: WorkExperience) => void;
   onAiUsed: (aiUsed: boolean) => void;
+  userPlan: EditorFormProps["plan"];
 }
 
 const GenerateWorkExperinceButton = ({
-  onWorkExperienceGenerated, onAiUsed
+  onWorkExperienceGenerated,
+  onAiUsed,
+  userPlan,
 }: GenerateWorkExperinceButtonProps) => {
   const [showInputDialog, setShowInputDialog] = useState(false);
+  const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
+console.log("userPlan: ", userPlan)
+  const handleClick = () => {
+    if (userPlan === "FREE") {
+      setShowUpgradeDialog(true);
+      // Tell parent this attempt used AI intent but was blocked (optional):
+      onAiUsed(false);
+      return;
+    }
+    setShowInputDialog(true);
+  };
 
   return (
     <>
-      <Button
-        variant="outline"
-        type="button"
-        //TODO: Block for non-premium users
-        onClick={() => setShowInputDialog(true)}
-      >
+      <Button variant="outline" type="button" onClick={handleClick}>
         <WandSparkles className="size-4" />
         Smart fill (AI)
       </Button>
+
+      {/* Upgrade gate */}
+      <UpgradeDialog
+        open={showUpgradeDialog}
+        onOpenChange={setShowUpgradeDialog}
+      />
+
+      {/* Actual AI input */}
       <InputDialog
         open={showInputDialog}
         onOpenChange={setShowInputDialog}
@@ -61,6 +80,7 @@ const GenerateWorkExperinceButton = ({
     </>
   );
 };
+
 
 export default GenerateWorkExperinceButton;
 
@@ -87,7 +107,7 @@ function InputDialog({
   async function onSubmit(input: GenerateWorkExperienceInput) {
     try {
       const response = await generateWorkExperience(input);
-console.log(response)
+
       onWorkExperienceGenerated(response);
     } catch (error) {
       console.error(error);
@@ -132,6 +152,43 @@ console.log(response)
             </LoadingButton>
           </form>
         </Form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function UpgradeDialog({
+  open,
+  onOpenChange,
+}: { open: boolean; onOpenChange: (open: boolean) => void }) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Upgrade to unlock AI</DialogTitle>
+          <DialogDescription>
+            Smart fill (AI) is a Premium feature. Upgrade to generate tailored, ATS-optimized work experience entries in seconds.
+          </DialogDescription>
+        </DialogHeader>
+
+        {/* <ul className="mt-4 space-y-2 text-sm">
+          <li className="flex items-start gap-2">
+            <WandSparkles className="size-4 mt-0.5" />
+            <span>AI-generated bullet points based on your description</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <WandSparkles className="size-4 mt-0.5" />
+            <span>Faster PDF printing & premium templates</span>
+          </li>
+        </ul> */}
+
+        <div className="mt-6 flex gap-2">
+          <Button asChild className="w-full">
+            <Link href="/pricing">See plans</Link>
+          </Button>
+          {/* or go straight to checkout if you want */}
+          {/* <Button className="w-full" onClick={() => startCheckout("premium","monthly")}>Upgrade now</Button> */}
+        </div>
       </DialogContent>
     </Dialog>
   );
