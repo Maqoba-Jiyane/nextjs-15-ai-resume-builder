@@ -13,10 +13,12 @@ const FREE_FEATURES = [
   "Standard PDF printing",
 ] as const;
 
-const PREMIUM_FEATURES = [
+export const PREMIUM_FEATURES = [
   "All Free features",
   "Premium templates",
   "Unlimited resumes",
+  "Smart fill (AI): Professional summaries",
+  "Smart fill (AI): Work experience bullets",
   "Faster PDF printing",
   "Priority email support",
 ] as const;
