@@ -153,7 +153,7 @@ export default function LandingPage() {
             <Button
               asChild
               variant="outline"
-              className="hover:text-blue-700 text-white border-blue-200 hover:bg-blue-50 px-6 py-6"
+              className="text-blue-700 border-blue-200 hover:bg-blue-50 px-6 py-6"
               aria-label="See pricing"
             >
               <a href="#pricing">See Pricing</a>
@@ -327,7 +327,7 @@ export default function LandingPage() {
             <Button asChild className="bg-blue-600 text-white hover:bg-blue-700">
               <Link href="/resumes" prefetch>Start Free</Link>
             </Button>
-            <Button asChild variant="outline" className="text-white hover:text-blue-700 border-blue-200 hover:bg-blue-50">
+            <Button asChild variant="outline" className="text-blue-700 border-blue-200 hover:bg-blue-50">
               <a href="#pricing">Go Premium</a>
             </Button>
           </div>
@@ -394,7 +394,7 @@ export default function LandingPage() {
                 <li>• PDF export</li>
                 <li>• Priority support</li>
               </ul>
-              <Button asChild variant="outline" className="mt-6 w-full text-white hover:text-blue-700 border-blue-200 hover:bg-blue-50" aria-label="Upgrade to Premium Monthly">
+              <Button asChild variant="outline" className="mt-6 w-full text-blue-700 border-blue-200 hover:bg-blue-50" aria-label="Upgrade to Premium Monthly">
                 <Link href="/pricing?plan=monthly">Upgrade — R499/month</Link>
               </Button>
               <p className="mt-3 text-xs text-slate-500">Best for ongoing job hunts.</p>

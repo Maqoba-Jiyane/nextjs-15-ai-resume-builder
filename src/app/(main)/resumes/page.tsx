@@ -1,4 +1,3 @@
-
 import prisma from "@/lib/prisma";
 import { resumeDataInclude } from "@/lib/types";
 import { auth, clerkClient } from "@clerk/nextjs/server";
@@ -6,6 +5,9 @@ import { Metadata } from "next";
 import ResumeItem from "./ResumeItem";
 import { cookies } from "next/headers";
 import NewResumeCta from "./NewResumeCta";
+import { Button } from "@/components/ui/button";
+import { PlusSquare } from "lucide-react";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Your resumes",
@@ -49,7 +51,16 @@ export default async function Page() {
   // 3. Render
   return (
     <main className="max-w-7xl mx-auto w-full px-3 py-6 space-y-6">
-      {latestResumeId && <NewResumeCta latestResumeId={latestResumeId} />}
+      {latestResumeId ? (
+        <NewResumeCta latestResumeId={latestResumeId} />
+      ) : (
+        <Button className="mx-auto flex w-fit gap-2" asChild>
+          <Link href={"/editor"}>
+            <PlusSquare className="size-5" />
+            New resume
+          </Link>
+        </Button>
+      )}
       <div className="space-y-1">
         <h1 className="text-3xl font-bold">Your resumes</h1>
         <p>Total: {totalCount}</p>
