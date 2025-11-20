@@ -28,29 +28,26 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import LoadingButton from "@/components/LoadingButton";
 import Link from "next/link";
-import { EditorFormProps } from "@/lib/types";
 
 interface GenerateWorkExperinceButtonProps {
   onWorkExperienceGenerated: (workExperience: WorkExperience) => void;
   onAiUsed: (aiUsed: boolean) => void;
-  userPlan: EditorFormProps["plan"];
 }
 
 const GenerateWorkExperinceButton = ({
   onWorkExperienceGenerated,
   onAiUsed,
-  userPlan,
 }: GenerateWorkExperinceButtonProps) => {
   const [showInputDialog, setShowInputDialog] = useState(false);
   const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
-console.log("userPlan: ", userPlan)
+
   const handleClick = () => {
-    if (userPlan === "FREE") {
-      setShowUpgradeDialog(true);
-      // Tell parent this attempt used AI intent but was blocked (optional):
-      onAiUsed(false);
-      return;
-    }
+    // if (userPlan === "FREE") {
+    //   setShowUpgradeDialog(true);
+    //   // Tell parent this attempt used AI intent but was blocked (optional):
+    //   onAiUsed(false);
+    //   return;
+    // }
     setShowInputDialog(true);
   };
 

@@ -71,6 +71,7 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
       // console.log("blob: ", resPdf)
       const blob = await resPdf.blob();
       const objUrl = URL.createObjectURL(blob);
+      console.log("objUrl: ", objUrl)
       const a = document.createElement("a");
       const nameParts = [
         sanitize(resume.firstName || ""),
@@ -129,7 +130,7 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
         <Button
           size="lg"
           variant="premium"
-          onClick={() => handlePrint()}
+          onClick={resume.paid ? () => handlePrint() : () => myClientComponent(resume.id, 0) }
           className="flex w-full items-center justify-center gap-2"
           disabled={downloading}
         >
@@ -139,7 +140,7 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
               Downloading...
             </>
           ) : (
-            "Download"
+            resume.paid ? "Download" : "Make Payment"
           )}
         </Button>
         <DownloadConfirmationDialog
@@ -309,50 +310,86 @@ function DownloadConfirmationDialog({
   );
 }
 
-function myClientComponent(resumeId: string, discountPercentage: number) {
-  callApi();
-  async function callApi() {
-    const basePrice = 5217.6;
-    const taxRate = 0.15;
-    const discountedPrice = basePrice * (1 - discountPercentage / 100);
-    const taxAmount = discountedPrice * taxRate;
-    const totalAmount = discountedPrice + taxAmount;
-    try {
-      const response = await fetch("/api/yoco-checkout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+// Helper: round to 2 decimal places (e.g. for cents)
+const roundToCents = (value: number) =>
+  Math.round(value * 100) / 100;
+
+type CreateCheckoutResponse = {
+  id: string;
+  redirectUrl: string;
+  // add other fields from your API response if needed
+};
+
+async function myClientComponent(
+  resumeId: string,
+  discountPercentage: number
+) {
+  // Basic guard
+  if (!resumeId) {
+    console.error("resumeId is required");
+    return;
+  }
+
+  // Clamp discount between 0 and 100 to avoid weird values
+  const normalizedDiscount = Math.min(Math.max(discountPercentage, 0), 100);
+
+  const basePrice = 5217.6;
+  const taxRate = 0.15;
+
+  // Price calculations
+  const discountAmount = roundToCents(
+    basePrice * (normalizedDiscount / 100)
+  );
+  const discountedPrice = roundToCents(basePrice - discountAmount);
+  const taxAmount = roundToCents(discountedPrice * taxRate);
+  const totalAmount = roundToCents(discountedPrice + taxAmount);
+
+  const payload = {
+    amount: totalAmount,
+    currency: "ZAR",
+    totalDiscount: discountAmount,
+    totalTaxAmount: taxAmount,
+    subtotalAmount: discountedPrice,resumeId: resumeId,
+    lineItems: [
+      {
+        displayName: "AI Resume",
+        quantity: 1,
+        pricingDetails: {
+          price: discountedPrice,
         },
-        body: JSON.stringify({
-          amount: totalAmount,
-          currency: "ZAR",
-          totalDiscount: basePrice * (discountPercentage / 100),
-          totalTaxAmount: taxAmount,
-          subtotalAmount: discountedPrice,
-          lineItems: [
-            {
-              displayName: "AI Resume",
-              quantity: 1,
-              pricingDetails: {
-                price: discountedPrice,
-              },
-            },
-          ],
-        }),
-      });
+      },
+    ],
+  };
 
-      if (!response.ok) {
-        throw new Error("Failed to create Yoco checkout");
-      }
+  console.log(payload)
 
-      const createPayment = await response.json();
+  try {
+    const response = await fetch("/api/yoco-checkout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
 
-      updateResumeForPayment(resumeId, createPayment.id);
-
-      // Directly redirect in the browser
-      window.location.href = createPayment.redirectUrl;
-    } catch (error) {
-      console.error(error);
+    if (!response.ok) {
+      const errorBody = await response.text().catch(() => "");
+      console.error("Yoco checkout failed:", errorBody);
+      throw new Error("Failed to create Yoco checkout");
     }
+
+    console.log(response)
+
+    const createPayment: CreateCheckoutResponse = await response.json();
+
+    // Persist the payment id against the resume (assuming this function exists)
+    console.log("createPayment: ", createPayment)
+    updateResumeForPayment(resumeId, createPayment.id);
+
+    // Redirect in the browser
+    window.location.href = createPayment.redirectUrl;
+  } catch (error) {
+    console.error("Error creating checkout:", error);
+    // Optionally surface this to the UI with a toast/snackbar
   }
 }

@@ -24,7 +24,6 @@ interface GenerateSummaryButtonProps {
 const GenerateSummaryButton = ({
   resumeData,
   onSummaryGenerated,
-  userPlan,
 }: GenerateSummaryButtonProps) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -32,10 +31,10 @@ const GenerateSummaryButton = ({
 
   async function handleClick() {
     // Client-side gate
-    if (userPlan === "FREE") {
-      setShowUpgradeDialog(true);
-      return;
-    }
+    // if (userPlan === "FREE") {
+    //   setShowUpgradeDialog(true);
+    //   return;
+    // }
 
     try {
       setLoading(true);

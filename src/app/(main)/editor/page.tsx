@@ -27,20 +27,11 @@ async function Page({ searchParams }: PageProps) {
     where: { userId: clerkUserId },
     include: userDataInclude,
   });
-  if (!user) return null;
-
-  const now = new Date();
-  const effectivePlan: "FREE" | "PREMIUM" =
-    user.plan === "PREMIUM" && (!user.premiumUntil || user.premiumUntil > now)
-      ? "PREMIUM"
-      : "FREE";
 
   return (
     <ResumeEditor
       resumeToEdit={resumeToEdit}
       personalInfoDetailsToAssign={user}
-      plan={effectivePlan}
-      premiumUntil={user.premiumUntil ?? null}
     />
   );
 }

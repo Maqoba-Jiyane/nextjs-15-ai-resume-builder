@@ -10,11 +10,11 @@ export const runtime = "nodejs";
 
 const WINDOW_SECONDS = 3 * 60; // 3 minutes clock skew tolerance
 
-function addDays(d: Date, days: number) {
-  const x = new Date(d);
-  x.setDate(x.getDate() + days);
-  return x;
-}
+// function addDays(d: Date, days: number) {
+//   const x = new Date(d);
+//   x.setDate(x.getDate() + days);
+//   return x;
+// }
 
 function extractV1Signatures(header: string): string[] {
   // Accept: "v1,BASE64 v1,BASE64"
@@ -49,12 +49,14 @@ export async function POST(req: NextRequest) {
     const sigHeader = req.headers.get("webhook-signature");
 
     if (!id || !ts || !sigHeader) {
+      console.log("Missing signature headers")
       return new Response("Missing signature headers", { status: 400 });
     }
 
     const now = Math.floor(Date.now() / 1000);
     const tsNum = Number(ts);
     if (!Number.isFinite(tsNum) || tsNum + WINDOW_SECONDS < now) {
+      console.log("Request expired")
       return new Response("Request expired", { status: 400 });
     }
 
@@ -102,6 +104,7 @@ export async function POST(req: NextRequest) {
     const paymentIdFromRef = ref.paymentId; // we injected this when creating the checkout
 
     if (!checkoutId && !paymentIdFromRef) {
+      console.log("Missing identifiers")
       return new Response("Missing identifiers", { status: 400 });
     }
 
@@ -114,6 +117,8 @@ export async function POST(req: NextRequest) {
     // 7) Find the Payment row:
     //    Prefer paymentId from reference, fallback to checkoutId lookup.
     const payment = await prisma.payment.findFirst({ where: { checkoutId } });
+
+    console.log("payment: ", payment)
 
     if (!payment) {
       // Don’t 404 webhooks in production; return 200 to avoid retries,
@@ -143,23 +148,28 @@ export async function POST(req: NextRequest) {
             // webhookPayload: body,
             checkoutId: payment.checkoutId ?? checkoutId ?? undefined, // backfill if needed
           },
-          include: { user: true },
         });
 
         // Extend premium starting from max(now, existing premiumUntil)
-        const nowD = new Date();
-        const base =
-          updated.user.premiumUntil && updated.user.premiumUntil > nowD
-            ? updated.user.premiumUntil
-            : nowD;
+        // const nowD = new Date();
+        // const base =
+        //   updated.user.premiumUntil && updated.user.premiumUntil > nowD
+        //     ? updated.user.premiumUntil
+        //     : nowD;
 
-        const extended =
-          updated.cycle === "WEEKLY" ? addDays(base, 7) : addDays(base, 30);
+        // const extended =
+        //   updated.cycle === "WEEKLY" ? addDays(base, 7) : addDays(base, 30);
 
-        await tx.user.update({
-          where: { userId: updated.userId },
-          data: { plan: "PREMIUM", premiumUntil: extended },
-        });
+        // await tx.user.update({
+        //   where: { userId: updated.userId },
+        //   data: { plan: "PREMIUM", premiumUntil: extended },
+        // });
+
+        await tx.resume.update({
+          where: {id: updated.resumeId || ""},
+          data: {paid: true}
+        })
+
       });
     } else if (eventType === "payment.failed" || eventType === "payment.canceled") {
       await prisma.payment.update({

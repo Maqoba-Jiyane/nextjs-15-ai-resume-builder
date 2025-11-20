@@ -70,6 +70,12 @@ const PublicDropDownMenu = () => {
               <span>Resumes</span>
             </Link>
           </DropdownMenuItem>
+          {/* <DropdownMenuItem asChild>
+            <Link href={"/cover-letters"}>
+              <FileUser />
+              <span>Cover Letters</span>
+            </Link>
+          </DropdownMenuItem> */}
           <DropdownMenuItem asChild>
             <Link href={"https://www.employmentecho.co.za"}>
               <FileUser />

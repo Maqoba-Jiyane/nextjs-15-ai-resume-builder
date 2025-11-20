@@ -11,6 +11,16 @@ export interface EditorFormProps {
 
   // NEW, read-only gating info
   plan: EffectivePlan;
+}
+
+export interface CoverLetterFormProps {
+  resumeData: ResumeValues;
+  personalDetails: UserDetailsValues;
+  setResumeData: (data: ResumeValues) => void;
+  onAiUsed: (aiUsed: boolean) => void;
+
+  // NEW, read-only gating info
+  plan: EffectivePlan;
   premiumUntil?: Date | null;
 }
 

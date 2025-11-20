@@ -110,7 +110,7 @@ export async function saveResume(values: ResumeValues, aiUsed = false) {
         userId,
         photoUrl: newPhotoUrl,
         checkoutId: null,
-        paid: true,
+        paid: false,
         downloadRequest: false,
         downloaded: false,
         workExperiences: {

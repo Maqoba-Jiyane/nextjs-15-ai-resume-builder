@@ -44,6 +44,7 @@ export default deleteResume;
 export async function updateResumeForPayment(resumeId:string | undefined, checkoutId: string) {
 
   console.log("resumeId: ", resumeId)
+  console.log("checkoutId: ", checkoutId)
 
   if(!resumeId || !checkoutId) return
   await prisma.resume.update({

@@ -104,7 +104,6 @@ const isLocked = (tpl: TemplateMeta, plan: EditorFormProps["plan"]) =>
 export default function TemplateSelector({
   resumeData,
   setResumeData,
-  plan,
 }: EditorFormProps) {
   const router = useRouter();
 
@@ -149,7 +148,7 @@ export default function TemplateSelector({
     (templateId: TemplateId) => {
       const tpl = TEMPLATES.find((t) => t.id === templateId)!;
 
-      if (isLocked(tpl, plan)) {
+      if (isLocked(tpl, "PREMIUM")) {
         // Upsell: send to pricing; keep client logic minimal
         goToPricing();
         return;
@@ -160,7 +159,7 @@ export default function TemplateSelector({
         shouldDirty: true,
       });
     },
-    [form, plan, goToPricing],
+    [form, goToPricing],
   );
 
   // Modal ESC
@@ -337,7 +336,7 @@ export default function TemplateSelector({
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {filtered.map((tpl) => {
-            const locked = isLocked(tpl, plan);
+            const locked = isLocked(tpl, "PREMIUM");
             const selected = selectedTemplate === tpl.id;
             return (
               <TemplateCard
@@ -388,7 +387,7 @@ export default function TemplateSelector({
 
             <div className="mt-3 flex items-center justify-between">
               <Button onClick={closeModal}>Close</Button>
-              {isLocked(modalTemplate, plan) ? (
+              {isLocked(modalTemplate, "PREMIUM") ? (
                 <Button
                   onClick={() => {
                     closeModal();

@@ -16,15 +16,11 @@ import { ATSAnalysisProps } from "@/components/Interfaces";
 interface ResumeEditorProps {
   resumeToEdit: ResumeServerData | null;
   personalInfoDetailsToAssign: UserServerData | null;
-  plan: "FREE" | "PREMIUM"; // NEW
-  premiumUntil?: Date | null; // NEW
 }
 
 function ResumeEditor({
   resumeToEdit,
   personalInfoDetailsToAssign,
-  plan,
-  premiumUntil,
 }: ResumeEditorProps) {
   const searchParams = useSearchParams();
   const [resumeData, setResumeData] = useState<ResumeValues>(
@@ -130,8 +126,7 @@ function ResumeEditor({
                 setResumeData={setResumeData}
                 personalDetails={personalInfoDetails}
                 onAiUsed={setAiUsed}
-                plan={plan}                    // pass down
-                premiumUntil={premiumUntil}    // pass down (optional)
+                plan={"PREMIUM"}                    // pass down
               />
             )}
           </div>

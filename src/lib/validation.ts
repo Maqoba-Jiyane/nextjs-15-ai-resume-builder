@@ -209,6 +209,11 @@ export type ResumeValues = Omit<z.infer<typeof resumeSchema>, "photo"> & {
   photo?: File | string | null;
 };
 
+export type CoverLetterValues = Omit<z.infer<typeof resumeSchema>, "photo"> & {
+  id?: string;
+  photo?: File | string | null;
+};
+
 export const generateWorkExperienceSchema = z.object({
   description: z
     .string()
