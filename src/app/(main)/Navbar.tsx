@@ -68,9 +68,9 @@ function Navbar() {
               <Link href="/resumes" className="hover:text-blue-600">
                 Resumes
               </Link>
-              {/* <Link href="/cover-letters" className="hover:text-blue-600">
+              <Link href="/cover-letters" className="hover:text-blue-600">
                 Cover Letters
-              </Link> */}
+              </Link>
               <Link href="https://www.employmentecho.co.za" target="_blank" className="hover:text-blue-600">Jobs</Link>
               <Link href="/blog" className="hover:text-blue-600">
                 Blog
