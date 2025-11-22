@@ -19,7 +19,6 @@ import {
   ArrowRight,
 } from "lucide-react";
 import React from "react";
-import BlurCarousel from "@/components/BlurCarousel";
 import CircularLogos from "@/components/BlurCarousel";
 
 const TestimonialsSection = dynamic(() => import("@/components/Testimonials"), {
