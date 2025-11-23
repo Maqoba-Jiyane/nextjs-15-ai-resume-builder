@@ -80,12 +80,12 @@ const PublicDropDownMenu = () => {
             </Link>
           </DropdownMenuItem>
 
-          <DropdownMenuItem asChild>
+          {/* <DropdownMenuItem asChild>
             <Link href="/cover-letters">
               <FileText className="mr-2 h-4 w-4" />
               <span>Cover Letters</span>
             </Link>
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
 
           <DropdownMenuItem asChild>
             <Link href="https://www.employmentecho.co.za">
