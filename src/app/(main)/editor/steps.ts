@@ -28,6 +28,11 @@ export const steps: {
     component: JobDescriptionForm,
     key: "job-description",
   },
+  // {
+  //   title: "Old cv upload",
+  //   component: OldCVUpload,
+  //   key: "old-cv",
+  // },
   {
     title: "Personal info",
     component: PersonalInfoForm,

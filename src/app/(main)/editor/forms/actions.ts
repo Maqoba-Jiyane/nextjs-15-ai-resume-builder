@@ -108,7 +108,7 @@ Description:
 • Reduced onboarding time by 20% by streamlining internal training processes
 `;
 
-const userMessage = `Please provide a SMART-based work experience entry based on this description: ${description}`;
+  const userMessage = `Please provide a SMART-based work experience entry based on this description: ${description}`;
 
   const completion = await openai.chat.completions.create({
     model: "gpt-4o-mini",
@@ -145,7 +145,7 @@ const userMessage = `Please provide a SMART-based work experience entry based on
   const startDate = startDateStr ? new Date(startDateStr) : undefined;
   const endDate = endDateStr ? new Date(endDateStr) : undefined;
 
-  console.log(descriptionText)
+  console.log(descriptionText);
 
   return {
     position,

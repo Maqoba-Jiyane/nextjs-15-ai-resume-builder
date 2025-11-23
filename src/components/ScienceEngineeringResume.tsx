@@ -210,7 +210,7 @@ const Section = ({
 
 const CertificateSection = ({ resumeData }: { resumeData: ResumeValues }) => {
   const certificates = resumeData.certifications;
-  console.log("certificates: ", resumeData.certifications);
+  
   if (!certificates?.length) return null;
 
   return (

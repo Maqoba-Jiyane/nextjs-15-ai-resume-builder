@@ -31,7 +31,6 @@ const Layout = async ({ children }: LayoutProps): Promise<JSX.Element | null> =>
       <Navbar />
       <Sidebar isAffiliate={isAffiliate} />
       {children}
-      {/* <PremiumModal /> */}
     </div>
   );
 };

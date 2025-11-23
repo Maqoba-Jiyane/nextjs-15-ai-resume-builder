@@ -9,10 +9,12 @@ import PublicDropDownMenu from "@/components/PublicDropDownMenu";
 import { Button } from "@/components/ui/button";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
+import { usePathname } from "next/navigation";
 
 function Navbar() {
   const { theme } = useTheme();
   const width = useScreenWidth();
+  const pathname = usePathname();
 
   const [isMounted, setIsMounted] = useState(false);
 
@@ -24,6 +26,11 @@ function Navbar() {
   if (!isMounted) return null;
 
   const isDark = theme === "dark";
+
+  // Only use pathname after the component has mounted on the client side
+  if (!isMounted || pathname !== "/") {
+    return null; // Hide the navbar on all pages except the home page
+  }
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-800 bg-slate-950/80 backdrop-blur">

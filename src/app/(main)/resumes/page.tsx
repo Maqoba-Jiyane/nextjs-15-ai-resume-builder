@@ -18,14 +18,12 @@ export default async function Page() {
   const refCode = cookieStore.get("refCode")?.value;
 
   const { userId } = await auth();
-  if (!userId) {
-    return null;
-  }
+  if (!userId) return null;
 
-  if (refCode && userId) {
+  // Attach referral code → Clerk
+  if (refCode) {
     try {
       const client = await clerkClient();
-
       await client.users.updateUserMetadata(userId, {
         publicMetadata: { refCode },
       });
@@ -34,9 +32,7 @@ export default async function Page() {
     }
   }
 
-  console.log(userId);
-
-  // 2. Fetch data from prisma
+  // Fetch resumes
   const [resumes, totalCount] = await Promise.all([
     prisma.resume.findMany({
       where: { userId },
@@ -46,30 +42,41 @@ export default async function Page() {
     prisma.resume.count({ where: { userId } }),
   ]);
 
-  // const canCreate = canCreateResume(totalCount, plan as Plan);
   const latestResumeId = resumes[0]?.id;
-  // 3. Render
+
   return (
-    <main className="max-w-7xl mx-auto w-full px-3 py-6 space-y-6">
+    <main className="mx-auto w-full max-w-7xl px-4 py-8 space-y-8 text-slate-200">
+      {/* CTA */}
       {latestResumeId ? (
-        <NewResumeCta latestResumeId={latestResumeId} />
+        <NewResumeCta/>
       ) : (
-        <Button className="mx-auto flex w-fit gap-2" asChild>
-          <Link href={"/editor"}>
+        <Button
+          className="mx-auto flex w-fit gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+          asChild
+        >
+          <Link href="/editor">
             <PlusSquare className="size-5" />
             New resume
           </Link>
         </Button>
       )}
-      <div className="space-y-1">
-        <h1 className="text-3xl font-bold">Your resumes</h1>
-        <p>Total: {totalCount}</p>
-      </div>
-      <div className="flex flex-col sm:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full gap-3">
-        {resumes.map((resume) => (
-          <ResumeItem key={resume.id} resume={resume} />
-        ))}
-      </div>
+
+      {/* Heading */}
+      <section className="space-y-1">
+        <h1 className="text-3xl font-extrabold tracking-tight">Your resumes</h1>
+        <p className="text-slate-400">Total: {totalCount}</p>
+      </section>
+
+      {/* Resume Grid */}
+      {resumes.length === 0 ? (
+        <p className="text-slate-500 italic">You haven’t created any resumes yet.</p>
+      ) : (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {resumes.map((resume) => (
+            <ResumeItem key={resume.id} resume={resume} />
+          ))}
+        </div>
+      )}
     </main>
   );
 }

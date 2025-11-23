@@ -190,9 +190,29 @@ export const referencesSchema = z.object({
 export type ReferenceItem = z.infer<typeof referenceItemSchema>;
 export type ReferencesValues = z.infer<typeof referencesSchema>;
 
+export const oldCVUploadSchema = z.object({
+  oldCV: z
+    .custom<File>()
+    .refine(
+      (file) =>
+        !file || // allow empty
+        ["application/pdf",
+         "application/msword",
+         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+         "text/plain"].includes(file.type),
+      {
+        message: "Please upload a PDF, DOC, DOCX, or TXT file.",
+      }
+    )
+    .optional(),
+});
+
+export type OldCVUpload = z.infer<typeof oldCVUploadSchema>;
+
 export const resumeSchema = z.object({
   ...generateInfoSchema.shape,
   ...personalInfoSchema.shape,
+  ...oldCVUploadSchema.shape,
   ...workExperienceSchema.shape,
   ...educationSchema.shape,
   ...certificationSchema.shape,
@@ -207,6 +227,7 @@ export const resumeSchema = z.object({
 export type ResumeValues = Omit<z.infer<typeof resumeSchema>, "photo"> & {
   id?: string;
   photo?: File | string | null;
+  oldCV?: File | string | null;
 };
 
 export type CoverLetterValues = Omit<z.infer<typeof resumeSchema>, "photo"> & {
