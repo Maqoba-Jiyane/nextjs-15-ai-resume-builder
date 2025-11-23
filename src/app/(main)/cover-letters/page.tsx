@@ -18,6 +18,8 @@ const page = async () => {
     prisma.resume.count({ where: { userId } }),
   ]);
 
+  console.log(resumes[0].id)
+
   return <div>{totalCount}</div>;
 };
 
