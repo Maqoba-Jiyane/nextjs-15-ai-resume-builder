@@ -1,130 +1,151 @@
-// app/earn-with-us/page.tsx
-import { JoinAffiliateButton } from '@/components/ui/JoinAffiliateButton';
-import prisma from '@/lib/prisma';
-import { auth } from '@clerk/nextjs/server';
+
+import AffiliateSignupSection from "./AffiliateSignupSection";
 
 export default async function AffiliateProgram() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      {/* Hero Section */}
-      <section className="text-center mb-16">
-        <h1 className="text-4xl md:text-5xl font-bold mb-6">
-          Earn Money by Sharing What You Love
-        </h1>
-        <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-          Join our affiliate program and earn competitive commissions for every customer you refer.
-        </p>
-        <div className="mt-10">
-          <JoinProgramButton />
-        </div>
-      </section>
-
-      {/* Value Proposition */}
-      <section className="mb-20">
-        <div className="grid md:grid-cols-3 gap-8 text-black">
-          <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-            <h3 className="text-xl font-semibold mb-4">High Commissions</h3>
-            <p className="text-gray-500">
-              Earn up to 40% on every sale you generate. The more you refer, the more you earn.
-            </p>
-          </div>
-          <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-            <h3 className="text-xl font-semibold mb-4">Easy to Use</h3>
-            <p className="text-gray-500">
-              Get your unique link in seconds and start sharing immediately.
-            </p>
-          </div>
-          <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-            <h3 className="text-xl font-semibold mb-4">Real-Time Tracking</h3>
-            <p className="text-gray-500">
-              Our dashboard shows your sign-ups, purchases, and earnings in real-time.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Social Proof */}
-      <section className="mb-20">
-        <h2 className="text-3xl font-bold text-center mb-12">What Our Affiliates Say</h2>
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-            <p className="text-gray-600 italic mb-4">
-              &quot;I&apos;ve been with the program for 6 months and it&apos;s become a significant part of my income. The dashboard makes tracking everything so simple!&quot;
-            </p>
-            <p className="font-medium">- Sarah K., Top Affiliate</p>
-          </div>
-          <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-            <p className="text-gray-600 italic mb-4">
-              &quot;The commission rates are the best I&apos;ve found, and the support team is always helpful when I have questions about optimizing my referrals.&quot;
-            </p>
-            <p className="font-medium">- Michael T., Content Creator</p>
-          </div>
-        </div>
-        <div className="mt-8 text-center">
-          <div className="inline-flex items-center gap-2 bg-blue-50 px-6 py-3 rounded-full">
-            <span className="text-blue-600 font-medium">R250,000+</span>
-            <span className="text-gray-600">earned by affiliates last year</span>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className="mb-20">
-        <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          <div className="text-center">
-            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-blue-600 font-bold text-xl">1</span>
+    <div className="w-full border-b border-border bg-background">
+      <div className="mx-auto max-w-6xl px-4 py-10 sm:py-12 space-y-16">
+        {/* Page header */}
+        <section className="space-y-3">
+          <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
+            Affiliate program
+          </p>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+                Earn with Eon Resume
+              </h1>
+              <p className="mt-2 max-w-xl text-sm text-muted-foreground">
+                Share Eon Resume with your audience and earn commissions on every
+                paid download that comes through your link.
+              </p>
             </div>
-            <h3 className="text-xl font-semibold mb-2">Sign Up</h3>
-            <p className="text-gray-600">
-              Join the program in just a few clicks - no complicated forms.
-            </p>
-          </div>
-          <div className="text-center">
-            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-blue-600 font-bold text-xl">2</span>
+            <div className="mt-2 sm:mt-0">
+            <AffiliateSignupSection />
             </div>
-            <h3 className="text-xl font-semibold mb-2">Get Your Link</h3>
-            <p className="text-gray-600">
-              Copy your unique affiliate link from your dashboard.
-            </p>
           </div>
-          <div className="text-center">
-            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-blue-600 font-bold text-xl">3</span>
-            </div>
-            <h3 className="text-xl font-semibold mb-2">Start Earning</h3>
-            <p className="text-gray-600">
-              Share your link and earn commissions on every sale.
-            </p>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA Section */}
-      <section className="bg-blue-50 rounded-2xl p-12 text-center text-black">
-        <h2 className="text-3xl font-bold mb-6">Ready to Start Earning?</h2>
-        <p className="text-gray-600 max-w-2xl mx-auto mb-8">
-          Join thousands of affiliates who are already earning with us. It&apos;s free to join and takes less than 2 minutes.
-        </p>
-        <JoinProgramButton />
-      </section>
+        {/* Key benefits */}
+        <section className="space-y-6">
+          <h2 className="text-base font-semibold text-foreground">
+            Why join the program?
+          </h2>
+          <div className="grid gap-5 md:grid-cols-3">
+            {[
+              {
+                title: "High commissions",
+                body: "Earn up to 40% per purchase. Great for creators, coaches, and job-help pages.",
+              },
+              {
+                title: "Quick setup",
+                body: "Sign in, get your link, and share it on WhatsApp, TikTok, Facebook, or your website.",
+              },
+              {
+                title: "Clear reporting",
+                body: "Track clicks, conversions, and payouts from a simple dashboard.",
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="rounded-xl border border-border bg-card p-5 shadow-sm"
+              >
+                <h3 className="text-sm font-semibold text-foreground mb-2">
+                  {item.title}
+                </h3>
+                <p className="text-xs text-muted-foreground">{item.body}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Social proof */}
+        <section className="space-y-6">
+          <h2 className="text-base font-semibold text-foreground">
+            What affiliates are saying
+          </h2>
+          <div className="grid gap-5 md:grid-cols-2">
+            <div className="rounded-xl border border-border bg-card p-5">
+              <p className="text-xs italic text-muted-foreground mb-3">
+                “I recommend Eon Resume in my CV tips videos. It&apos;s become
+                a consistent side income without extra work.”
+              </p>
+              <p className="text-xs font-medium text-foreground">
+                — Sarah, Content Creator
+              </p>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-5">
+              <p className="text-xs italic text-muted-foreground mb-3">
+                “I share my link in WhatsApp groups. When people download their
+                CVs, I get paid. Simple and transparent.”
+              </p>
+              <p className="text-xs font-medium text-foreground">
+                — Michael, Job-Help Admin
+              </p>
+            </div>
+          </div>
+          <div className="flex justify-center">
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-[0.7rem] text-emerald-300">
+              <span className="font-semibold">R250,000+</span>
+              <span className="text-muted-foreground">
+                paid out to affiliates last year
+              </span>
+            </div>
+          </div>
+        </section>
+
+        {/* How it works */}
+        <section className="space-y-6">
+          <h2 className="text-base font-semibold text-foreground">
+            How it works
+          </h2>
+          <div className="grid gap-6 md:grid-cols-3">
+            {[
+              {
+                step: "1",
+                title: "Sign up",
+                text: "Accept the affiliate terms from your Eon Resume account.",
+              },
+              {
+                step: "2",
+                title: "Share your link",
+                text: "Post your link wherever your audience is most active.",
+              },
+              {
+                step: "3",
+                title: "Get paid",
+                text: "Earn commission whenever someone makes a qualifying purchase.",
+              },
+            ].map((s) => (
+              <div key={s.step} className="space-y-3 text-sm">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-sky-500/10 text-xs font-semibold text-sky-400">
+                  {s.step}
+                </div>
+                <h3 className="font-medium text-foreground">{s.title}</h3>
+                <p className="text-xs text-muted-foreground">{s.text}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        
+
+        {/* Bottom CTA strip */}
+        <section className="rounded-2xl border border-sky-500/20 bg-sky-500/5 p-6 sm:p-7 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="text-sm font-semibold text-foreground">
+              Ready to start earning with Eon Resume?
+            </h2>
+            <p className="mt-1 text-xs text-muted-foreground max-w-md">
+              Joining is free, and you can turn your existing audience into an
+              extra monthly income stream in just a few minutes.
+            </p>
+          </div>
+          <div className="mt-3 sm:mt-0">
+          <AffiliateSignupSection />
+          </div>
+        </section>
+      </div>
     </div>
-  );
-}
-
-async function JoinProgramButton() {
-  const { userId } = await auth();
-  if (!userId) return null;
-
-  const user = await prisma.user.findUnique({
-    where: { userId },
-    select: { affiliate: true },
-  });
-
-  return (
-    
-    <JoinAffiliateButton isAffiliate={!!user?.affiliate} />
   );
 }

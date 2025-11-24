@@ -4,24 +4,25 @@ export async function getAffiliateStats(userId: string) {
   const user = await prisma.user.findUnique({
     where: { userId },
     select: {
-      referralCode: true,
-    }
+      affiliate: true,
+    },
   });
 
   if (!user) return null;
 
-  const code = user.referralCode;
+  const code = user.affiliate?.code;
 
-  const [signups, purchases,  earnings] = await Promise.all([
-    prisma.user.count({ where: { referredByCode: code } }),
-    prisma.payment.count({ where: { referralCode: code,} }),
-    prisma.payment.aggregate({ where: { referralCode: code }, _sum: { amountPaid: true } })
-  ]);
+  const stats = await prisma.affiliate.findUnique({
+    where: { userId },
+  });
+
+  if(!stats) return;
 
   return {
     code,
-    purchases,
-    signups,
-    earnings: earnings._sum.amountPaid ? (earnings._sum.amountPaid/100) * 0.4 : 0
+    clicks: stats?.totalClicks,
+    purchases: stats?.totalPurchases,
+    signups: stats?.totalSignups,
+    earnings: stats?.totalCommission,
   };
 }

@@ -63,8 +63,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         email_addresses = [],
         first_name = "",
         last_name = "",
-        image_url = "",
-        public_metadata = { refCode: "" },
       } = data;
 
       const email = email_addresses[0]?.email_address || "";
@@ -75,20 +73,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
           email,
           firstName: first_name,
           lastName: last_name,
-          image: image_url,
-          referredByCode: public_metadata?.refCode
-            ? public_metadata?.refCode
-            : null,
         },
         create: {
           userId: clerkUserId,
           email,
           firstName: first_name,
           lastName: last_name,
-          image: image_url,
-          referredByCode: public_metadata?.refCode
-            ? public_metadata?.refCode
-            : null,
         },
       });
 

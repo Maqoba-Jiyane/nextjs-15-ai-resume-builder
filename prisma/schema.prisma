@@ -176,6 +176,8 @@ model User {
   
   plan          Plan     @default(FREE)
   premiumUntil  DateTime?   // if now < premiumUntil => Premium
+
+  affiliate Affiliate?
   
 
   // 🔹 Personal Details (editable by user)
@@ -209,12 +211,30 @@ model User {
   // 🔹 Timestamps
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
-  affiliate        Boolean @default(false)
 
   @@map("user")
   @@index([referredByCode])
 }
 
+model Affiliate {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [userId])
+
+  code            String   @unique           // e.g. "EON-4F7KQ"
+  status          String   @default("active") // "active" | "paused" | "banned"
+
+  payshapId       String
+  bank            String
+
+  totalClicks     Int      @default(0)
+  totalSignups    Int      @default(0)
+  totalPurchases  Int      @default(0)   // cents
+  totalCommission Int      @default(0)   // cents
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
 
 model WorkExperiencePrompt {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId

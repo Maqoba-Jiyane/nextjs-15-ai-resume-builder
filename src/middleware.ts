@@ -16,24 +16,24 @@ const isUnsafeRoute = createRouteMatcher(["/admin(.*)"]);
 
 export default clerkMiddleware(async (auth, request: NextRequest) => {
   const url = new URL(request.url);
-  const pathname = request.nextUrl.pathname;
+  // const pathname = request.nextUrl.pathname;
 
   const res = NextResponse.next();
 
   // ✅ Store `refCode` in cookie if found in URL
-  const refCode = url.searchParams.get("refCode");
-  if (refCode) {
-    const redirectUrl = new URL(pathname, request.url); // Clean URL (remove query param)
-    const redirectResponse = NextResponse.redirect(redirectUrl);
+  // const refCode = url.searchParams.get("refCode");
+  // if (refCode) {
+  //   const redirectUrl = new URL(pathname, request.url); // Clean URL (remove query param)
+  //   const redirectResponse = NextResponse.redirect(redirectUrl);
 
-    redirectResponse.cookies.set("refCode", refCode, {
-      path: "/",
-      maxAge: 60 * 60 * 24 * 30, // 30 days
-      httpOnly: false,
-    });
+  //   redirectResponse.cookies.set("refCode", refCode, {
+  //     path: "/",
+  //     maxAge: 60 * 60 * 24 * 30, // 30 days
+  //     httpOnly: false,
+  //   });
 
-    return redirectResponse;
-  }
+  //   return redirectResponse;
+  // }
 
   // ✅ Store coupon in cookie if found in query param and not already stored
   const coupon = url.searchParams.get("coupon");

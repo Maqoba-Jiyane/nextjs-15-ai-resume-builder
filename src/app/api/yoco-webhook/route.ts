@@ -170,6 +170,18 @@ export async function POST(req: NextRequest) {
           data: {paid: true}
         })
 
+        const user = await prisma.user.findUnique({
+          where: {userId: updated.userId}
+        })
+
+        await prisma.affiliate.update({
+          where: { code: user?.referredByCode || "" },
+          data: {
+            totalPurchases: { increment: 1 },
+            totalCommission: { increment: 400 },
+          },
+        });        
+
       });
     } else if (eventType === "payment.failed" || eventType === "payment.canceled") {
       await prisma.payment.update({

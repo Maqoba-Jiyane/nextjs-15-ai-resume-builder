@@ -18,8 +18,10 @@ import {
   Handshake,
   ArrowRight,
 } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import CircularLogos from "@/components/BlurCarousel";
+import { useSearchParams } from "next/navigation";
+import { UseConsumeAffiliateRefOnce } from "@/components/UseConsumeAffiliateRefOnce";
 
 const TestimonialsSection = dynamic(() => import("@/components/Testimonials"), {
   loading: () => (
@@ -108,9 +110,46 @@ const trustLogos = [
 ];
 
 export default function LandingPage() {
+
+  const searchParams = useSearchParams();
+  const referralCode = searchParams.get("refCode"); // e.g. ?ref=EON-4F7KQ
+
+  console.log("referralCode: ", referralCode)
+
+  useEffect(() => {
+    if (!referralCode) return;
+
+    // Check if we already have a referral cookie
+    const existingRef = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("refCode="))
+      ?.split("=")[1];
+
+    // Only track + set cookie the *first* time
+    if (!existingRef) {
+      // 1) Store the referral code in a cookie for ~30 days
+      const maxAge = 60 * 60 * 24; // 24 hours
+      document.cookie = `refCode=${encodeURIComponent(
+        referralCode,
+      )}; path=/; max-age=${maxAge}; samesite=lax`;
+
+      // 2) Increment clicks for this affiliate
+      fetch("/api/affiliate/click", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ code: referralCode }),
+      }).catch(() => {
+        // fail silently – don't block UX
+      });
+    }
+  }, [referralCode]);
+
   return (
     <main className="w-full bg-slate-950 text-slate-50">
       {/* SEO JSON-LD */}
+      <UseConsumeAffiliateRefOnce />
       <Script
         id="ld-website"
         type="application/ld+json"
@@ -304,7 +343,7 @@ export default function LandingPage() {
               <div
                 key={i}
                 className={cn(
-                  "rounded-xl border border-slate-800 bg-slate-900/70 p-5 shadow-sm transition-transform transition-shadow duration-200 hover:-translate-y-1 hover:shadow-[0_18px_35px_rgba(15,23,42,0.9)]",
+                  "rounded-xl border border-slate-800 bg-slate-900/70 p-5 shadow-sm transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_18px_35px_rgba(15,23,42,0.9)]",
                 )}
               >
                 <div className="mb-3 inline-flex items-center justify-center rounded-full bg-sky-500/10 p-2 text-sky-300">

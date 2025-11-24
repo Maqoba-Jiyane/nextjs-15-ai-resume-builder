@@ -51,8 +51,8 @@ export default function Sidebar({
               <a href="/user/profile" className="block hover:underline">
               👤 Account Details
               </a>
-              {/* <a href="/user/subscription" className="block hover:underline">
-              💳 Manage Subscription
+              {/* <a href="/earn-with-us" className="block hover:underline">
+              Affiliate
               </a> */}
               {isAffiliate && (
                 <a

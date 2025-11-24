@@ -43,55 +43,61 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const discountPercentage = Number(useRetrieveRef());
   const [downloading, setDownloading] = useState(false);
+  const [redirecting, setRedirecting] = useState(false);
   const { toast } = useToast();
 
   const handlePrint = async () => {
-    setDownloading(true);
-    // Ask the server to mint a short-lived signed URL for this resume
-    const r = await fetch(
-      `/api/print-url?resumeId=${encodeURIComponent(resume.id)}`,
-    );
-    if (!r.ok) {
-      console.error("Failed to get signed print URL");
-      return;
-    }
-    const { url } = await r.json(); // e.g. /api/print?token=...
-
-    try {
-      // setDownloading(true);
-      // Option A (fastest UX): let the browser stream it in a new tab
-      // window.open(url, "_blank");
-      // setDownloading(false);
-
-      // Option B (keep "Save as" behavior + custom filename)
-      // console.log("url: ", url)
-      const resPdf = await fetch(url, { method: "POST" });
-
-      if (!resPdf.ok) throw new Error("PDF download failed");
-      // console.log("blob: ", resPdf)
-      const blob = await resPdf.blob();
-      const objUrl = URL.createObjectURL(blob);
-      console.log("objUrl: ", objUrl)
-      const a = document.createElement("a");
-      const nameParts = [
-        sanitize(resume.firstName || ""),
-        sanitize(resume.lastName || ""),
-        resume.title ? sanitize(resume.title) : "",
-        resume.description ? sanitize(resume.description.substring(0, 40)) : "",
-      ].filter(Boolean);
-      a.href = objUrl;
-      a.download = `${nameParts.join("_") || "resume"}.pdf`;
-      a.click();
-      URL.revokeObjectURL(objUrl);
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        description: "Ooops. That shouldn't have happened, please try again.",
-      });
-      setDownloading(false);
-      console.error(error);
-    } finally {
-      setDownloading(false);
+    if(resume.paid){
+      setDownloading(true);
+      // Ask the server to mint a short-lived signed URL for this resume
+      const r = await fetch(
+        `/api/print-url?resumeId=${encodeURIComponent(resume.id)}`,
+      );
+      if (!r.ok) {
+        console.error("Failed to get signed print URL");
+        return;
+      }
+      const { url } = await r.json(); // e.g. /api/print?token=...
+  
+      try {
+        // setDownloading(true);
+        // Option A (fastest UX): let the browser stream it in a new tab
+        // window.open(url, "_blank");
+        // setDownloading(false);
+  
+        // Option B (keep "Save as" behavior + custom filename)
+        // console.log("url: ", url)
+        const resPdf = await fetch(url, { method: "POST" });
+  
+        if (!resPdf.ok) throw new Error("PDF download failed");
+        // console.log("blob: ", resPdf)
+        const blob = await resPdf.blob();
+        const objUrl = URL.createObjectURL(blob);
+        console.log("objUrl: ", objUrl);
+        const a = document.createElement("a");
+        const nameParts = [
+          sanitize(resume.firstName || ""),
+          sanitize(resume.lastName || ""),
+          resume.title ? sanitize(resume.title) : "",
+          resume.description ? sanitize(resume.description.substring(0, 40)) : "",
+        ].filter(Boolean);
+        a.href = objUrl;
+        a.download = `${nameParts.join("_") || "resume"}.pdf`;
+        a.click();
+        URL.revokeObjectURL(objUrl);
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          description: "Ooops. That shouldn't have happened, please try again.",
+        });
+        setDownloading(false);
+        console.error(error);
+      } finally {
+        setDownloading(false);
+      }
+    }else{
+      setRedirecting(true)
+      myClientComponent(resume.id, 0)
     }
   };
 
@@ -130,17 +136,22 @@ const ResumeItem = ({ resume }: ResumeItemProps) => {
         <Button
           size="lg"
           variant="premium"
-          onClick={resume.paid ? () => handlePrint() : () => myClientComponent(resume.id, 0) }
+          onClick={() => handlePrint()
+          }
           className="flex w-full items-center justify-center gap-2"
-          disabled={downloading}
+          disabled={downloading || redirecting}
         >
           {downloading ? (
             <>
               <ShipWheel className="h-4 w-4 animate-spin" />
               Downloading...
             </>
+          ) : resume.paid ? (
+            "Download"
+          ) : redirecting ? (
+            "Redirecting..."
           ) : (
-            resume.paid ? "Download" : "Make Payment"
+            "Make Payment"
           )}
         </Button>
         <DownloadConfirmationDialog
@@ -311,8 +322,7 @@ function DownloadConfirmationDialog({
 }
 
 // Helper: round to 2 decimal places (e.g. for cents)
-const roundToCents = (value: number) =>
-  Math.round(value * 100) / 100;
+const roundToCents = (value: number) => Math.round(value * 100) / 100;
 
 type CreateCheckoutResponse = {
   id: string;
@@ -320,10 +330,7 @@ type CreateCheckoutResponse = {
   // add other fields from your API response if needed
 };
 
-async function myClientComponent(
-  resumeId: string,
-  discountPercentage: number
-) {
+async function myClientComponent(resumeId: string, discountPercentage: number) {
   // Basic guard
   if (!resumeId) {
     console.error("resumeId is required");
@@ -337,9 +344,7 @@ async function myClientComponent(
   const taxRate = 0.15;
 
   // Price calculations
-  const discountAmount = roundToCents(
-    basePrice * (normalizedDiscount / 100)
-  );
+  const discountAmount = roundToCents(basePrice * (normalizedDiscount / 100));
   const discountedPrice = roundToCents(basePrice - discountAmount);
   const taxAmount = roundToCents(discountedPrice * taxRate);
   const totalAmount = roundToCents(discountedPrice + taxAmount);
@@ -349,7 +354,8 @@ async function myClientComponent(
     currency: "ZAR",
     totalDiscount: discountAmount,
     totalTaxAmount: taxAmount,
-    subtotalAmount: discountedPrice,resumeId: resumeId,
+    subtotalAmount: discountedPrice,
+    resumeId: resumeId,
     lineItems: [
       {
         displayName: "AI Resume",
@@ -361,7 +367,7 @@ async function myClientComponent(
     ],
   };
 
-  console.log(payload)
+  console.log(payload);
 
   try {
     const response = await fetch("/api/yoco-checkout", {
@@ -378,12 +384,12 @@ async function myClientComponent(
       throw new Error("Failed to create Yoco checkout");
     }
 
-    console.log(response)
+    console.log(response);
 
     const createPayment: CreateCheckoutResponse = await response.json();
 
     // Persist the payment id against the resume (assuming this function exists)
-    console.log("createPayment: ", createPayment)
+    console.log("createPayment: ", createPayment);
     updateResumeForPayment(resumeId, createPayment.id);
 
     // Redirect in the browser

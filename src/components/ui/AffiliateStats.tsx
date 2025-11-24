@@ -6,18 +6,20 @@ import { useState } from "react";
 
 export function AffiliateStats({
   code,
+  clicks,
   purchases,
   signups,
   earnings,
 }: {
-  code: string | null;
+  code: string | undefined;
+  clicks: number;
   purchases: number;
   signups: number;
   earnings: number;
 }) {
   const [copied, setCopied] = useState(false);
 
-  const referralUrl = `https://www.eonresume.co.za/?refCode=${code}`;
+  const referralUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/?refCode=${code}`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(referralUrl);
@@ -26,18 +28,18 @@ export function AffiliateStats({
   };
 
   return (
-    <div className="space-y-8 sm:space-y-10">
+    <div className="space-y-10">
       {/* Referral Link Section */}
-      <div className="bg-muted p-4 sm:p-6 rounded-lg shadow-sm max-w-screen">
-        <h2 className="text-lg sm:text-xl font-semibold mb-2 text-primary">
+      <div className="rounded-2xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950/90 dark:shadow-xl">
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-2">
           🚀 Your Referral Link
         </h2>
-        <p className="text-sm text-gray-500 mb-4">
-          Share this link with others. You’ll earn rewards for every signup and
-          purchase they make!
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+          Share your link and earn commission from every signup & purchase.
         </p>
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-          <code className="bg-white text-black px-3 py-2 rounded-md text-sm w-full overflow-x-hidden whitespace-nowrap text-ellipsis">
+
+        <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <code className="w-full truncate rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-xs text-slate-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
             {referralUrl}
           </code>
 
@@ -45,7 +47,7 @@ export function AffiliateStats({
             onClick={handleCopy}
             variant="outline"
             size="sm"
-            className="w-full sm:w-auto"
+            className="w-full sm:w-auto dark:border-slate-600 dark:text-slate-200"
           >
             <ClipboardCopyIcon className="h-4 w-4 mr-2" />
             {copied ? "Copied!" : "Copy"}
@@ -53,35 +55,25 @@ export function AffiliateStats({
         </div>
       </div>
 
-      {/* Stats Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 text-black">
-        <Stat
-          label="Signups"
-          value={signups}
-          description="People you've inspired to join"
-        />
-        <Stat
-          label="Purchases"
-          value={purchases}
-          description="Conversions from your referrals"
-        />
-        <Stat
-          label="Earnings"
-          value={`R${earnings.toFixed(2)}`}
-          description="Your total commission earned"
-        />
+      {/* Stats Grid */}
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+        <Stat label="Clicks" value={clicks} />
+        <Stat label="Signups" value={signups} />
+        <Stat label="Purchases" value={purchases} />
+        <Stat label="Earnings" value={`R${(earnings/100).toFixed(2)}`} />
       </div>
 
-      {/* Motivation / Tips */}
-      <div className="bg-primary/5 p-4 sm:p-6 rounded-lg">
-        <div className="flex items-start sm:items-center space-x-2 sm:space-x-3 mb-2">
-          <Sparkles className="h-5 w-5 text-primary" />
-          <h3 className="text-md font-semibold text-primary">Pro Tip</h3>
+      {/* Pro tip */}
+      <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 dark:border-slate-700 dark:bg-slate-900/60">
+        <div className="flex items-start gap-3">
+          <Sparkles className="h-5 w-5 text-sky-400" />
+          <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+            Pro Tip
+          </h3>
         </div>
-        <p className="text-sm text-gray-500">
-          Share your link on social media, in your bio, or with friends in chat
-          groups. The more visibility you get, the more you earn. Let’s grow
-          together!
+        <p className="mt-2 text-xs text-slate-600 dark:text-slate-400">
+          Post your link on WhatsApp Status, TikTok, Facebook bio, and job
+          groups. The more visibility you create, the more you earn. 🚀
         </p>
       </div>
     </div>
@@ -91,19 +83,18 @@ export function AffiliateStats({
 function Stat({
   label,
   value,
-  description,
 }: {
   label: string;
   value: number | string;
-  description?: string;
 }) {
   return (
-    <div className="text-center border p-4 sm:p-5 rounded-lg shadow-sm bg-white hover:shadow-md transition-shadow">
-      <div className="text-2xl sm:text-3xl font-extrabold">{value}</div>
-      <div className="text-sm text-gray-500">{label}</div>
-      {description && (
-        <div className="mt-1 text-xs text-gray-400">{description}</div>
-      )}
+    <div className="rounded-xl border border-slate-200 bg-white/95 p-4 shadow-sm text-center dark:border-slate-700 dark:bg-slate-950/90 dark:shadow-lg transition hover:shadow-md dark:hover:shadow-xl">
+      <div className="text-xl font-bold text-slate-900 dark:text-white">
+        {value}
+      </div>
+      <div className="mt-1 text-[0.7rem] text-slate-500 dark:text-slate-400">
+        {label}
+      </div>
     </div>
   );
 }
