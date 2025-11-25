@@ -201,7 +201,7 @@ export async function POST(req: NextRequest) {
         try {
           const { subject, html } = affiliatePurchaseEmail({
             amount: 400, // cents or rand? adjust to your logic
-            dashboardUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/affiliate`,
+            dashboardUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/earn-with-us/dashboard`,
           });
 
           const mailOptions: MailOptions = {
