@@ -30,7 +30,7 @@ export function AffiliateStats({
   return (
     <div className="space-y-10">
       {/* Referral Link Section */}
-      <div className="rounded-2xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950/90 dark:shadow-xl">
+      <div className="rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950/90 dark:shadow-xl">
         <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-2">
           🚀 Your Referral Link
         </h2>
@@ -56,7 +56,7 @@ export function AffiliateStats({
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-4">
         <Stat label="Clicks" value={clicks} />
         <Stat label="Signups" value={signups} />
         <Stat label="Purchases" value={purchases} />

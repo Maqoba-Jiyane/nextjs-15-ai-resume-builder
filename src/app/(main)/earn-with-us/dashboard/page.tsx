@@ -45,7 +45,7 @@ export default async function AffiliateDashboard() {
 
   // ✅ Has affiliate stats
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
+    <div className="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:mx-auto">
       <div className="mb-8 text-center">
         <p className="text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
           Affiliate dashboard
@@ -59,7 +59,7 @@ export default async function AffiliateDashboard() {
         </p>
       </div>
 
-      <div className="rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950/90">
+      <div className="rounded-2xl">
         <AffiliateStats {...stats} />
       </div>
 

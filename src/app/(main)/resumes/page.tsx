@@ -5,9 +5,6 @@ import { Metadata } from "next";
 import ResumeItem from "./ResumeItem";
 import { cookies } from "next/headers";
 import NewResumeCta from "./NewResumeCta";
-import { Button } from "@/components/ui/button";
-import { PlusSquare } from "lucide-react";
-import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Your resumes",
@@ -42,24 +39,9 @@ export default async function Page() {
     prisma.resume.count({ where: { userId } }),
   ]);
 
-  const latestResumeId = resumes[0]?.id;
-
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-8 space-y-8 text-slate-200">
-      {/* CTA */}
-      {latestResumeId ? (
-        <NewResumeCta/>
-      ) : (
-        <Button
-          className="mx-auto flex w-fit gap-2 bg-blue-600 hover:bg-blue-700 text-white"
-          asChild
-        >
-          <Link href="/editor">
-            <PlusSquare className="size-5" />
-            New resume
-          </Link>
-        </Button>
-      )}
+      <NewResumeCta/>
 
       {/* Heading */}
       <section className="space-y-1">
