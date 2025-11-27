@@ -50,18 +50,17 @@ export default async function AffiliateSignupSection() {
   //   });
   // }
 
-  const [affiliate, total] =await Promise.all([
+  const [affiliate] =await Promise.all([
     prisma.affiliate.findFirst({
       where: { userId },
       select: { code: true },
     }),
-    prisma.affiliate.count(),
   ]);
 
   return (
     <div>
       <AffiliateButton
-        isAffiliate={affiliate ? true : false} totalNumber={total}
+        isAffiliate={affiliate ? true : false}
         affiliate={user?.affiliate || null}
       />
     </div>

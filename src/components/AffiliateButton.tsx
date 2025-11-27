@@ -7,7 +7,6 @@ import AffiliateSignupForm from "@/app/(main)/earn-with-us/AffiliateSignupForm";
 
 interface AffiliateButtonProps {
   isAffiliate: boolean;
-  totalNumber: number;
   affiliate: AffiliateProps | null;
 }
 
@@ -17,7 +16,7 @@ interface AffiliateProps {
   payshapId: string;
 }
 
-const AffiliateButton = ({ isAffiliate, totalNumber, affiliate }: AffiliateButtonProps) => {
+const AffiliateButton = ({ isAffiliate, affiliate }: AffiliateButtonProps) => {
   const [showForm, setShowForm] = React.useState(false);
 
   console.log("isAffiliate: ", isAffiliate)
@@ -34,7 +33,7 @@ const AffiliateButton = ({ isAffiliate, totalNumber, affiliate }: AffiliateButto
   // Not an affiliate yet
   return (
     <div>
-      {totalNumber < 10  ? <>{!showForm ? (
+      {!showForm ? (
         // Show only Join Program button
         <Button onClick={() => setShowForm(true)}>
           Join Program
@@ -42,9 +41,7 @@ const AffiliateButton = ({ isAffiliate, totalNumber, affiliate }: AffiliateButto
       ) : (
         // After clicking → show the form instead of the button
         <AffiliateSignupForm existingAffiliate={affiliate ?? null} />
-      )}</> : <Button>
-      Volume Reached
-    </Button>}
+      )}
     </div>
   );
 };
