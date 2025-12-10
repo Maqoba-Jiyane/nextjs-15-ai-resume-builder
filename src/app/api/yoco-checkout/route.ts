@@ -109,7 +109,7 @@ export async function POST(req: NextRequest) {
       resumeId,
     }).toString();
 
-    const yocoRes = await fetch("https://payments.yoco.com/api/checkouts", {
+    const yocoRes = await fetch("/api/checkouts", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
