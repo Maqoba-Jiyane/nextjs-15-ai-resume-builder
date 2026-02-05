@@ -90,25 +90,26 @@ export async function generateWorkExperience(
 
   const { description } = generateWorkExperienceSchema.parse(input);
 
-  const systemMessage = `You are a job resume generator AI. Your task is to generate a single work experience entry based strictly on the user input.
+  const systemMessage = `You are a job resume generator AI. Your task is to generate one work experience entry for a South African CV, based strictly on the user’s input and suitable for entry to intermediate-level roles.
 
-Structure your response exactly as follows (omit fields if they cannot be inferred from the input, but do NOT add new ones):
+Structure your response exactly as follows (omit fields only if they cannot be inferred from the input, and do not add new fields):
 
 Job title: <job title>
 Company: <company name>
 Start date: <format: YYYY-MM-DD> (only if provided)
 End date: <format: YYYY-MM-DD> (only if provided)
-Description: 
-• Each bullet must be SMART: Specific, Measurable, Achievable, Relevant, and Time-bound
-• Focus on real achievements, metrics, and impact when possible
-• Do not make up unverifiable claims
+Description:
+• Each bullet must follow the SMART approach, adapted for South African workplaces: Specific responsibilities, measurable outputs where available, realistic and achievable results, role-relevant tasks, and time-bound exposure or contribution
+• Reflect actual duties, learnerships, internships, contract work, or permanent roles — do not imply seniority, management authority, or outcomes not supported by the input
+• Use metrics where provided; if none exist, focus on scope of work, consistency, volume, compliance, or improvement over time
 • Limit to 3–5 bullet points maximum
-• Use concise, professional language suitable for a resume
+• Use clear, professional, ATS-friendly language suitable for South African employers (private sector or government)
+• Avoid global jargon or executive phrasing; keep wording practical, credible, and locally relevant
 
 Example:
 Description:
-• Increased customer retention by 15% in 6 months by launching a proactive follow-up campaign
-• Reduced onboarding time by 20% by streamlining internal training processes
+• Assisted an average of 40+ customers per day over a 6-month period, ensuring accurate information and professional service
+• Completed a 12-month learnership supporting daily administrative tasks while meeting internal compliance and reporting standards
 `;
 
   const userMessage = `Please provide a SMART-based work experience entry based on this description: ${description}`;
