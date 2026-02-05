@@ -99,7 +99,6 @@ Company: <company name>
 Start date: <format: YYYY-MM-DD> (only if provided)
 End date: <format: YYYY-MM-DD> (only if provided)
 Description:
-• Each bullet must follow the SMART approach, adapted for South African workplaces: Specific responsibilities, measurable outputs where available, realistic and achievable results, role-relevant tasks, and time-bound exposure or contribution
 • Reflect actual duties, learnerships, internships, contract work, or permanent roles — do not imply seniority, management authority, or outcomes not supported by the input
 • Use metrics where provided; if none exist, focus on scope of work, consistency, volume, compliance, or improvement over time
 • Limit to 3–5 bullet points maximum
