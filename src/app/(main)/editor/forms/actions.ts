@@ -112,7 +112,7 @@ Description:
 • Completed a 12-month learnership supporting daily administrative tasks while meeting internal compliance and reporting standards
 `;
 
-  const userMessage = `Please provide a SMART-based work experience entry based on this description: ${description}`;
+  const userMessage = `Please provide work experience entry based on this description: ${description}`;
 
   const completion = await openai.chat.completions.create({
     model: "gpt-4o-mini",
