@@ -52,7 +52,7 @@ function Navbar() {
           <div className="flex items-center">
             <nav
               className={`flex items-center gap-5 text-sm ${
-                isDark ? "text-slate-100" : "text-slate-900"
+                isDark ? "text-white" : "text-slate-900"
               }`}
             >
               <Link href="/" className="hover:text-sky-400">
