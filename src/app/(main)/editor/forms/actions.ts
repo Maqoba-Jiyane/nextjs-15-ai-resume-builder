@@ -1,6 +1,6 @@
 "use server";
 
-import openai from "@/lib/openai";
+// import openai from "@/lib/openai";
 import prisma from "@/lib/prisma";
 import {
   AnalyzeResumeInput,
@@ -12,6 +12,12 @@ import {
   WorkExperience,
 } from "@/lib/validation";
 import { auth } from "@clerk/nextjs/server";
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+  baseURL: "https://api.groq.com/openai/v1",
+});
 
 export async function generateSummary(input: GenerateSummaryInput) {
   // TODO: Block non-prremium users
@@ -31,8 +37,8 @@ When a job description is provided, tailor the summary to match its requirements
 Base the summary strictly on the user’s actual work history, education, learnerships, internships, or skills — do not invent seniority, leadership scope, or outcomes.
 Keep the tone clear, honest, and ATS-friendly, suitable for CVs submitted to South African employers (private sector or government).
 Keep the summary concise (3–5 lines), professional, and focused on readiness, reliability, and growth potential, not executive-level impact.`;
-  
-const userMessage = `Please generate a professional resume summary from this data:
+
+  const userMessage = `Please generate a professional resume summary from this data:
 
 Job title: ${jobTitle || "N/A"}
 
@@ -61,7 +67,7 @@ Job Description: ${jobDescription || "N/A"}
 `;
 
   const completion = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: "openai/gpt-oss-120b",
     messages: [
       {
         role: "system",
@@ -114,7 +120,7 @@ Description:
   const userMessage = `Please provide work experience entry based on this description: ${description}`;
 
   const completion = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: "openai/gpt-oss-120b",
     messages: [
       {
         role: "system",
@@ -198,7 +204,7 @@ ${educations
 `;
 
   const completion = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: "openai/gpt-oss-120b",
     messages: [
       {
         role: "system",
@@ -308,7 +314,7 @@ Use your knowledge of best practices in ATS algorithms and resume optimization t
 `;
     // Request AI completion from OpenAI's GPT model
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "openai/gpt-oss-120b",
       messages: [
         {
           role: "system",
