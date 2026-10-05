@@ -6,7 +6,42 @@ Instead of manually designing a CV from scratch, users select a resume template 
 
 AI-powered functionality enhances the resume-building experience while the template and form system keeps resume data structured and reusable.
 
+---
 
+## Demo
+
+<!--
+  Each subsection below is a placeholder for one part of the product flow.
+  To add a new demo: drop the file into /public, then replace the placeholder
+  line with an image/gif tag pointing at public/<filename>.
+  Keep one subsection per flow stage so this section stays easy to extend.
+-->
+
+### Landing Page
+
+![Eon Resume landing page](public/eon-resume-landing-page.gif)
+
+### Resume Builder — Form-Driven Creation
+
+_(GIF coming soon — structured form flow and live template population)_
+
+### AI-Assisted Content
+
+_(GIF coming soon — AI-powered resume content assistance)_
+
+### Resume Templates & Preview
+
+_(GIF coming soon — switching templates while keeping the same resume data)_
+
+### PDF Export
+
+_(GIF coming soon — resume rendering and PDF export workflow)_
+
+### Payments
+
+_(GIF coming soon — payment flow)_
+
+---
 
 ## Core Features
 
@@ -41,31 +76,31 @@ This approach separates the user's resume **content** from the resume **presenta
 
 Eon Resume is built with:
 
-| Technology | Purpose |
-| --- | --- |
-| **Next.js 15.3.8** | Full-stack React framework |
-| **React 19** | User interface |
-| **TypeScript 5** | Type-safe application development |
-| **Prisma 6.3.1** | ORM and typed database access |
-| **MongoDB** | Primary application database |
-| **Clerk** | Authentication and user management |
-| **Groq API** | Current AI inference provider |
-| **OpenAI API** | Original AI provider used during development |
-| **Tailwind CSS 3.4** | Styling |
-| **React Hook Form** | Structured resume forms |
-| **Zod** | Form and runtime validation |
-| **Zustand** | Client-side state management |
-| **dnd-kit** | Drag-and-drop and section reordering |
-| **Framer Motion** | UI animation |
-| **pdf-lib** | PDF generation and manipulation |
-| **PDF.js / pdf-parse** | PDF parsing and reading |
-| **Puppeteer Core** | Browser-based resume rendering/export workflows |
-| **@sparticuz/chromium** | Serverless Chromium support |
-| **Vercel Blob** | File/blob storage |
-| **Nodemailer** | Email integration |
-| **Svix** | Webhook handling |
-| **Radix UI** | Accessible UI primitives |
-| **Lucide React / React Icons** | Icons |
+| Technology                     | Purpose                                         |
+| ------------------------------ | ----------------------------------------------- |
+| **Next.js 15.3.8**             | Full-stack React framework                      |
+| **React 19**                   | User interface                                  |
+| **TypeScript 5**               | Type-safe application development               |
+| **Prisma 6.3.1**               | ORM and typed database access                   |
+| **MongoDB**                    | Primary application database                    |
+| **Clerk**                      | Authentication and user management              |
+| **Groq API**                   | Current AI inference provider                   |
+| **OpenAI API**                 | Original AI provider used during development    |
+| **Tailwind CSS 3.4**           | Styling                                         |
+| **React Hook Form**            | Structured resume forms                         |
+| **Zod**                        | Form and runtime validation                     |
+| **Zustand**                    | Client-side state management                    |
+| **dnd-kit**                    | Drag-and-drop and section reordering            |
+| **Framer Motion**              | UI animation                                    |
+| **pdf-lib**                    | PDF generation and manipulation                 |
+| **PDF.js / pdf-parse**         | PDF parsing and reading                         |
+| **Puppeteer Core**             | Browser-based resume rendering/export workflows |
+| **@sparticuz/chromium**        | Serverless Chromium support                     |
+| **Vercel Blob**                | File/blob storage                               |
+| **Nodemailer**                 | Email integration                               |
+| **Svix**                       | Webhook handling                                |
+| **Radix UI**                   | Accessible UI primitives                        |
+| **Lucide React / React Icons** | Icons                                           |
 
 ### Notable Package Versions
 
