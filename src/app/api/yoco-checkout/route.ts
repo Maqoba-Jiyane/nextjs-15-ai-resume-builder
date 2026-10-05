@@ -26,25 +26,15 @@ export async function POST(req: NextRequest) {
 
     // 2) Parse/validate body
     const parsed = BodySchema.safeParse(await req.json());
-    console.log("parsed: ", parsed)
+
     if (!parsed.success) {
       return NextResponse.json(
         { error: "Invalid payload", details: parsed.error.flatten() },
         { status: 400 },
       );
     }
+
     const { resumeId: resumeIdRaw } = parsed.data;
-
-    // 3) Resolve internal user
-    // const user = await prisma.user.findUnique({
-    //   where: { userId: clerkUserId }, // user.userId is the Clerk id or your internal FK
-    //   select: { userId: true },
-    // });
-
-    // if (!user) {
-    //   console.log("User not found")
-    //   return NextResponse.json({ error: "User not found" }, { status: 404 });
-    // }
 
     // 4) Verify resume belongs to this user (compare against Clerk id)
     const resume = await prisma.resume.findFirst({
@@ -55,7 +45,7 @@ export async function POST(req: NextRequest) {
     if (!resume) {
       return NextResponse.json({ error: "Resume not found" }, { status: 404 });
     }
-    
+
     const resumeId = resume.id;
 
     // 5) Server-side pricing (R10 total, VAT-inclusive)
@@ -103,13 +93,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const reference = new URLSearchParams({
-      paymentId: payment.id,
-      kind: "cv-download",
-      resumeId,
-    }).toString();
-
-    const yocoRes = await fetch("/api/checkouts", {
+    const yocoRes = await fetch("https://payments.yoco.com/api/checkouts", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -120,21 +104,36 @@ export async function POST(req: NextRequest) {
         currency: "ZAR",
         totalDiscount: discountCents, // cents
         totalTaxAmount: taxCents, // cents
+        subtotalAmount: totalCents,
         lineItems: [
           {
             displayName: "CV Download (PDF)",
             quantity: 1,
-            pricingDetails: { price: subtotalCents }, // pre-VAT price in cents
+            pricingDetails: {
+              price: subtotalCents,
+              taxAmount: taxCents,
+            },
           },
         ],
-        reference,
+        clientReferenceId: payment.id,
+        metadata: {
+          paymentId: payment.id,
+          kind: "cv-download",
+          resumeId,
+        },
         successUrl: `${origin}/resumes`,
         cancelUrl: `${origin}/resumes`,
       }),
     });
 
+    console.log("Yoco checkout response status:", yocoRes.status);
+
     if (!yocoRes.ok) {
       const errText = await yocoRes.text().catch(() => "");
+      console.error("[Yoco checkout] API request failed", {
+        status: yocoRes.status,
+        body: errText,
+      });
       await prisma.payment.update({
         where: { id: payment.id },
         data: {
@@ -144,13 +143,13 @@ export async function POST(req: NextRequest) {
       });
       return NextResponse.json(
         {
-          error: `Yoco error ${yocoRes.status}: ${
-            errText || "Unknown"
-          }`,
+          error: `Yoco error ${yocoRes.status}: ${errText || "Unknown"}`,
         },
         { status: 502 },
       );
     }
+
+    console.log("Yoco checkout response OK");
 
     const data = (await yocoRes.json()) as {
       id: string;

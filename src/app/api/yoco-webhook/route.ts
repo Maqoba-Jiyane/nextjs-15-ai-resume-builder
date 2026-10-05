@@ -108,10 +108,11 @@ export async function POST(req: NextRequest) {
     const body = JSON.parse(rawBuf.toString("utf8")) as {
       type?: string; // e.g. "payment.succeeded"
       payload?: {
-        id?: string; // checkoutId
+        id?: string; // Yoco payment ID
         reference?: string; // our compact metadata
         metadata?: {
           checkoutId?: string;
+          paymentId?: string;
         };
       };
     };
@@ -119,9 +120,10 @@ export async function POST(req: NextRequest) {
     const eventType = body.type ?? "";
     const checkoutId = body.payload?.metadata?.checkoutId ?? null;
     const ref = parseReference(body.payload?.reference ?? null);
-    const paymentIdFromRef = ref.paymentId; // we injected this when creating the checkout
+    const paymentId =
+      body.payload?.metadata?.paymentId ?? ref.paymentId ?? null;
 
-    if (!checkoutId && !paymentIdFromRef) {
+    if (!checkoutId && !paymentId) {
       console.log("Missing identifiers");
       return new Response("Missing identifiers", { status: 400 });
     }
@@ -132,14 +134,20 @@ export async function POST(req: NextRequest) {
     });
 
     // 7) Find the Payment row
-    const payment = await prisma.payment.findFirst({ where: { checkoutId } });
-
-    console.log("payment: ", payment);
+    const paymentByCheckout =
+      checkoutId
+        ? await prisma.payment.findFirst({ where: { checkoutId } })
+        : null;
+    const payment =
+      paymentByCheckout ??
+      (paymentId
+        ? await prisma.payment.findUnique({ where: { id: paymentId } })
+        : null);
 
     if (!payment) {
       console.warn("[Yoco webhook] payment not found", {
         eventType,
-        paymentIdFromRef,
+        paymentId,
         checkoutId,
       });
       return new Response("OK", { status: 200 });
