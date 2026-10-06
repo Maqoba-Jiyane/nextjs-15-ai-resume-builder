@@ -134,10 +134,9 @@ export async function POST(req: NextRequest) {
     });
 
     // 7) Find the Payment row
-    const paymentByCheckout =
-      checkoutId
-        ? await prisma.payment.findFirst({ where: { checkoutId } })
-        : null;
+    const paymentByCheckout = checkoutId
+      ? await prisma.payment.findFirst({ where: { checkoutId } })
+      : null;
     const payment =
       paymentByCheckout ??
       (paymentId
@@ -186,7 +185,7 @@ export async function POST(req: NextRequest) {
           where: { userId: updated.userId },
           select: {
             referredByCode: true,
-            email: true
+            email: true,
           },
         });
 
