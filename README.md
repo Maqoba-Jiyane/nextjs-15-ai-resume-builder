@@ -51,15 +51,15 @@ AI-powered functionality enhances the resume-building experience while the templ
 
 ### Resume Templates & Preview
 
-_(GIF coming soon — switching templates while keeping the same resume data)_
+![Eon Resume template selector](public/eon-resume-template-selector.gif)
 
 ### PDF Export
 
-_(GIF coming soon — resume rendering and PDF export workflow)_
+![Eon Resume pdf export](public/eon-resume-pdf-export.gif)
 
 ### Payments
 
-_(GIF coming soon — payment flow)_
+![Eon Resume payments](public/eon-resume-payment.gif)
 
 ---
 
