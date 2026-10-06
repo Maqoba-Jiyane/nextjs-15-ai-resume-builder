@@ -23,11 +23,31 @@ AI-powered functionality enhances the resume-building experience while the templ
 
 ### Resume Builder — Form-Driven Creation
 
-_(GIF coming soon — structured form flow and live template population)_
+#### General Information
+
+![Eon Resume general information](public/eon-resume-general-info.gif)
+
+#### Personal Information
+
+![Eon Resume personal information](public/eon-resume-personal-details.gif)
+
+#### Education
+
+![Eon Resume education](public/eon-resume-education.gif)
 
 ### AI-Assisted Content
 
-_(GIF coming soon — AI-powered resume content assistance)_
+#### Work Experience
+
+![Eon Resume work experience](public/eon-resume-work-experience.gif)
+
+#### Skills
+
+![Eon Resume skills](public/eon-resume-skills.gif)
+
+#### Summary
+
+![Eon Resume summary](public/eon-resume-summary.gif)
 
 ### Resume Templates & Preview
 
